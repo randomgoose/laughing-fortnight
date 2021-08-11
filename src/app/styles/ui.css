@@ -1,37 +1,25 @@
-body {
-    font: 12px sans-serif;
-    text-align: center;
-    margin: 20px;
+@import '~antd/dist/antd.css';
+
+html {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
-button {
-    border-radius: 5px;
-    background: white;
-    color: black;
-    border: none;
-    padding: 8px 15px;
-    margin: 0 5px;
-    box-shadow: inset 0 0 0 1px black;
-    outline: none;
+*,
+*:before,
+*:after {
+    -webkit-box-sizing: inherit;
+    -moz-box-sizing: inherit;
+    box-sizing: inherit;
 }
-#create {
-    box-shadow: none;
-    background: #18a0fb;
-    color: white;
+
+body * {
+    /* font-size: 12px; */
+    /* line-height: 20px; */
+    font-family: 'Inter';
 }
-input {
-    border: none;
-    outline: none;
-    padding: 8px;
-}
-input:hover {
-    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
-}
-button:focus {
-    box-shadow: inset 0 0 0 2px #18a0fb;
-}
-#create:focus {
-    box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.3);
-}
-input:focus {
-    box-shadow: inset 0 0 0 2px #18a0fb;
+
+#react-page {
+    width: 100%;
+    height: 100%;
 }
