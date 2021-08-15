@@ -10,3 +10,9 @@ ReactDOM.render(
     </Provider>,
     document.getElementById('react-page')
 );
+
+// @ts-ignore
+if (module.hot) {
+    // @ts-ignore
+    module.hot.accept();
+}

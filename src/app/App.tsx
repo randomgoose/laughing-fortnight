@@ -2,7 +2,7 @@ import * as React from 'react';
 import './styles/ui.css';
 import SideBar from './components/Sidebar';
 import Canvas from './components/Canvas';
-import Config from './components/Config';
+import Config from './components/Config/LineConfig/Config';
 import Gallery from './components/Gallery';
 import {useDispatch} from 'react-redux';
 import {loadState} from './features/chart/lineChartSlice';
@@ -30,14 +30,15 @@ function App() {
     }, []);
 
     return (
-        <div className={'App'} style={{width: 800, height: '100%', display: 'flex'}}>
+        <div className={'App'} style={{width: '100%', height: '100%', display: 'flex'}}>
             <SideBar />
             <div
                 className={'App__content'}
                 style={{
                     display: 'flex',
                     flexDirection: 'column',
-                    width: 484,
+                    width: '100%',
+                    maxWidth: 1200,
                     borderRight: '1px solid rgba(0, 0, 0, .1)',
                 }}
             >

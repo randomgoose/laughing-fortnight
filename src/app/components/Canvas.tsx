@@ -24,23 +24,16 @@ export default function Canvas() {
         <div
             style={{
                 height: '50%',
-                width: '100%',
+                flex: 1,
                 backgroundColor: '#f2f2f2',
                 position: 'relative',
                 overflow: 'hidden',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
             }}
         >
-            <div
-                style={{
-                    width: '100%',
-                    height: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                }}
-            >
-                {chart}
-            </div>
+            <div style={{resize: 'both', width: '100%', height: '100%', overflow: 'scroll'}}>{chart}</div>
         </div>
     );
 }

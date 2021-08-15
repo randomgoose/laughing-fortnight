@@ -6,7 +6,7 @@ import pieChartReducer from '../features/chart/pieChartSlice';
 export const store = configureStore({
     reducer: {
         app: appReducer,
-        chart: chartReducer,
+        line: chartReducer,
         pie: pieChartReducer,
     },
 });

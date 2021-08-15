@@ -1,31 +1,17 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {data} from '../../data/baseData';
-import {generateRandomHexColor} from '../../utils/generateRandomHexColor';
+import {Serie, LineProps} from '@nivo/line';
+import {OrdinalColorScaleConfigScheme} from '@nivo/colors';
 
-export interface ILine {
-    key: string;
-    color: string;
-    curveType: string;
-}
-
-const lines: ILine[] = [];
-Object.keys(data[0]).forEach((key) => {
-    if (key !== 'name') {
-        lines.push({
-            key,
-            color: generateRandomHexColor(),
-            curveType: 'monotone',
-        });
-    }
-});
-
-export interface ChartState {
+export interface ChartState extends LineProps {
     showXAxis: boolean;
     xAxisLabel: string;
     showYAxis: boolean;
     showLegend: boolean;
-    showCartesianGrid: boolean;
-    legendLayout: 'horizontal' | 'vertical';
+    showGridX: boolean;
+    showGridY: boolean;
+    colors: OrdinalColorScaleConfigScheme;
+    legendDirection: 'column' | 'row';
     legendAlign: 'left' | 'center' | 'right';
     legendVerticalAlign: 'top' | 'middle' | 'bottom';
     margin: {
@@ -34,9 +20,9 @@ export interface ChartState {
         left: number;
         right: number;
     };
-    data: Object[];
-    lines: ILine[];
-    activeKey: string;
+    data: Serie[];
+    lines: Array<string | number>;
+    activeSerie: string | number;
     scale: number;
 }
 
@@ -45,20 +31,20 @@ const initialState: ChartState = {
     xAxisLabel: '',
     showYAxis: true,
     showLegend: true,
-    legendLayout: 'horizontal',
+    legendDirection: 'column',
     legendAlign: 'left',
     legendVerticalAlign: 'bottom',
-    margin: {
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0,
-    },
+    colors: {scheme: 'nivo'},
+    margin: {top: 50, right: 110, bottom: 50, left: 60},
     data: data,
-    lines: lines,
-    showCartesianGrid: true,
-    activeKey: '',
+    lines: data.map((item) => item.id),
+    showGridX: true,
+    showGridY: true,
+    activeSerie: '',
     scale: 1,
+    enableArea: true,
+    curve: 'linear',
+    enablePoints: true,
 };
 
 export const chartSlice = createSlice({
@@ -80,14 +66,20 @@ export const chartSlice = createSlice({
         setShowLegend: (state, action: PayloadAction<boolean>) => {
             state.showLegend = action.payload;
         },
-        addKey: (state, action: PayloadAction<ILine>) => {
+        addKey: (state, action: PayloadAction<string | number>) => {
             state.lines = [...state.lines, action.payload];
         },
-        removeKey: (state, action: PayloadAction<string>) => {
-            state.lines = state.lines.filter((item) => item.key !== action.payload);
+        removeKey: (state, action: PayloadAction<string | number>) => {
+            state.lines = state.lines.filter((item) => item !== action.payload);
         },
-        setLegendLayout: (state, action: PayloadAction<'vertical' | 'horizontal'>) => {
-            state.legendLayout = action.payload;
+        setLegendDirection: (state, action: PayloadAction<'column' | 'row'>) => {
+            state.legendDirection = action.payload;
+        },
+        setShowGridX: (state, action: PayloadAction<boolean>) => {
+            state.showGridX = action.payload;
+        },
+        setShowGridY: (state, action: PayloadAction<boolean>) => {
+            state.showGridY = action.payload;
         },
         setMargin: (
             state,
@@ -95,24 +87,18 @@ export const chartSlice = createSlice({
         ) => {
             state.margin = Object.assign(state.margin, action.payload);
         },
-        setData: (state, action: PayloadAction<{index: number; key: string; newValue: number}>) => {
-            const {index, key, newValue} = action.payload;
-            state.data[index] = {...state.data[index], [key]: newValue};
+        setData: (
+            state,
+            action: PayloadAction<{serieIndex: number; datumIndex: number; key: string; value: number}>
+        ) => {
+            const {serieIndex, datumIndex, key, value} = action.payload;
+            state.data[serieIndex]['data'][datumIndex][key] = value;
         },
         setNewData: (state, action: PayloadAction<ChartState['data']>) => {
             state.data = action.payload;
         },
-        setShowCartesianGrid: (state, action: PayloadAction<boolean>) => {
-            state.showCartesianGrid = action.payload;
-        },
-        setActiveKey: (state, action: PayloadAction<string>) => {
-            state.activeKey = action.payload;
-        },
-        setLines: (state, action: PayloadAction<{key: string; line: Partial<ILine>}>) => {
-            Object.assign(
-                state.lines.find((line) => line.key === action.payload.key),
-                action.payload.line
-            );
+        setActiveSerie: (state, action: PayloadAction<string | number>) => {
+            state.activeSerie = action.payload;
         },
         setScale: (state, action: PayloadAction<number>) => {
             state.scale = action.payload;
@@ -131,14 +117,14 @@ export const {
     setShowYAxis,
     setShowLegend,
     setMargin,
-    setLegendLayout,
+    setLegendDirection,
     setXAxisLabel,
     addKey,
     removeKey,
     setData,
-    setShowCartesianGrid,
-    setActiveKey,
-    setLines,
+    setShowGridX,
+    setShowGridY,
+    setActiveSerie,
     setNewData,
     setScale,
     setLegendAlign,

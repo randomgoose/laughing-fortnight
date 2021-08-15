@@ -6,7 +6,7 @@ import {useImmer} from 'use-immer';
 
 interface Props {
     value: number;
-    onFinishEditing: (value: number) => void;
+    onFinishEditing?: (value: number) => void;
 }
 
 export default function EditableDiv({value, onFinishEditing}: Props) {

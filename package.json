@@ -11,9 +11,12 @@
 	},
 	"dependencies": {
 		"@ant-design/icons": "^4.6.2",
+		"@nivo/core": "^0.73.0",
+		"@nivo/line": "^0.73.0",
 		"@reduxjs/toolkit": "^1.6.1",
 		"ahooks": "^2.10.9",
 		"antd": "^4.16.11",
+		"csv": "^5.5.0",
 		"immer": "^9.0.5",
 		"react": "^17.0.2",
 		"react-color": "^2.19.3",
@@ -41,7 +44,8 @@
 		"typescript": "^4.1.2",
 		"url-loader": "^4.1.1",
 		"webpack": "^4.41.4",
-		"webpack-cli": "^3.3.6"
+		"webpack-cli": "^3.3.6",
+		"webpack-dev-server": "^3.11.2"
 	},
 	"husky": {
 		"hooks": {
