@@ -1,3 +1,4 @@
+import {Tooltip} from 'antd';
 import * as React from 'react';
 import {FcAreaChart, FcBarChart, FcLineChart, FcPieChart} from 'react-icons/fc';
 import {useDispatch, useSelector} from 'react-redux';
@@ -36,12 +37,14 @@ function ChartType({type, children}: {type: 'line' | 'bar' | 'pie' | 'area'; chi
     const {chartType} = useSelector((state: RootState) => state.app);
 
     return (
-        <SidebarButton
-            style={{backgroundColor: type === chartType ? '#e5e6eb' : 'white'}}
-            onClick={() => dispatch(setChartType(type))}
-        >
-            {children}
-        </SidebarButton>
+        <Tooltip title={type[0].toUpperCase() + type.slice(1)}>
+            <SidebarButton
+                style={{backgroundColor: type === chartType ? '#e5e6eb' : 'white'}}
+                onClick={() => dispatch(setChartType(type))}
+            >
+                {children}
+            </SidebarButton>
+        </Tooltip>
     );
 }
 

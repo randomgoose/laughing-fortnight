@@ -1,23 +1,22 @@
 import * as React from 'react';
 import {FcLineChart} from 'react-icons/fc';
-import {useDispatch, useSelector} from 'react-redux';
-import {setScale} from '../../../features/chart/lineChartSlice';
+import {useSelector} from 'react-redux';
 import {RootState} from '../../../redux/store';
-import {Button, Collapse, Space, Slider} from 'antd';
-import MarginInput from '../../MarginInput';
+import {Button, Collapse, Space} from 'antd';
 import GridConfig from './GridConfig';
-import Label from '../../Typography/Label';
 import AxisConfig from './AxisConfig';
 import LegendConfig from './LegendConfig';
 import DataConfig from './DataConfig';
-import LineConfig from './LineConfig';
+import SerieConfig from './SerieConfig';
 import CollapsePanel from '../../StyledComponents/StyledCollapsePanel';
+import GeneralConfig from '../GeneralConfig';
+import LinesConfig from './LinesConfig';
+import PointsConfig from './PointsConfig';
 
 export default function Config() {
-    const {activeSerie, scale} = useSelector((state: RootState) => state.line);
+    const {activeSerie} = useSelector((state: RootState) => state.line);
     const chartConfig = useSelector((state: RootState) => state.line);
     const {selectionId} = useSelector((state: RootState) => state.app);
-    const dispatch = useDispatch();
 
     React.useEffect(() => {
         console.log(activeSerie);
@@ -59,15 +58,7 @@ export default function Config() {
             </div>
             <Collapse ghost accordion style={{background: 'white', padding: 0}}>
                 <CollapsePanel key={'general'} header={'General'}>
-                    <Slider
-                        min={0.3}
-                        max={3}
-                        step={0.01}
-                        value={scale}
-                        onChange={(value: number) => dispatch(setScale(value))}
-                    />
-                    <Label>边距</Label>
-                    <MarginInput />
+                    <GeneralConfig />
                 </CollapsePanel>
                 <CollapsePanel key={'axes'} header={'坐标轴'}>
                     <AxisConfig />
@@ -78,10 +69,15 @@ export default function Config() {
                 <CollapsePanel key={'legend'} header={'图例'}>
                     <LegendConfig />
                 </CollapsePanel>
-                <CollapsePanel header={'Data'} key={'数据'}>
+                <CollapsePanel header={'数据'} key={'data'}>
                     <DataConfig />
                 </CollapsePanel>
-                <CollapsePanel key={'lines'} header={'Lines'}></CollapsePanel>
+                <CollapsePanel key={'lines'} header={'Lines'}>
+                    <LinesConfig />
+                </CollapsePanel>
+                <CollapsePanel key={'points'} header={'数据点'}>
+                    <PointsConfig />
+                </CollapsePanel>
             </Collapse>
             <Space></Space>
             <Button style={{width: '100%'}} type={'primary'} onClick={renderChart}>
@@ -99,7 +95,7 @@ export default function Config() {
                 padding: 16,
             }}
         >
-            {activeSerie !== null ? <LineConfig /> : config}
+            {activeSerie ? <SerieConfig /> : config}
         </div>
     );
 }

@@ -13,7 +13,6 @@ export default function GridConfig() {
         <Space direction={'vertical'}>
             <Space>
                 <MenuOutlined rotate={90} />
-
                 <Label>纵向网格</Label>
                 <Switch
                     size={'small'}
@@ -29,6 +28,9 @@ export default function GridConfig() {
                     checked={showGridY}
                     onChange={(checked) => dispatch(setShowGridY(checked))}
                 ></Switch>
+            </Space>
+            <Space>
+                <Label>网格颜色</Label>
             </Space>
         </Space>
     );

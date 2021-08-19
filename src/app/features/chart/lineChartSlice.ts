@@ -1,7 +1,8 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {data} from '../../data/baseData';
 import {Serie, LineProps} from '@nivo/line';
-import {OrdinalColorScaleConfigScheme} from '@nivo/colors';
+import {OrdinalColorScaleConfig} from '@nivo/colors';
+import {ColorSchemeId} from '@nivo/colors';
 
 export interface ChartState extends LineProps {
     showXAxis: boolean;
@@ -10,7 +11,7 @@ export interface ChartState extends LineProps {
     showLegend: boolean;
     showGridX: boolean;
     showGridY: boolean;
-    colors: OrdinalColorScaleConfigScheme;
+    colors: OrdinalColorScaleConfig;
     legendDirection: 'column' | 'row';
     legendAlign: 'left' | 'center' | 'right';
     legendVerticalAlign: 'top' | 'middle' | 'bottom';
@@ -109,6 +110,18 @@ export const chartSlice = createSlice({
         setLegendVerticalAlign: (state, action: PayloadAction<'top' | 'middle' | 'bottom'>) => {
             state.legendVerticalAlign = action.payload;
         },
+        setColorScheme: (state, action: PayloadAction<ColorSchemeId>) => {
+            state.colors = {scheme: action.payload};
+        },
+        setCurve: (state, action: PayloadAction<LineProps['curve']>) => {
+            state.curve = action.payload;
+        },
+        setEnablePoints: (state, action: PayloadAction<boolean>) => {
+            state.enablePoints = action.payload;
+        },
+        setLineWidth: (state, action: PayloadAction<number>) => {
+            state.lineWidth = action.payload;
+        },
     },
 });
 
@@ -130,6 +143,9 @@ export const {
     setLegendAlign,
     setLegendVerticalAlign,
     loadState,
+    setColorScheme,
+    setCurve,
+    setLineWidth,
 } = chartSlice.actions;
 
 export default chartSlice.reducer;

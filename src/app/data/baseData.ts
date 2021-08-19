@@ -33,6 +33,7 @@ export const data: Serie[] = [
                 y: 1200,
             },
         ],
+        key: 'Type A',
     },
     {
         id: 'Type B',
@@ -66,5 +67,6 @@ export const data: Serie[] = [
                 y: 4300,
             },
         ],
+        key: 'Type B',
     },
 ];

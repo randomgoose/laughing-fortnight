@@ -4,30 +4,30 @@ import SideBar from './components/Sidebar';
 import Canvas from './components/Canvas';
 import Config from './components/Config/LineConfig/Config';
 import Gallery from './components/Gallery';
-import {useDispatch} from 'react-redux';
-import {loadState} from './features/chart/lineChartSlice';
-import {setSelectionId} from './features/app/appSlice';
+// import {useDispatch} from 'react-redux';
+// import {loadState} from './features/chart/lineChartSlice';
+// import {setSelectionId} from './features/app/appSlice';
 
 function App() {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
 
-    React.useEffect(() => {
-        window.onmessage = async (e: {
-            data: {pluginMessage: PromiseLike<{type: any; data: any}> | {type: any; data: any}};
-        }) => {
-            const {type, data} = await e.data.pluginMessage;
-            switch (type) {
-                case 'get-chart-data':
-                    dispatch(loadState(JSON.parse(data)));
-                    break;
-                case 'set-selection':
-                    dispatch(setSelectionId(data));
-                    break;
-                default:
-                    console.log(data);
-            }
-        };
-    }, []);
+    // React.useEffect(() => {
+    //     window.onmessage = async (e: {
+    //         data: {pluginMessage: PromiseLike<{type: any; data: any}> | {type: any; data: any}};
+    //     }) => {
+    //         const {type, data} = await e.data.pluginMessage;
+    //         switch (type) {
+    //             case 'get-chart-data':
+    //                 dispatch(loadState(JSON.parse(data)));
+    //                 break;
+    //             case 'set-selection':
+    //                 dispatch(setSelectionId(data));
+    //                 break;
+    //             default:
+    //                 console.log(data);
+    //         }
+    //     };
+    // }, []);
 
     return (
         <div className={'App'} style={{width: '100%', height: '100%', display: 'flex'}}>

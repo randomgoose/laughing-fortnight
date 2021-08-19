@@ -15,10 +15,12 @@ export default function VisLineChart() {
         lines,
         // showYAxis,
         data,
-        // showLegend,
+        showLegend,
         showGridX,
         showGridY,
         margin,
+        lineWidth,
+        // enablePoints,
         legendDirection,
         // legendAlign,
         // legendVerticalAlign,
@@ -69,9 +71,10 @@ export default function VisLineChart() {
                     : null
             }
             colors={colors}
-            pointColor={{theme: 'background'}}
+            enablePoints={true}
+            pointColor={{from: 'color'}}
             pointSize={10}
-            pointBorderColor={{from: 'serieColor'}}
+            pointBorderColor={{theme: 'background'}}
             pointLabelYOffset={-12}
             onClick={(point) => {
                 console.log(point);
@@ -80,32 +83,37 @@ export default function VisLineChart() {
             curve={curve}
             enableArea={enableArea}
             useMesh={true}
-            legends={[
-                {
-                    anchor: 'bottom-right',
-                    direction: legendDirection,
-                    justify: false,
-                    translateX: 100,
-                    translateY: 0,
-                    itemsSpacing: 0,
-                    itemDirection: 'left-to-right',
-                    itemWidth: 80,
-                    itemHeight: 20,
-                    itemOpacity: 0.75,
-                    symbolSize: 12,
-                    symbolShape: 'circle',
-                    symbolBorderColor: 'rgba(0, 0, 0, .5)',
-                    effects: [
-                        {
-                            on: 'hover',
-                            style: {
-                                itemBackground: 'rgba(0, 0, 0, .03)',
-                                itemOpacity: 1,
-                            },
-                        },
-                    ],
-                },
-            ]}
+            lineWidth={lineWidth}
+            legends={
+                showLegend
+                    ? [
+                          {
+                              anchor: 'bottom-right',
+                              direction: legendDirection,
+                              justify: false,
+                              translateX: 100,
+                              translateY: 0,
+                              itemsSpacing: 0,
+                              itemDirection: 'left-to-right',
+                              itemWidth: 80,
+                              itemHeight: 20,
+                              itemOpacity: 0.75,
+                              symbolSize: 12,
+                              symbolShape: 'circle',
+                              symbolBorderColor: 'rgba(0, 0, 0, .5)',
+                              effects: [
+                                  {
+                                      on: 'hover',
+                                      style: {
+                                          itemBackground: 'rgba(0, 0, 0, .03)',
+                                          itemOpacity: 1,
+                                      },
+                                  },
+                              ],
+                          },
+                      ]
+                    : []
+            }
         />
     );
 }
