@@ -13,6 +13,16 @@ module.exports = (env, argv) => ({
     code: './src/plugin/controller.ts', // The entry point for your plugin code
   },
 
+  devServer: {
+    contentBase: path.join(__dirname, 'dist'),
+    compress: true,
+    open: true,
+    openPage: './ui.html',
+    hot: true,
+    inline: true,
+    port:9000
+  },
+
   module: {
     rules: [
       // Converts TypeScript code to JavaScript
