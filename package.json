@@ -17,6 +17,7 @@
 		"@reduxjs/toolkit": "^1.6.1",
 		"ahooks": "^2.10.9",
 		"antd": "^4.16.11",
+		"crypto-random-string": "^4.0.0",
 		"csv": "^5.5.0",
 		"immer": "^9.0.5",
 		"react": "^17.0.2",

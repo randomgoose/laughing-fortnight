@@ -3,7 +3,7 @@ export const generateIncreasingNumberSequence = (count: number, max: number = 10
     for (let i = 0; i < count; i++) {
         res.push(Math.random() * (max - min) + min);
     }
-    return res.sort();
+    return res.sort((a, b) => a - b);
 };
 
 export const generateDecreasingNumberSequence = (count: number, max: number = 100, min: number = 1): number[] => {

@@ -82,6 +82,11 @@ export const chartSlice = createSlice({
         setShowGridY: (state, action: PayloadAction<boolean>) => {
             state.showGridY = action.payload;
         },
+        setSerieId: (state, action: PayloadAction<{id: string | number; newId: string | number}>) => {
+            const {id, newId} = action.payload;
+            state.data.find((serie) => serie.id === id).id = newId;
+            state.lines.push(newId);
+        },
         setMargin: (
             state,
             action: PayloadAction<Partial<{left: number; right: number; top: number; bottom: number}>>
@@ -97,6 +102,7 @@ export const chartSlice = createSlice({
         },
         setNewData: (state, action: PayloadAction<ChartState['data']>) => {
             state.data = action.payload;
+            state.lines = action.payload.map((serie) => serie.id);
         },
         setActiveSerie: (state, action: PayloadAction<string | number>) => {
             state.activeSerie = action.payload;
@@ -146,6 +152,7 @@ export const {
     setColorScheme,
     setCurve,
     setLineWidth,
+    setSerieId,
 } = chartSlice.actions;
 
 export default chartSlice.reducer;

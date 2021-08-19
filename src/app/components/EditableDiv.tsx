@@ -1,12 +1,12 @@
 import * as React from 'react';
 import {useClickAway} from 'ahooks';
-import {InputNumber} from 'antd';
+import {InputNumber, Input} from 'antd';
 import {useRef} from 'react';
 import {useImmer} from 'use-immer';
 
 interface Props {
-    value: number;
-    onFinishEditing?: (value: number) => void;
+    value: number | string;
+    onFinishEditing?: (value: number | string) => void;
 }
 
 export default function EditableDiv({value, onFinishEditing}: Props) {
@@ -21,19 +21,35 @@ export default function EditableDiv({value, onFinishEditing}: Props) {
 
     return editing ? (
         <div ref={ref}>
-            <InputNumber
-                autoFocus
-                value={temp}
-                onChange={(value) => {
-                    setTemp(value);
-                }}
-                onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                        setEditing(false);
-                        onFinishEditing(temp);
-                    }
-                }}
-            />
+            {typeof value === 'string' ? (
+                <Input
+                    autoFocus
+                    value={temp}
+                    onChange={(e) => {
+                        setTemp(e.target.value);
+                    }}
+                    onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                            setEditing(false);
+                            onFinishEditing(temp);
+                        }
+                    }}
+                />
+            ) : (
+                <InputNumber
+                    autoFocus
+                    value={temp}
+                    onChange={(value) => {
+                        setTemp(value);
+                    }}
+                    onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                            setEditing(false);
+                            onFinishEditing(temp);
+                        }
+                    }}
+                />
+            )}
         </div>
     ) : (
         <div
