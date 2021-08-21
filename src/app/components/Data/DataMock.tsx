@@ -3,7 +3,11 @@ import {Button, Form, InputNumber, Radio} from 'antd';
 import * as React from 'react';
 import {useImmer} from 'use-immer';
 // import {useDispatch} from 'react-redux';
-import {generateDecreasingNumberSequence, generateIncreasingNumberSequence} from '../../utils/generateNumbers';
+import {
+    generateDecreasingNumberSequence,
+    generateGaussianSequence,
+    generateIncreasingNumberSequence,
+} from '../../utils/generateNumbers';
 import cryptoRandomString from 'crypto-random-string';
 import {Serie} from '@nivo/line';
 import {useDispatch} from 'react-redux';
@@ -12,13 +16,17 @@ import {FallOutlined, RiseOutlined} from '@ant-design/icons';
 
 export default function DataMock() {
     const dispatch = useDispatch();
-    const [numberSequenceAttr, setNumberSequenceAttr] = useImmer<{
-        min: number;
-        max: number;
-        count: number;
-        array: number;
-        trend: 'rise' | 'fall' | 'normal-distribution';
-    }>({
+    const [numberSequenceAttr, setNumberSequenceAttr] = useImmer<
+        Partial<{
+            min: number;
+            max: number;
+            count: number;
+            array: number;
+            mean: number;
+            std: number;
+            trend: 'rise' | 'fall' | 'normal-distribution';
+        }>
+    >({
         min: 0,
         max: 1000,
         count: 12,
@@ -29,13 +37,17 @@ export default function DataMock() {
     const [tempData, setTempData] = useImmer<Serie[]>([]);
 
     const generateNumberSequence = React.useCallback(() => {
-        const {count, max, min, trend} = numberSequenceAttr;
+        const {count, max, min, trend, mean, std} = numberSequenceAttr;
         if (trend === 'rise') {
             return generateIncreasingNumberSequence(count, max, min).map((num, index) => {
                 return {x: index, y: num};
             });
-        } else {
+        } else if (trend === 'fall') {
             return generateDecreasingNumberSequence(count, max, min).map((num, index) => {
+                return {x: index, y: num};
+            });
+        } else {
+            return generateGaussianSequence(count, mean, std).map((num, index) => {
                 return {x: index, y: num};
             });
         }
@@ -56,12 +68,25 @@ export default function DataMock() {
                     });
                 }}
             >
-                <Form.Item name={'min'} label={'最小值'} fieldKey={'min'}>
-                    <InputNumber />
-                </Form.Item>
-                <Form.Item name={'max'} label={'最大值'} fieldKey={'max'}>
-                    <InputNumber />
-                </Form.Item>
+                {numberSequenceAttr.trend !== 'normal-distribution' ? (
+                    <>
+                        <Form.Item name={'min'} label={'最小值'} fieldKey={'min'}>
+                            <InputNumber />
+                        </Form.Item>
+                        <Form.Item name={'max'} label={'最大值'} fieldKey={'max'}>
+                            <InputNumber />
+                        </Form.Item>
+                    </>
+                ) : (
+                    <>
+                        <Form.Item name={'mean'} label={'均值'} fieldKey={'mean'}>
+                            <InputNumber />
+                        </Form.Item>
+                        <Form.Item name={'std'} label={'标准差'} fieldKey={'std'}>
+                            <InputNumber />
+                        </Form.Item>
+                    </>
+                )}
                 <Form.Item name={'count'} label={'数组长度'} fieldKey={'count'}>
                     <InputNumber />
                 </Form.Item>
@@ -78,23 +103,25 @@ export default function DataMock() {
                         ]}
                     ></Radio.Group>
                 </Form.Item>
+                <Form.Item>
+                    <Button
+                        onClick={() => {
+                            const {array} = numberSequenceAttr;
+                            let temp = [];
+                            for (let i = 0; i < array; i++) {
+                                const serie: Serie = {
+                                    id: cryptoRandomString({length: 4}),
+                                    data: generateNumberSequence(),
+                                };
+                                temp.push(serie);
+                            }
+                            setTempData(temp);
+                        }}
+                    >
+                        模拟数据
+                    </Button>
+                </Form.Item>
             </Form>
-            <Button
-                onClick={() => {
-                    const {array} = numberSequenceAttr;
-                    let temp = [];
-                    for (let i = 0; i < array; i++) {
-                        const serie: Serie = {
-                            id: cryptoRandomString({length: 4}),
-                            data: generateNumberSequence(),
-                        };
-                        temp.push(serie);
-                    }
-                    setTempData(temp);
-                }}
-            >
-                Random
-            </Button>
         </div>
     );
 }

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useClickAway} from 'ahooks';
+import {useClickAway, useKeyPress} from 'ahooks';
 import {InputNumber, Input} from 'antd';
 import {useRef} from 'react';
 import {useImmer} from 'use-immer';
@@ -14,10 +14,18 @@ export default function EditableDiv({value, onFinishEditing}: Props) {
     const [temp, setTemp] = useImmer(value);
     const ref = useRef(null);
 
-    useClickAway(() => {
+    function finishEditing() {
         setEditing(false);
         onFinishEditing(temp);
+    }
+
+    useClickAway(() => {
+        finishEditing();
     }, ref);
+
+    useKeyPress('Enter', () => {
+        finishEditing();
+    });
 
     return editing ? (
         <div ref={ref}>

@@ -37,7 +37,7 @@ function ChartType({type, children}: {type: 'line' | 'bar' | 'pie' | 'area'; chi
     const {chartType} = useSelector((state: RootState) => state.app);
 
     return (
-        <Tooltip title={type[0].toUpperCase() + type.slice(1)}>
+        <Tooltip title={type[0].toUpperCase() + type.slice(1)} placement={'right'}>
             <SidebarButton
                 style={{backgroundColor: type === chartType ? '#e5e6eb' : 'white'}}
                 onClick={() => dispatch(setChartType(type))}

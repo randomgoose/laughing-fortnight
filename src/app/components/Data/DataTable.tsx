@@ -8,8 +8,8 @@ import EditableDiv from '../EditableDiv';
 
 export default function DataTable() {
     const {data} = useSelector((state: RootState) => state.line);
-
     const dispatch = useDispatch();
+
     return (
         <Tabs type={'card'} tabPosition={'left'}>
             {data.map((item, index) => (

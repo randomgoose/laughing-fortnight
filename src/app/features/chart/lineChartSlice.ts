@@ -46,6 +46,7 @@ const initialState: ChartState = {
     enableArea: true,
     curve: 'linear',
     enablePoints: true,
+    pointSize: 8,
 };
 
 export const chartSlice = createSlice({
@@ -128,6 +129,9 @@ export const chartSlice = createSlice({
         setLineWidth: (state, action: PayloadAction<number>) => {
             state.lineWidth = action.payload;
         },
+        setPointSize: (state, action: PayloadAction<number>) => {
+            state.pointSize = action.payload;
+        },
     },
 });
 
@@ -153,6 +157,8 @@ export const {
     setCurve,
     setLineWidth,
     setSerieId,
+    setPointSize,
+    setEnablePoints,
 } = chartSlice.actions;
 
 export default chartSlice.reducer;

@@ -3960,6 +3960,11 @@ node-libs-browser@^2.2.1:
     util "^0.11.0"
     vm-browserify "^1.0.1"
 
+normal-distribution@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.npmjs.org/normal-distribution/-/normal-distribution-1.1.1.tgz#e8e2e79a5b3453d6e02f3786ff1f592051531249"
+  integrity sha512-lyz7LXBhjiEdAw234zTz05EohshNCORpC0duBQeaKzZIeTE6oDfpcBocEXbZTFv3GkoiMPz9mhgUuv5mMc64uA==
+
 normalize-path@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/normalize-path/-/normalize-path-2.1.1.tgz#1ab28b556e198363a8c1a6f7e6fa20137fe6aed9"

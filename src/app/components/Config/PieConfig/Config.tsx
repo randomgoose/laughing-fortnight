@@ -1,19 +1,11 @@
 import * as React from 'react';
-import {FcLineChart} from 'react-icons/fc';
+import {FcPieChart} from 'react-icons/fc';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../../redux/store';
 import {Button, Collapse, Space} from 'antd';
-import GridConfig from './GridConfig';
-import AxisConfig from './AxisConfig';
-import LegendConfig from './LegendConfig';
-import DataConfig from './DataConfig';
-import SerieConfig from './SerieConfig';
 import CollapsePanel from '../../StyledComponents/StyledCollapsePanel';
-import GeneralConfig from './GeneralConfig';
-import LinesConfig from './LinesConfig';
-import PointsConfig from './PointsConfig';
 
-export default function LineConfig() {
+export default function PieConfig() {
     const {activeSerie} = useSelector((state: RootState) => state.line);
     const chartConfig = useSelector((state: RootState) => state.line);
     const {selectionId} = useSelector((state: RootState) => state.app);
@@ -53,31 +45,17 @@ export default function LineConfig() {
     const config = (
         <>
             <div style={{display: 'flex', alignItems: 'center', marginBottom: 8}}>
-                <FcLineChart style={{marginRight: 8}} />
-                <div style={{fontSize: 16, lineHeight: '24px', fontWeight: 'bold'}}>折线图</div>
+                <FcPieChart style={{marginRight: 8}} />
+                <div style={{fontSize: 16, lineHeight: '24px', fontWeight: 'bold'}}>饼图</div>
             </div>
             <Collapse ghost accordion style={{background: 'white', padding: 0}}>
-                <CollapsePanel key={'general'} header={'General'}>
-                    <GeneralConfig />
-                </CollapsePanel>
-                <CollapsePanel key={'axes'} header={'坐标轴'}>
-                    <AxisConfig />
-                </CollapsePanel>
-                <CollapsePanel key={'grid'} header={'网格'}>
-                    <GridConfig />
-                </CollapsePanel>
-                <CollapsePanel key={'legend'} header={'图例'}>
-                    <LegendConfig />
-                </CollapsePanel>
-                <CollapsePanel header={'数据'} key={'data'}>
-                    <DataConfig />
-                </CollapsePanel>
-                <CollapsePanel key={'lines'} header={'Lines'}>
-                    <LinesConfig />
-                </CollapsePanel>
-                <CollapsePanel key={'points'} header={'数据点'}>
-                    <PointsConfig />
-                </CollapsePanel>
+                <CollapsePanel key={'general'} header={'General'}></CollapsePanel>
+                <CollapsePanel key={'axes'} header={'坐标轴'}></CollapsePanel>
+                <CollapsePanel key={'grid'} header={'网格'}></CollapsePanel>
+                <CollapsePanel key={'legend'} header={'图例'}></CollapsePanel>
+                <CollapsePanel header={'数据'} key={'data'}></CollapsePanel>
+                <CollapsePanel key={'lines'} header={'Lines'}></CollapsePanel>
+                <CollapsePanel key={'points'} header={'数据点'}></CollapsePanel>
             </Collapse>
             <Space></Space>
             <Button style={{width: '100%'}} type={'primary'} onClick={renderChart}>
@@ -95,7 +73,7 @@ export default function LineConfig() {
                 padding: 16,
             }}
         >
-            {activeSerie ? <SerieConfig /> : config}
+            {activeSerie ? <div></div> : config}
         </div>
     );
 }

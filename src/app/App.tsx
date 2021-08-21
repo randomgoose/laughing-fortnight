@@ -2,13 +2,17 @@ import * as React from 'react';
 import './styles/ui.css';
 import SideBar from './components/Sidebar';
 import Canvas from './components/Canvas';
-import Config from './components/Config/LineConfig/Config';
+import LineConfig from './components/Config/LineConfig/Config';
 import Gallery from './components/Gallery';
+import PieConfig from './components/Config/PieConfig/Config';
+import {useSelector} from 'react-redux';
+import {RootState} from './redux/store';
 // import {useDispatch} from 'react-redux';
 // import {loadState} from './features/chart/lineChartSlice';
 // import {setSelectionId} from './features/app/appSlice';
 
 function App() {
+    const {chartType} = useSelector((state: RootState) => state.app);
     // const dispatch = useDispatch();
 
     // React.useEffect(() => {
@@ -45,7 +49,7 @@ function App() {
                 <Canvas />
                 <Gallery />
             </div>
-            <Config />
+            {chartType === 'line' ? <LineConfig /> : chartType === 'pie' ? <PieConfig /> : <div />}
         </div>
     );
 }

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import {Space, Slider, Select, Form, Switch} from 'antd';
-import Label from '../Typography/Label';
-import MarginInput from '../MarginInput';
+import Label from '../../Typography/Label';
+import MarginInput from '../../MarginInput';
 import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '../../redux/store';
-import {setColorScheme, setScale} from '../../features/chart/lineChartSlice';
+import {RootState} from '../../../redux/store';
+import {setColorScheme, setScale} from '../../../features/chart/lineChartSlice';
 import {colorSchemes} from '@nivo/colors';
 import {AreaChartOutlined, ColumnWidthOutlined, GatewayOutlined, HighlightOutlined} from '@ant-design/icons';
 
@@ -13,7 +13,6 @@ const colorSchemeList = Object.keys(colorSchemes);
 export default function GeneralConfig() {
     const dispatch = useDispatch();
     const {scale, colors, enableArea, margin} = useSelector((state: RootState) => state.line);
-    console.log(scale);
 
     function dispatchSetColorScheme(value) {
         dispatch(setColorScheme(value));

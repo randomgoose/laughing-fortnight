@@ -20,7 +20,7 @@ export default function VisLineChart() {
         showGridY,
         margin,
         lineWidth,
-        // enablePoints,
+        enablePoints,
         legendDirection,
         // legendAlign,
         // legendVerticalAlign,
@@ -31,6 +31,7 @@ export default function VisLineChart() {
         // scale,
         curve,
         enableArea,
+        pointSize,
     } = useSelector((state: RootState) => state.line);
 
     const dispatch = useDispatch();
@@ -71,9 +72,9 @@ export default function VisLineChart() {
                     : null
             }
             colors={colors}
-            enablePoints={true}
+            enablePoints={enablePoints}
             pointColor={{from: 'color'}}
-            pointSize={10}
+            pointSize={pointSize}
             pointBorderColor={{theme: 'background'}}
             pointLabelYOffset={-12}
             onClick={(point) => {

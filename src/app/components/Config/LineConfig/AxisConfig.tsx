@@ -21,7 +21,7 @@ export default () => {
             </Space>
             {showXAxis ? (
                 <Space direction={'vertical'} size={2}>
-                    <Label>Title</Label>
+                    <Label>X 轴标题</Label>
                     <Input
                         onChange={(e) => {
                             dispatch(setXAxisLabel(e.target.value));
