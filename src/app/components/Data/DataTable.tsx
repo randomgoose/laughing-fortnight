@@ -2,7 +2,7 @@ import {PlusOutlined} from '@ant-design/icons';
 import {Table, Tabs, Button} from 'antd';
 import * as React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {setData, setNewData, setSerieId} from '../../features/chart/lineChartSlice';
+import {addValue, setData, setSerieId} from '../../features/chart/lineChartSlice';
 import {RootState} from '../../redux/store';
 import EditableDiv from '../EditableDiv';
 
@@ -11,7 +11,7 @@ export default function DataTable() {
     const dispatch = useDispatch();
 
     return (
-        <Tabs type={'card'} tabPosition={'left'}>
+        <Tabs type={'card'}>
             {data.map((item, index) => (
                 <Tabs.TabPane
                     key={item.id}
@@ -53,7 +53,7 @@ export default function DataTable() {
                             <Button
                                 icon={<PlusOutlined />}
                                 onClick={() => {
-                                    dispatch(setNewData([...data, data[0]]));
+                                    dispatch(addValue(item.id));
                                 }}
                             >
                                 新增

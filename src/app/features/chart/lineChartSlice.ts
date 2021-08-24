@@ -3,6 +3,8 @@ import {data} from '../../data/baseData';
 import {Serie, LineProps} from '@nivo/line';
 import {OrdinalColorScaleConfig} from '@nivo/colors';
 import {ColorSchemeId} from '@nivo/colors';
+import {AxisProps} from '@nivo/axes';
+import cryptoRandomString from 'crypto-random-string';
 
 export interface ChartState extends LineProps {
     showXAxis: boolean;
@@ -47,6 +49,13 @@ const initialState: ChartState = {
     curve: 'linear',
     enablePoints: true,
     pointSize: 8,
+    axisBottom: {
+        legend: 'x 轴',
+        legendPosition: 'middle',
+        tickRotation: 0,
+        legendOffset: 24,
+        tickPadding: 0,
+    },
 };
 
 export const chartSlice = createSlice({
@@ -103,7 +112,9 @@ export const chartSlice = createSlice({
         },
         setNewData: (state, action: PayloadAction<ChartState['data']>) => {
             state.data = action.payload;
-            state.lines = action.payload.map((serie) => serie.id);
+            state.lines = action.payload
+                .filter((serie) => serie.data.filter((datum) => isNaN(parseFloat(datum.y as string))).length === 0)
+                .map((serie) => serie.id);
         },
         setActiveSerie: (state, action: PayloadAction<string | number>) => {
             state.activeSerie = action.payload;
@@ -132,6 +143,21 @@ export const chartSlice = createSlice({
         setPointSize: (state, action: PayloadAction<number>) => {
             state.pointSize = action.payload;
         },
+        addValue: (state, action: PayloadAction<string | number>) => {
+            state.data
+                .find((datum) => (datum.id = action.payload))
+                .data.push({x: cryptoRandomString({length: 4}), y: 100});
+        },
+        setAxis: (
+            state,
+            action: PayloadAction<{
+                which: 'axisBottom' | 'axisLeft' | 'axisTop' | 'axisRight';
+                props: Partial<AxisProps>;
+            }>
+        ) => {
+            const {which, props} = action.payload;
+            !state[which] ? (state[which] = props) : Object.assign(state[which], props);
+        },
     },
 });
 
@@ -159,6 +185,8 @@ export const {
     setSerieId,
     setPointSize,
     setEnablePoints,
+    addValue,
+    setAxis,
 } = chartSlice.actions;
 
 export default chartSlice.reducer;

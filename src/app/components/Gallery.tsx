@@ -1,8 +1,12 @@
 import {Tabs} from 'antd';
 import * as React from 'react';
 import {FcPuzzle} from 'react-icons/fc';
+import {useSelector} from 'react-redux';
+import {RootState} from '../redux/store';
 import DataMock from './Data/DataMock';
+import DataSource from './Data/DataSource';
 import DataTable from './Data/DataTable';
+import DataUpload from './Data/DataUpload';
 
 function Sample({title}: {title: string}) {
     return (
@@ -22,12 +26,22 @@ function Sample({title}: {title: string}) {
 }
 
 export default function Gallery() {
+    const {dataSource} = useSelector((state: RootState) => state.app);
+
     return (
-        <div className={'Gallery'} style={{padding: 16}}>
-            <DataMock />
+        <div className={'Gallery'} style={{padding: 16, width: '100%', minHeight: 480}}>
             <Tabs defaultActiveKey={'data'}>
                 <Tabs.TabPane key={'data'} tab={'数据'}>
-                    <DataTable />
+                    {!dataSource ? (
+                        <DataSource />
+                    ) : dataSource === 'mock' ? (
+                        <>
+                            <DataMock />
+                            <DataTable />
+                        </>
+                    ) : dataSource === 'file' ? (
+                        <DataUpload />
+                    ) : null}
                 </Tabs.TabPane>
                 <Tabs.TabPane key={'gallery'} tab={'示例图表'}>
                     <div style={{display: 'flex', alignItems: 'center', marginBottom: 8}} className={'Gallery__title'}>

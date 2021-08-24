@@ -2,11 +2,13 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 export interface AppState {
     chartType: 'line' | 'bar' | 'pie' | 'area';
+    dataSource: 'mock' | 'file' | 'sheet' | null;
     selectionId: string;
 }
 
 const initialState: AppState = {
     chartType: 'line',
+    dataSource: null,
     selectionId: '',
 };
 
@@ -20,9 +22,12 @@ export const appSlice = createSlice({
         setSelectionId: (state, action: PayloadAction<string>) => {
             state.selectionId = action.payload;
         },
+        setDataSource: (state, action: PayloadAction<'mock' | 'file' | 'sheet' | null>) => {
+            state.dataSource = action.payload;
+        },
     },
 });
 
-export const {setChartType, setSelectionId} = appSlice.actions;
+export const {setChartType, setSelectionId, setDataSource} = appSlice.actions;
 
 export default appSlice.reducer;

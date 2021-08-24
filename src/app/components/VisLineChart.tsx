@@ -24,11 +24,11 @@ export default function VisLineChart() {
         legendDirection,
         // legendAlign,
         // legendVerticalAlign,
-        xAxisLabel,
         // lines,
         // showCartesianGrid,
         // activeKey,
         // scale,
+        axisBottom,
         curve,
         enableArea,
         pointSize,
@@ -42,23 +42,12 @@ export default function VisLineChart() {
             data={data.filter((item) => lines.includes(item.id))}
             enableGridX={showGridX}
             enableGridY={showGridY}
-            xScale={{type: 'point'}}
+            xScale={{type: 'linear'}}
             yScale={{type: 'linear', min: 0, max: 'auto', reverse: false}}
             yFormat=" >-.2f"
             // axisTop={null}
             // axisRight={null}
-            axisBottom={
-                showXAxis
-                    ? {
-                          tickSize: 5,
-                          tickPadding: 5,
-                          tickRotation: 0,
-                          legend: xAxisLabel,
-                          legendOffset: 36,
-                          legendPosition: 'middle',
-                      }
-                    : null
-            }
+            axisBottom={showXAxis ? axisBottom : null}
             axisLeft={
                 showYAxis
                     ? {

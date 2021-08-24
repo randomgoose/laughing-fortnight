@@ -20,10 +20,16 @@ export default function PointsConfig() {
                         break;
                     case 'enable-points':
                         dispatch(setEnablePoints(value));
+                        break;
                 }
             }}
         >
-            <Form.Item name={'enable-points'} label={<Label>启用数据点</Label>}>
+            <Form.Item
+                name={'enable-points'}
+                label={<Label>启用数据点</Label>}
+                fieldKey={'enable-points'}
+                valuePropName={'checked'}
+            >
                 <Switch size={'small'}></Switch>
             </Form.Item>
             <Form.Item name={'point-size'} label={<Label>数据点尺寸</Label>}>
