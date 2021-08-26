@@ -3,9 +3,9 @@ import {useDispatch, useSelector} from 'react-redux';
 // import {LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer} from 'recharts';
 // import {CurveType} from 'recharts/types/shape/Curve';
 // import {useImmer} from 'use-immer';
-import {RootState} from '../redux/store';
+import {RootState} from '../../redux/store';
 import {ResponsiveLine} from '@nivo/line';
-import {setActiveSerie} from '../features/chart/lineChartSlice';
+import {setActiveSerie} from '../../features/chart/lineChartSlice';
 
 export default function VisLineChart() {
     const {
@@ -15,13 +15,11 @@ export default function VisLineChart() {
         lines,
         // showYAxis,
         data,
-        showLegend,
         showGridX,
         showGridY,
         margin,
         lineWidth,
         enablePoints,
-        legendDirection,
         // legendAlign,
         // legendVerticalAlign,
         // lines,
@@ -31,7 +29,11 @@ export default function VisLineChart() {
         axisBottom,
         curve,
         enableArea,
+        areaBaselineValue,
+        areaOpacity,
+        areaBlendMode,
         pointSize,
+        legends,
     } = useSelector((state: RootState) => state.line);
 
     const dispatch = useDispatch();
@@ -72,38 +74,12 @@ export default function VisLineChart() {
             }}
             curve={curve}
             enableArea={enableArea}
+            areaBaselineValue={areaBaselineValue}
+            areaOpacity={areaOpacity}
+            areaBlendMode={areaBlendMode}
             useMesh={true}
             lineWidth={lineWidth}
-            legends={
-                showLegend
-                    ? [
-                          {
-                              anchor: 'bottom-right',
-                              direction: legendDirection,
-                              justify: false,
-                              translateX: 100,
-                              translateY: 0,
-                              itemsSpacing: 0,
-                              itemDirection: 'left-to-right',
-                              itemWidth: 80,
-                              itemHeight: 20,
-                              itemOpacity: 0.75,
-                              symbolSize: 12,
-                              symbolShape: 'circle',
-                              symbolBorderColor: 'rgba(0, 0, 0, .5)',
-                              effects: [
-                                  {
-                                      on: 'hover',
-                                      style: {
-                                          itemBackground: 'rgba(0, 0, 0, .03)',
-                                          itemOpacity: 1,
-                                      },
-                                  },
-                              ],
-                          },
-                      ]
-                    : []
-            }
+            legends={legends}
         />
     );
 }

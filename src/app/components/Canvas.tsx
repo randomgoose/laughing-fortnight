@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {useSelector} from 'react-redux';
 import {RootState} from '../redux/store';
-import VisLineChart from './VisLineChart';
-import VisPieChart from './VisPieChart';
+import VisLineChart from './Chart/VisLineChart';
+import VisPieChart from './Chart/VisPieChart';
 
 export default function Canvas() {
     const {chartType} = useSelector((state: RootState) => state.app);

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {ResponsivePie} from '@nivo/pie';
 import {useSelector} from 'react-redux';
-import {RootState} from '../redux/store';
+import {RootState} from '../../redux/store';
 
 export default function VisPieChart() {
     const {data} = useSelector((state: RootState) => state.pie);

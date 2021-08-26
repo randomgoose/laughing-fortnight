@@ -1,7 +1,4 @@
 import * as React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {setMargin} from '../features/chart/lineChartSlice';
-import {RootState} from '../redux/store';
 import {InputNumber, Space} from 'antd';
 import styled from 'styled-components';
 import {useState} from 'react';
@@ -16,15 +13,25 @@ const Box = styled.div`
     width: 96px;
 `;
 
-export default function MarginInput() {
-    const {left, right, bottom, top} = useSelector((state: RootState) => state.line.margin);
+interface Props {
+    value?: {left: number; right: number; bottom: number; top: number};
+    onChange?: (value: {left: number; right: number; bottom: number; top: number}) => void;
+}
+
+export default function MarginInput(props: Props) {
+    const [values, setValues] = useState({top: 50, right: 110, bottom: 50, left: 60});
+    // const {left, right, bottom, top} = useSelector((state: RootState) => state.line.margin);
     const [editingMargin, setEditingMargin] = useState('');
 
     function focusHandler(value) {
         setEditingMargin(value);
     }
 
-    const dispatch = useDispatch();
+    function handleChange(value: {left: number; right: number; bottom: number; top: number}) {
+        setValues(Object.assign(values, value));
+        props.onChange(value);
+    }
+
     return (
         <div className={'MarginInput'} style={{display: 'flex', width: '100%'}}>
             <Space></Space>
@@ -43,38 +50,38 @@ export default function MarginInput() {
                 <InputNumber
                     type={'number'}
                     className={'margin-top'}
-                    value={top}
+                    value={values.top || props.value.top}
                     style={{width: '100%'}}
-                    onChange={(value) => dispatch(setMargin({top: value}))}
                     onFocus={() => focusHandler('top')}
                     onBlur={() => setEditingMargin(null)}
+                    onChange={(value) => handleChange({...(values || props.value), top: value})}
                 />
                 <InputNumber
                     type={'number'}
                     className={'margin-left'}
-                    value={left}
+                    value={values.left || props.value.left}
                     style={{width: '100%'}}
-                    onChange={(value) => dispatch(setMargin({left: value}))}
                     onFocus={() => focusHandler('left')}
                     onBlur={() => setEditingMargin(null)}
+                    onChange={(value) => handleChange({...(values || props.value), left: value})}
                 />
                 <InputNumber
                     type={'number'}
                     className={'margin-right'}
-                    value={right}
+                    value={values.right || props.value.right}
                     style={{width: '100%'}}
-                    onChange={(value) => dispatch(setMargin({right: value}))}
                     onFocus={() => focusHandler('right')}
                     onBlur={() => setEditingMargin(null)}
+                    onChange={(value) => handleChange({...(values || props.value), right: value})}
                 />
                 <InputNumber
                     type={'number'}
                     className={'margin-bottom'}
-                    value={bottom}
+                    value={values.bottom || props.value.bottom}
                     style={{width: '100%'}}
-                    onChange={(value) => dispatch(setMargin({bottom: value}))}
                     onFocus={() => focusHandler('bottom')}
                     onBlur={() => setEditingMargin(null)}
+                    onChange={(value) => handleChange({...(values || props.value), bottom: value})}
                 />
             </div>
         </div>

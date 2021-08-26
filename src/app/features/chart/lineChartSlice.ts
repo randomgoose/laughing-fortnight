@@ -1,12 +1,12 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {data} from '../../data/baseData';
-import {Serie, LineProps} from '@nivo/line';
+import {Serie, LineProps, LineSvgProps} from '@nivo/line';
 import {OrdinalColorScaleConfig} from '@nivo/colors';
 import {ColorSchemeId} from '@nivo/colors';
 import {AxisProps} from '@nivo/axes';
 import cryptoRandomString from 'crypto-random-string';
-
-export interface ChartState extends LineProps {
+import {LegendProps} from '@nivo/legends';
+export interface ChartState extends LineSvgProps {
     showXAxis: boolean;
     xAxisLabel: string;
     showYAxis: boolean;
@@ -14,9 +14,6 @@ export interface ChartState extends LineProps {
     showGridX: boolean;
     showGridY: boolean;
     colors: OrdinalColorScaleConfig;
-    legendDirection: 'column' | 'row';
-    legendAlign: 'left' | 'center' | 'right';
-    legendVerticalAlign: 'top' | 'middle' | 'bottom';
     margin: {
         top: number;
         bottom: number;
@@ -34,9 +31,32 @@ const initialState: ChartState = {
     xAxisLabel: '',
     showYAxis: true,
     showLegend: true,
-    legendDirection: 'column',
-    legendAlign: 'left',
-    legendVerticalAlign: 'bottom',
+    legends: [
+        {
+            anchor: 'bottom-right',
+            direction: 'column',
+            justify: false,
+            translateX: 100,
+            translateY: 0,
+            itemsSpacing: 0,
+            itemDirection: 'left-to-right',
+            itemWidth: 80,
+            itemHeight: 20,
+            itemOpacity: 0.75,
+            symbolSize: 12,
+            symbolShape: 'circle',
+            symbolBorderColor: 'rgba(0, 0, 0, .5)',
+            effects: [
+                {
+                    on: 'hover',
+                    style: {
+                        itemBackground: 'rgba(0, 0, 0, .03)',
+                        itemOpacity: 1,
+                    },
+                },
+            ],
+        },
+    ],
     colors: {scheme: 'nivo'},
     margin: {top: 50, right: 110, bottom: 50, left: 60},
     data: data,
@@ -83,9 +103,6 @@ export const chartSlice = createSlice({
         removeKey: (state, action: PayloadAction<string | number>) => {
             state.lines = state.lines.filter((item) => item !== action.payload);
         },
-        setLegendDirection: (state, action: PayloadAction<'column' | 'row'>) => {
-            state.legendDirection = action.payload;
-        },
         setShowGridX: (state, action: PayloadAction<boolean>) => {
             state.showGridX = action.payload;
         },
@@ -122,12 +139,6 @@ export const chartSlice = createSlice({
         setScale: (state, action: PayloadAction<number>) => {
             state.scale = action.payload;
         },
-        setLegendAlign: (state, action: PayloadAction<'left' | 'center' | 'right'>) => {
-            state.legendAlign = action.payload;
-        },
-        setLegendVerticalAlign: (state, action: PayloadAction<'top' | 'middle' | 'bottom'>) => {
-            state.legendVerticalAlign = action.payload;
-        },
         setColorScheme: (state, action: PayloadAction<ColorSchemeId>) => {
             state.colors = {scheme: action.payload};
         },
@@ -158,6 +169,18 @@ export const chartSlice = createSlice({
             const {which, props} = action.payload;
             !state[which] ? (state[which] = props) : Object.assign(state[which], props);
         },
+        setPartialState: (state, action: PayloadAction<Partial<ChartState>>) => {
+            Object.assign(state, action.payload);
+        },
+        setLegend: (state, action: PayloadAction<{index: number; newLegend: LegendProps}>) => {
+            const {index, newLegend} = action.payload;
+            Object.assign(state.legends[index], newLegend);
+        },
+        removeLegendByIndex: (state, action: PayloadAction<number>) => {
+            // console.log([...state.legends.slice(0, action.payload), ...state.legends.slice(action.payload)]);
+            state.legends = state.legends.filter((_legend, index) => index !== action.payload);
+            // state.legends = [...state.legends.slice(0, action.payload), ...state.legends.slice(action.payload)];
+        },
     },
 });
 
@@ -166,7 +189,6 @@ export const {
     setShowYAxis,
     setShowLegend,
     setMargin,
-    setLegendDirection,
     setXAxisLabel,
     addKey,
     removeKey,
@@ -176,8 +198,6 @@ export const {
     setActiveSerie,
     setNewData,
     setScale,
-    setLegendAlign,
-    setLegendVerticalAlign,
     loadState,
     setColorScheme,
     setCurve,
@@ -187,6 +207,9 @@ export const {
     setEnablePoints,
     addValue,
     setAxis,
+    setPartialState,
+    setLegend,
+    removeLegendByIndex,
 } = chartSlice.actions;
 
 export default chartSlice.reducer;

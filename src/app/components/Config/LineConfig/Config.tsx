@@ -1,17 +1,16 @@
 import * as React from 'react';
-import {FcLineChart} from 'react-icons/fc';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../../redux/store';
-import {Button, Collapse, Space} from 'antd';
+import {Button, Tabs, Space} from 'antd';
 import GridConfig from './GridConfig';
 import AxisConfig from './AxisConfig';
 import LegendConfig from './LegendConfig';
 import DataConfig from './DataConfig';
 import SerieConfig from './SerieConfig';
-import CollapsePanel from '../../StyledComponents/StyledCollapsePanel';
 import GeneralConfig from './GeneralConfig';
 import LinesConfig from './LinesConfig';
 import PointsConfig from './PointsConfig';
+import {StyledTabPane} from '../../StyledComponents/StyledComponents';
 
 export default function LineConfig() {
     const {activeSerie} = useSelector((state: RootState) => state.line);
@@ -52,33 +51,29 @@ export default function LineConfig() {
 
     const config = (
         <>
-            <div style={{display: 'flex', alignItems: 'center', marginBottom: 8}}>
-                <FcLineChart style={{marginRight: 8}} />
-                <div style={{fontSize: 16, lineHeight: '24px', fontWeight: 'bold'}}>折线图</div>
-            </div>
-            <Collapse ghost accordion style={{background: 'white', padding: 0}}>
-                <CollapsePanel key={'general'} header={'General'}>
+            <Tabs tabPosition={'left'} type={'card'} style={{height: '100%'}}>
+                <StyledTabPane key={'general'} tab={'General'}>
                     <GeneralConfig />
-                </CollapsePanel>
-                <CollapsePanel key={'axes'} header={'坐标轴'}>
+                </StyledTabPane>
+                <StyledTabPane key={'axes'} tab={'坐标轴'}>
                     <AxisConfig />
-                </CollapsePanel>
-                <CollapsePanel key={'grid'} header={'网格'}>
+                </StyledTabPane>
+                <StyledTabPane key={'grid'} tab={'网格'}>
                     <GridConfig />
-                </CollapsePanel>
-                <CollapsePanel key={'legend'} header={'图例'}>
+                </StyledTabPane>
+                <StyledTabPane key={'legend'} tab={'图例'}>
                     <LegendConfig />
-                </CollapsePanel>
-                <CollapsePanel header={'数据'} key={'data'}>
+                </StyledTabPane>
+                <StyledTabPane tab={'数据'} key={'data'}>
                     <DataConfig />
-                </CollapsePanel>
-                <CollapsePanel key={'lines'} header={'Lines'}>
+                </StyledTabPane>
+                <StyledTabPane key={'lines'} tab={'Lines'}>
                     <LinesConfig />
-                </CollapsePanel>
-                <CollapsePanel key={'points'} header={'数据点'}>
+                </StyledTabPane>
+                <StyledTabPane key={'points'} tab={'数据点'}>
                     <PointsConfig />
-                </CollapsePanel>
-            </Collapse>
+                </StyledTabPane>
+            </Tabs>
             <Space></Space>
             <Button style={{width: '100%'}} type={'primary'} onClick={renderChart}>
                 渲染
@@ -90,9 +85,8 @@ export default function LineConfig() {
         <div
             className={'Config'}
             style={{
-                width: 260,
                 height: '100%',
-                padding: 16,
+                width: '100%',
             }}
         >
             {activeSerie ? <SerieConfig /> : config}

@@ -3,7 +3,6 @@ import {Switch, Collapse, Form, Input, Radio, Slider, InputNumber} from 'antd';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../redux/store';
 import {setAxis, setShowXAxis, setShowYAxis} from '../../../features/chart/lineChartSlice';
-import CollapsePanel from '../../StyledComponents/StyledCollapsePanel';
 import {AlignCenterOutlined, AlignLeftOutlined, AlignRightOutlined} from '@ant-design/icons';
 
 export default () => {
@@ -15,7 +14,7 @@ export default () => {
     return (
         <>
             <Collapse key={'x-axis'} ghost>
-                <CollapsePanel
+                <Collapse.Panel
                     collapsible={showXAxis ? 'header' : 'disabled'}
                     key={'showXAxis'}
                     header={'显示 x 轴'}
@@ -63,8 +62,8 @@ export default () => {
                             <InputNumber />
                         </Form.Item>
                     </Form>
-                </CollapsePanel>
-                <CollapsePanel
+                </Collapse.Panel>
+                <Collapse.Panel
                     collapsible={showYAxis ? 'header' : 'disabled'}
                     key={'showYAxis'}
                     header={'显示 y 轴'}
@@ -75,7 +74,7 @@ export default () => {
                             onChange={(checked) => dispatch(setShowYAxis(checked))}
                         ></Switch>
                     }
-                ></CollapsePanel>
+                ></Collapse.Panel>
             </Collapse>
         </>
     );

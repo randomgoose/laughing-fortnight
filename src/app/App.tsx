@@ -43,7 +43,7 @@ function App() {
                     flexDirection: 'column',
                     width: '100%',
                     maxWidth: 1200,
-                    borderRight: '1px solid rgba(0, 0, 0, .1)',
+                    // borderRight: '1px solid rgba(0, 0, 0, .1)',
                 }}
             >
                 <Canvas />

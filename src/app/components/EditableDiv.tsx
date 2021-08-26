@@ -31,6 +31,9 @@ export default function EditableDiv({value, onFinishEditing}: Props) {
         <div ref={ref}>
             {typeof value === 'string' ? (
                 <Input
+                    onBlur={() => {
+                        finishEditing();
+                    }}
                     autoFocus
                     value={temp}
                     onChange={(e) => {
@@ -45,6 +48,9 @@ export default function EditableDiv({value, onFinishEditing}: Props) {
                 />
             ) : (
                 <InputNumber
+                    onBlur={() => {
+                        finishEditing();
+                    }}
                     autoFocus
                     value={temp}
                     onChange={(value) => {

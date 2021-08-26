@@ -7,7 +7,6 @@ import Label from '../../Typography/Label';
 import {useClickAway} from 'ahooks';
 import {RootState} from '../../../redux/store';
 import {SketchPicker} from 'react-color';
-import CollapsePanel from '../../StyledComponents/StyledCollapsePanel';
 
 export default function () {
     const dispatch = useDispatch();
@@ -33,7 +32,7 @@ export default function () {
                 Line
             </Space>
             <Collapse ghost accordion style={{background: 'white', padding: 0}}>
-                <CollapsePanel header={'Basic'} key={'basic'}>
+                <Collapse.Panel header={'Basic'} key={'basic'}>
                     <Label>Key</Label>
                     <Input disabled value={activeSerie} />
                     <div ref={ref}>
@@ -49,7 +48,7 @@ export default function () {
                         </Button>
                         {displayColorPicker ? <SketchPicker /> : null}
                     </div>
-                </CollapsePanel>
+                </Collapse.Panel>
             </Collapse>
         </>
     );
