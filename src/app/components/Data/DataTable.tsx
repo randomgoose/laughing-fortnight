@@ -4,7 +4,7 @@ import * as React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {addValue, setData, setSerieId} from '../../features/chart/lineChartSlice';
 import {RootState} from '../../redux/store';
-import EditableDiv from '../EditableDiv';
+import EditableDiv from '../CustomInput/EditableDiv';
 
 export default function DataTable() {
     const {data} = useSelector((state: RootState) => state.line);

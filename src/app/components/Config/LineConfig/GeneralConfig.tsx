@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Space, Slider, Select, Form, Switch} from 'antd';
-import MarginInput from '../../MarginInput';
+import MarginInput from '../../CustomInput/MarginInput';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../redux/store';
 import {ChartState, setPartialState} from '../../../features/chart/lineChartSlice';

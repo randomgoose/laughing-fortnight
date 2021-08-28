@@ -53,7 +53,7 @@ export default function PieConfig() {
                 <Tabs.TabPane key={'grid'} tab={'网格'}></Tabs.TabPane>
                 <Tabs.TabPane key={'legend'} tab={'图例'}></Tabs.TabPane>
                 <Tabs.TabPane key={'data'} tab={'数据'}></Tabs.TabPane>
-                <Tabs.TabPane key={'lines'} tab={'Lines'}></Tabs.TabPane>
+                <Tabs.TabPane key={'lines'} tab={'线条'}></Tabs.TabPane>
                 <Tabs.TabPane key={'points'} tab={'数据点'}></Tabs.TabPane>
             </Tabs>
             <Space></Space>

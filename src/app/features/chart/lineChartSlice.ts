@@ -174,7 +174,7 @@ export const chartSlice = createSlice({
         },
         setLegend: (state, action: PayloadAction<{index: number; newLegend: LegendProps}>) => {
             const {index, newLegend} = action.payload;
-            Object.assign(state.legends[index], newLegend);
+            state.legends[index] = {...state.legends[index], ...newLegend};
         },
         removeLegendByIndex: (state, action: PayloadAction<number>) => {
             // console.log([...state.legends.slice(0, action.payload), ...state.legends.slice(action.payload)]);

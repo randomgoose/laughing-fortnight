@@ -44,7 +44,7 @@ export default function VisLineChart() {
             data={data.filter((item) => lines.includes(item.id))}
             enableGridX={showGridX}
             enableGridY={showGridY}
-            xScale={{type: 'linear'}}
+            xScale={{type: 'point'}}
             yScale={{type: 'linear', min: 0, max: 'auto', reverse: false}}
             yFormat=" >-.2f"
             // axisTop={null}

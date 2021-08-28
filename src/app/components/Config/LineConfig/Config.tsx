@@ -52,7 +52,7 @@ export default function LineConfig() {
     const config = (
         <>
             <Tabs tabPosition={'left'} type={'card'} style={{height: '100%'}}>
-                <StyledTabPane key={'general'} tab={'General'}>
+                <StyledTabPane key={'general'} tab={'通用'}>
                     <GeneralConfig />
                 </StyledTabPane>
                 <StyledTabPane key={'axes'} tab={'坐标轴'}>
@@ -64,10 +64,10 @@ export default function LineConfig() {
                 <StyledTabPane key={'legend'} tab={'图例'}>
                     <LegendConfig />
                 </StyledTabPane>
-                <StyledTabPane tab={'数据'} key={'data'}>
+                <StyledTabPane key={'data'} tab={'数据'}>
                     <DataConfig />
                 </StyledTabPane>
-                <StyledTabPane key={'lines'} tab={'Lines'}>
+                <StyledTabPane key={'lines'} tab={'线条'}>
                     <LinesConfig />
                 </StyledTabPane>
                 <StyledTabPane key={'points'} tab={'数据点'}>

@@ -13,44 +13,30 @@ import {
     PlusOutlined,
 } from '@ant-design/icons';
 import {useThrottle} from 'ahooks';
-import {useTransition} from '@react-spring/core';
-import {animated} from '@react-spring/web';
-// import {animated} from '@react-spring/web';
+import Anchor from '../../CustomInput/Anchor';
 
 export default () => {
     const dispatch = useDispatch();
     const {legends} = useSelector((state: RootState) => state.line);
     useThrottle(legends, {wait: 500});
 
-    const transition = useTransition(legends, {
-        from: {opacity: 0, transform: 'translateX(-10px)'},
-        enter: () => async (next) => {
-            await next({
-                opacity: 1,
-                transform: 'translateX(0px)',
-            });
-        },
-        to: {opacity: 0, transform: 'translateX(-10px)'},
-    });
-
-    function addLegend() {
+    const addLegend = React.useCallback(() => {
         dispatch(setPartialState({legends: [...legends, {...legends[0]}]}));
-    }
+    }, [legends]);
 
-    function deleteLegendByIndex(index: number) {
-        dispatch(removeLegendByIndex(index));
-    }
-
-    const AnimatedPanel = animated(Collapse.Panel);
+    const deleteLegendByIndex = React.useCallback(
+        (index: number) => {
+            dispatch(removeLegendByIndex(index));
+        },
+        [legends]
+    );
 
     return (
         <Space style={{width: '100%'}} direction={'vertical'}>
-            <Collapse collapsible={'header'} ghost>
-                {transition((style, item) => {
-                    const index = legends.indexOf(item);
-                    return item ? (
-                        <AnimatedPanel
-                            style={style}
+            <Collapse collapsible={'header'}>
+                {legends.map((legend, index) => {
+                    return (
+                        <Collapse.Panel
                             key={index}
                             header={`图例 ${index}`}
                             extra={
@@ -66,7 +52,7 @@ export default () => {
                                 onValuesChange={(changedValues) => {
                                     dispatch(setLegend({index: index, newLegend: changedValues}));
                                 }}
-                                initialValues={item}
+                                initialValues={legend}
                             >
                                 <Form.Item name={'direction'} label={'图例方向'}>
                                     <Radio.Group size={'small'}>
@@ -79,6 +65,9 @@ export default () => {
                                     </Radio.Group>
                                 </Form.Item>
                                 <Form.Item name={'translateX'} label={'translateX'}>
+                                    <Slider />
+                                </Form.Item>
+                                <Form.Item name={'translateY'} label={'translateY'}>
                                     <Slider />
                                 </Form.Item>
                                 <Form.Item name={'legendAlign'} label={'图例对齐方式'}>
@@ -107,10 +96,11 @@ export default () => {
                                         </Radio.Button>
                                     </Radio.Group>
                                 </Form.Item>
+                                <Form.Item name={'anchor'} label={'位置'}>
+                                    <Anchor />
+                                </Form.Item>
                             </Form>
-                        </AnimatedPanel>
-                    ) : (
-                        ''
+                        </Collapse.Panel>
                     );
                 })}
             </Collapse>

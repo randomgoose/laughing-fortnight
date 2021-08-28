@@ -4,12 +4,14 @@ export interface AppState {
     chartType: 'line' | 'bar' | 'pie' | 'area';
     dataSource: 'mock' | 'file' | 'sheet' | null;
     selectionId: string;
+    showAdvancedConfig: boolean;
 }
 
 const initialState: AppState = {
     chartType: 'line',
     dataSource: null,
     selectionId: '',
+    showAdvancedConfig: false,
 };
 
 export const appSlice = createSlice({
