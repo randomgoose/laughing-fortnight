@@ -1,13 +1,16 @@
 import * as React from 'react';
-import {Space, Slider, Select, Form, Switch} from 'antd';
+import {Space, Slider, Select, Form, Switch, Typography} from 'antd';
 import MarginInput from '../../CustomInput/MarginInput';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../redux/store';
 import {ChartState, setPartialState} from '../../../features/chart/lineChartSlice';
 import {colorSchemes} from '@nivo/colors';
 import {AreaChartOutlined, ColumnWidthOutlined, GatewayOutlined, HighlightOutlined} from '@ant-design/icons';
+import {FcSettings} from 'react-icons/fc';
 
 const colorSchemeList = Object.keys(colorSchemes);
+
+const scaleTypes = ['linear', 'point'];
 
 const blendModeList = [
     'normal',
@@ -41,95 +44,113 @@ export default function GeneralConfig() {
     }, [enableArea]);
 
     return (
-        <Form
-            form={form}
-            layout={'vertical'}
-            onValuesChange={(changedValues: Partial<ChartState>) => {
-                if (changedValues.colors) {
-                    dispatch(setPartialState({colors: {scheme: changedValues.colors}}));
-                } else {
-                    dispatch(setPartialState(changedValues));
-                }
-            }}
-            initialValues={{
-                scale: scale,
-                colors: colors['scheme'],
-                margin: margin,
-                enableArea: enableArea,
-                areaOpacity,
-                areaBlendMode,
-                areaBaselineValue,
-            }}
-        >
-            <Form.Item
-                label={
-                    <Space>
-                        <GatewayOutlined />
-                        尺寸
-                    </Space>
-                }
-                name={'scale'}
+        <>
+            <Typography.Title level={5}>
+                <Space align={'center'} size={4}>
+                    <FcSettings />
+                    通用设置
+                </Space>
+            </Typography.Title>
+            <Form
+                form={form}
+                layout={'vertical'}
+                onValuesChange={(changedValues: Partial<ChartState>) => {
+                    if (changedValues.colors) {
+                        dispatch(setPartialState({colors: {scheme: changedValues.colors}}));
+                    } else if (changedValues.xScale) {
+                        dispatch(setPartialState({xScale: {type: changedValues.xScale}}));
+                    } else {
+                        dispatch(setPartialState(changedValues));
+                    }
+                }}
+                initialValues={{
+                    scale: scale,
+                    colors: colors['scheme'],
+                    margin: margin,
+                    enableArea: enableArea,
+                    areaOpacity,
+                    areaBlendMode,
+                    areaBaselineValue,
+                }}
             >
-                <Slider min={0.3} max={20} step={0.01} />
-            </Form.Item>
-            {/* //TODO: Check sequential color schemes */}
-            <Form.Item
-                label={
-                    <Space>
-                        <HighlightOutlined />
-                        颜色
-                    </Space>
-                }
-                name={'colors'}
-            >
-                <Select style={{width: '100%'}}>
-                    {colorSchemeList.map((scheme) => (
-                        <Select.Option key={scheme} value={scheme}>
-                            {scheme}
-                        </Select.Option>
-                    ))}
-                </Select>
-            </Form.Item>
-            <Form.Item
-                label={
-                    <Space>
-                        <ColumnWidthOutlined />
-                        边距
-                    </Space>
-                }
-                name={'margin'}
-            >
-                <MarginInput />
-            </Form.Item>
-            <Form.Item
-                label={
-                    <Space>
-                        <AreaChartOutlined />
-                        面积图
-                    </Space>
-                }
-                name={'enableArea'}
-                valuePropName={'checked'}
-            >
-                <Switch size={'small'} />
-            </Form.Item>
-            <Form.Item name={'areaBaselineValue'} label={<Space>面积图基线</Space>}>
-                <Slider />
-            </Form.Item>
-            <Form.Item name={'areaOpacity'} label={<Space>面积图透明度</Space>}>
-                <Slider step={0.01} min={0} max={1} />
-            </Form.Item>
-            <Form.Item name={'areaBlendMode'} label={<Space>面积图混合方式</Space>}>
-                <Select
-                    placeholder={'选择混合方式'}
-                    options={blendModeList.map((mode) => {
-                        return {
-                            value: mode,
-                            label: mode,
-                        };
-                    })}
-                />
-            </Form.Item>
-        </Form>
+                <Form.Item
+                    label={
+                        <Space>
+                            <GatewayOutlined />
+                            尺寸
+                        </Space>
+                    }
+                    name={'scale'}
+                >
+                    <Slider min={0.1} max={3} step={0.1} />
+                </Form.Item>
+                <Form.Item name={'xScale'} label={'xScale'}>
+                    <Select
+                        options={scaleTypes.map((type) => ({
+                            title: type,
+                            value: type,
+                        }))}
+                    ></Select>
+                </Form.Item>
+                {/* //TODO: Check sequential color schemes */}
+                <Form.Item
+                    label={
+                        <Space>
+                            <HighlightOutlined />
+                            颜色
+                        </Space>
+                    }
+                    name={'colors'}
+                >
+                    <Select style={{width: '100%'}}>
+                        {colorSchemeList.map((scheme) => (
+                            <Select.Option key={scheme} value={scheme}>
+                                {scheme}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </Form.Item>
+                <Form.Item
+                    label={
+                        <Space>
+                            <ColumnWidthOutlined />
+                            边距
+                        </Space>
+                    }
+                    name={'margin'}
+                >
+                    <MarginInput />
+                </Form.Item>
+                <Form.Item
+                    label={
+                        <Space>
+                            <AreaChartOutlined />
+                            面积图
+                        </Space>
+                    }
+                    name={'enableArea'}
+                    valuePropName={'checked'}
+                >
+                    <Switch size={'small'} />
+                </Form.Item>
+                <Form.Item name={'areaBaselineValue'} label={<Space>面积图基线</Space>}>
+                    <Slider />
+                </Form.Item>
+                <Form.Item name={'areaOpacity'} label={<Space>面积图透明度</Space>}>
+                    <Slider step={0.01} min={0} max={1} />
+                </Form.Item>
+                <Form.Item name={'areaBlendMode'} label={<Space>面积图混合方式</Space>}>
+                    <Select
+                        placeholder={'选择混合方式'}
+                        options={blendModeList.map((mode) => {
+                            return {
+                                value: mode,
+                                label: mode,
+                            };
+                        })}
+                    />
+                </Form.Item>
+            </Form>
+        </>
     );
 }

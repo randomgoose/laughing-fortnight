@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../../redux/store';
-import {Button, Tabs, Space} from 'antd';
+import {Button, Tabs} from 'antd';
 import GridConfig from './GridConfig';
 import AxisConfig from './AxisConfig';
 import LegendConfig from './LegendConfig';
@@ -11,6 +11,7 @@ import GeneralConfig from './GeneralConfig';
 import LinesConfig from './LinesConfig';
 import PointsConfig from './PointsConfig';
 import {StyledTabPane} from '../../StyledComponents/StyledComponents';
+import {FcAbout, FcDatabase, FcGrid, FcLineChart, FcOrgUnit, FcRuler, FcSettings} from 'react-icons/fc';
 
 export default function LineConfig() {
     const {activeSerie} = useSelector((state: RootState) => state.line);
@@ -26,7 +27,10 @@ export default function LineConfig() {
             {
                 pluginMessage: {
                     type: 'render-chart',
-                    svg: document.querySelector('.recharts-surface').outerHTML,
+                    svg: `<svg>${document.querySelector('.canvas').querySelector('svg').innerHTML}</svg>`.replace(
+                        /transparent/g,
+                        '#ffffff'
+                    ),
                     config: chartConfig,
                 },
             },
@@ -34,49 +38,48 @@ export default function LineConfig() {
         );
     }
 
-    React.useEffect(() => {
-        if (selectionId.length > 0) {
-            window.parent.postMessage(
-                {
-                    pluginMessage: {
-                        type: 'update-chart',
-                        svg: document.querySelector('.recharts-surface').outerHTML,
-                        config: chartConfig,
-                    },
-                },
-                '*'
-            );
-        }
-    }, [chartConfig, selectionId]);
-
     const config = (
         <>
             <Tabs tabPosition={'left'} type={'card'} style={{height: '100%'}}>
-                <StyledTabPane key={'general'} tab={'通用'}>
+                <StyledTabPane key={'general'} tab={<FcSettings />}>
                     <GeneralConfig />
                 </StyledTabPane>
-                <StyledTabPane key={'axes'} tab={'坐标轴'}>
+                <StyledTabPane key={'axes'} tab={<FcRuler />}>
                     <AxisConfig />
                 </StyledTabPane>
-                <StyledTabPane key={'grid'} tab={'网格'}>
+                <StyledTabPane key={'grid'} tab={<FcGrid />}>
                     <GridConfig />
                 </StyledTabPane>
-                <StyledTabPane key={'legend'} tab={'图例'}>
+                <StyledTabPane key={'legend'} tab={<FcAbout />}>
                     <LegendConfig />
                 </StyledTabPane>
-                <StyledTabPane key={'data'} tab={'数据'}>
+                <StyledTabPane key={'data'} tab={<FcDatabase />}>
                     <DataConfig />
                 </StyledTabPane>
-                <StyledTabPane key={'lines'} tab={'线条'}>
+                <StyledTabPane key={'lines'} tab={<FcLineChart />}>
                     <LinesConfig />
                 </StyledTabPane>
-                <StyledTabPane key={'points'} tab={'数据点'}>
+                <StyledTabPane key={'points'} tab={<FcOrgUnit />}>
                     <PointsConfig />
                 </StyledTabPane>
             </Tabs>
-            <Space></Space>
-            <Button style={{width: '100%'}} type={'primary'} onClick={renderChart}>
-                渲染
+            <Button
+                style={{
+                    position: 'fixed',
+                    bottom: '48px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    boxShadow: '0 10px 10px rgba(0, 0, 0, .1)',
+                    fontSize: 16,
+                    lineHeight: 24,
+                }}
+                type={'primary'}
+                size={'large'}
+                onClick={renderChart}
+                shape={'round'}
+                disabled={!(selectionId.length > 0)}
+            >
+                {selectionId.length > 0 ? '渲染图表' : '未选择 Frame'}
             </Button>
         </>
     );
@@ -86,7 +89,8 @@ export default function LineConfig() {
             className={'Config'}
             style={{
                 height: '100%',
-                width: '100%',
+                width: 200,
+                flexShrink: 0,
             }}
         >
             {activeSerie ? <SerieConfig /> : config}

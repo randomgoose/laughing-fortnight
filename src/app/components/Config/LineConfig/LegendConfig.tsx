@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Radio, Form, Slider, Collapse, Button, Space} from 'antd';
+import {Radio, Form, Slider, Collapse, Button, Space, Typography} from 'antd';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../redux/store';
 import {setLegend, setPartialState, removeLegendByIndex} from '../../../features/chart/lineChartSlice';
@@ -14,6 +14,9 @@ import {
 } from '@ant-design/icons';
 import {useThrottle} from 'ahooks';
 import Anchor from '../../CustomInput/Anchor';
+import {FcAbout} from 'react-icons/fc';
+import {StyledCollapsePanel} from '../../StyledComponents/StyledComponents';
+import {baseLegend} from '../../../data/baseLegend';
 
 export default () => {
     const dispatch = useDispatch();
@@ -21,7 +24,7 @@ export default () => {
     useThrottle(legends, {wait: 500});
 
     const addLegend = React.useCallback(() => {
-        dispatch(setPartialState({legends: [...legends, {...legends[0]}]}));
+        dispatch(setPartialState({legends: [...legends, {...baseLegend[0]}]}));
     }, [legends]);
 
     const deleteLegendByIndex = React.useCallback(
@@ -33,19 +36,27 @@ export default () => {
 
     return (
         <Space style={{width: '100%'}} direction={'vertical'}>
-            <Collapse collapsible={'header'}>
+            <Typography.Title level={5}>
+                <Space size={4}>
+                    <FcAbout />
+                    图例设置
+                </Space>
+            </Typography.Title>
+            <Collapse collapsible={'header'} ghost>
                 {legends.map((legend, index) => {
                     return (
-                        <Collapse.Panel
+                        <StyledCollapsePanel
                             key={index}
                             header={`图例 ${index}`}
                             extra={
-                                <Button
-                                    danger
-                                    icon={<DeleteOutlined />}
-                                    size={'small'}
+                                <span
                                     onClick={() => deleteLegendByIndex(index)}
-                                />
+                                    style={{
+                                        cursor: 'pointer',
+                                    }}
+                                >
+                                    <DeleteOutlined />
+                                </span>
                             }
                         >
                             <Form
@@ -53,6 +64,7 @@ export default () => {
                                     dispatch(setLegend({index: index, newLegend: changedValues}));
                                 }}
                                 initialValues={legend}
+                                layout={'vertical'}
                             >
                                 <Form.Item name={'direction'} label={'图例方向'}>
                                     <Radio.Group size={'small'}>
@@ -100,7 +112,7 @@ export default () => {
                                     <Anchor />
                                 </Form.Item>
                             </Form>
-                        </Collapse.Panel>
+                        </StyledCollapsePanel>
                     );
                 })}
             </Collapse>

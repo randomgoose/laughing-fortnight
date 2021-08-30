@@ -1,20 +1,25 @@
 figma.showUI(__html__);
 figma.ui.resize(800, 600);
 
+function createChart(frame: FrameNode, svg): FrameNode {
+    const chart = figma.createNodeFromSvg(svg);
+    frame.appendChild(chart);
+    frame.resize(chart.width, chart.height);
+    frame.name = 'chart';
+    return frame;
+}
+
+function saveChartConfig(node: FrameNode, config) {
+    node.setPluginData('chart-data', JSON.stringify(config));
+}
+
 figma.ui.onmessage = (msg) => {
     switch (msg.type) {
         case 'render-chart':
-            const chart = figma.createNodeFromSvg(msg.svg);
-            chart.setPluginData('chart-data', JSON.stringify(msg.config));
-            figma.currentPage.appendChild(chart);
-            break;
-        case 'update-chart':
-            if (figma.currentPage.selection[0].type === 'FRAME' && chart.getPluginData('chart-data').length > 0) {
-                figma.currentPage.selection[0].children.forEach((child) => child.remove());
-                const updatedChart = figma.createNodeFromSvg(msg.svg);
-                figma.currentPage.selection[0].appendChild(updatedChart);
-                figma.currentPage.selection[0].setPluginData('chart-data', JSON.stringify(msg.config));
-                figma.currentPage.selection[0].resize(chart.width, chart.height);
+            const selection = figma.currentPage.selection;
+            if (selection[0] && selection[0].type === 'FRAME') {
+                const chart = createChart(selection[0], msg.svg);
+                saveChartConfig(chart, msg.config);
             }
             break;
         default:
@@ -31,6 +36,11 @@ figma.on('selectionchange', () => {
         figma.ui.postMessage({
             type: 'set-selection',
             data: figma.currentPage.selection[0] ? figma.currentPage.selection[0].id : '',
+        });
+    } else {
+        figma.ui.postMessage({
+            type: 'set-selection',
+            data: '',
         });
     }
 });

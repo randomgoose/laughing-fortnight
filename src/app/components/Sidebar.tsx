@@ -7,8 +7,8 @@ import {setChartType} from '../features/app/appSlice';
 import {RootState} from '../redux/store';
 
 const SidebarButton = styled.button`
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     border: none;
     background-color: white;
     display: flex;
@@ -26,13 +26,13 @@ const SidebarButton = styled.button`
     }
 
     &:not(:last-child) {
-        margin-bottom: 16px;
+        margin-bottom: 8px;
     }
 
     cursor: pointer;
 `;
 
-function ChartType({type, children}: {type: 'line' | 'bar' | 'pie' | 'area'; children: React.ReactNode}) {
+function ChartType({type, children}: {type?: 'line' | 'bar' | 'pie' | 'area'; children?: React.ReactNode}) {
     const dispatch = useDispatch();
     const {chartType} = useSelector((state: RootState) => state.app);
 
@@ -40,7 +40,7 @@ function ChartType({type, children}: {type: 'line' | 'bar' | 'pie' | 'area'; chi
         <Tooltip title={type[0].toUpperCase() + type.slice(1)} placement={'right'}>
             <SidebarButton
                 style={{backgroundColor: type === chartType ? '#e5e6eb' : 'white'}}
-                onClick={() => dispatch(setChartType(type))}
+                onClick={() => (type ? dispatch(setChartType(type)) : null)}
             >
                 {children}
             </SidebarButton>
@@ -55,11 +55,10 @@ export default function SideBar() {
             style={{
                 display: 'flex',
                 flexDirection: 'column',
-                width: 56,
                 height: '100%',
                 borderRight: '1px solid rgba(0, 0, 0, .1)',
                 alignItems: 'center',
-                padding: 16,
+                padding: 8,
             }}
         >
             <ChartType type={'bar'}>

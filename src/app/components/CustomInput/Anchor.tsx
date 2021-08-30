@@ -39,13 +39,14 @@ export default function Anchor({value, onChange}: Props) {
             className={'anchor'}
             style={{
                 position: 'relative',
-                width: 120,
-                height: 120,
+                width: 60,
+                height: 60,
                 border: '1px solid lightgray',
             }}
         >
-            {positions.map((position) => (
+            {positions.map((position, index) => (
                 <Point
+                    key={index}
                     className={position}
                     onClick={() => {
                         setActivePoint(position);

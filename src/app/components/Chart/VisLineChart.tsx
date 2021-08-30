@@ -20,6 +20,8 @@ export default function VisLineChart() {
         margin,
         lineWidth,
         enablePoints,
+        pointColor,
+        xScale,
         // legendAlign,
         // legendVerticalAlign,
         // lines,
@@ -44,7 +46,7 @@ export default function VisLineChart() {
             data={data.filter((item) => lines.includes(item.id))}
             enableGridX={showGridX}
             enableGridY={showGridY}
-            xScale={{type: 'point'}}
+            xScale={xScale}
             yScale={{type: 'linear', min: 0, max: 'auto', reverse: false}}
             yFormat=" >-.2f"
             // axisTop={null}
@@ -64,7 +66,7 @@ export default function VisLineChart() {
             }
             colors={colors}
             enablePoints={enablePoints}
-            pointColor={{from: 'color'}}
+            pointColor={pointColor}
             pointSize={pointSize}
             pointBorderColor={{theme: 'background'}}
             pointLabelYOffset={-12}

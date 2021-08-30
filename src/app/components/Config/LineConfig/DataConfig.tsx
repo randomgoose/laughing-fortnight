@@ -1,10 +1,11 @@
 import * as React from 'react';
-import {Checkbox, Space, Modal, Button, Upload, Table} from 'antd';
+import {Checkbox, Space, Modal, Button, Upload, Table, Typography} from 'antd';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../redux/store';
 import {addKey, removeKey, setNewData} from '../../../features/chart/lineChartSlice';
 import * as parse from 'csv-parse';
 import DataTable from '../../Data/DataTable';
+import {FcDatabase} from 'react-icons/fc';
 
 export const DataUtil = () => {
     const showModal = () => {
@@ -81,6 +82,7 @@ export const DataUtil = () => {
     return (
         <>
             <Modal
+                centered={true}
                 visible={isModalVisible}
                 title={'数据'}
                 onCancel={hideModal}
@@ -122,6 +124,12 @@ export default () => {
     const {data, lines} = useSelector((state: RootState) => state.line);
     return (
         <Space direction={'vertical'}>
+            <Typography.Title level={5}>
+                <Space size={4}>
+                    <FcDatabase />
+                    数据设置
+                </Space>
+            </Typography.Title>
             {data.map((item) => (
                 <Checkbox
                     value={item.id}

@@ -2,7 +2,7 @@ import * as React from 'react';
 import {FcPieChart} from 'react-icons/fc';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../../redux/store';
-import {Button, Space, Tabs} from 'antd';
+import {Button, Tabs} from 'antd';
 
 export default function PieConfig() {
     const {activeSerie} = useSelector((state: RootState) => state.line);
@@ -48,7 +48,7 @@ export default function PieConfig() {
                 <div style={{fontSize: 16, lineHeight: '24px', fontWeight: 'bold'}}>饼图</div>
             </div>
             <Tabs tabPosition={'left'}>
-                <Tabs.TabPane key={'general'} tab={'General'}></Tabs.TabPane>
+                <Tabs.TabPane key={'general'} tab={'General'} style={{width: 'fit-content'}}></Tabs.TabPane>
                 <Tabs.TabPane key={'axes'} tab={'坐标轴'}></Tabs.TabPane>
                 <Tabs.TabPane key={'grid'} tab={'网格'}></Tabs.TabPane>
                 <Tabs.TabPane key={'legend'} tab={'图例'}></Tabs.TabPane>
@@ -56,8 +56,7 @@ export default function PieConfig() {
                 <Tabs.TabPane key={'lines'} tab={'线条'}></Tabs.TabPane>
                 <Tabs.TabPane key={'points'} tab={'数据点'}></Tabs.TabPane>
             </Tabs>
-            <Space></Space>
-            <Button style={{width: '100%'}} type={'primary'} onClick={renderChart}>
+            <Button style={{width: '100%'}} type={'primary'} onClick={() => renderChart()} shape={'round'}>
                 渲染
             </Button>
         </>

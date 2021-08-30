@@ -1,5 +1,5 @@
 // import {Serie} from '@nivo/line';
-import {Button, Form, InputNumber, Radio} from 'antd';
+import {Button, Form, InputNumber, Radio, Space} from 'antd';
 import * as React from 'react';
 import {useImmer} from 'use-immer';
 // import {useDispatch} from 'react-redux';
@@ -61,7 +61,7 @@ export default function DataMock() {
 
     return (
         <div className={'data-mock'} style={{marginBottom: 8}}>
-            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%'}}>
+            <Space direction={'vertical'}>
                 <Header showReturnButton onReturn={() => dispatch(setDataSource(null))}>
                     数据模拟
                 </Header>
@@ -87,51 +87,49 @@ export default function DataMock() {
                     {numberSequenceAttr.trend !== 'normal-distribution' ? (
                         <>
                             <Form.Item name={'min'} label={'最小值'} fieldKey={'min'}>
-                                <InputNumber />
+                                <InputNumber style={{maxWidth: 48}} />
                             </Form.Item>
                             <Form.Item name={'max'} label={'最大值'} fieldKey={'max'}>
-                                <InputNumber />
+                                <InputNumber style={{maxWidth: 48}} />
                             </Form.Item>
                         </>
                     ) : (
                         <>
                             <Form.Item name={'mean'} label={'均值'} fieldKey={'mean'}>
-                                <InputNumber />
+                                <InputNumber style={{maxWidth: 48}} />
                             </Form.Item>
                             <Form.Item name={'std'} label={'标准差'} fieldKey={'std'}>
-                                <InputNumber />
+                                <InputNumber style={{maxWidth: 48}} />
                             </Form.Item>
                         </>
                     )}
                     <Form.Item name={'count'} label={'数组长度'} fieldKey={'count'}>
-                        <InputNumber />
+                        <InputNumber style={{maxWidth: 48}} />
                     </Form.Item>
                     <Form.Item name={'array'} label={'数组数'} fieldKey={'array'}>
-                        <InputNumber />
-                    </Form.Item>
-                    <Form.Item>
-                        <Button
-                            onClick={() => {
-                                const {array} = numberSequenceAttr;
-                                let temp = [];
-                                for (let i = 0; i < array; i++) {
-                                    const serie: Serie = {
-                                        id: cryptoRandomString({length: 4}),
-                                        data: generateNumberSequence(),
-                                    };
-                                    temp.push(serie);
-                                }
-                                setTempData(temp);
-                            }}
-                        >
-                            模拟数据
-                        </Button>
-                    </Form.Item>
-                    <Form.Item>
-                        <Button type={'link'}>高级设置</Button>
+                        <InputNumber style={{maxWidth: 36}} />
                     </Form.Item>
                 </Form>
-            </div>
+                <Space size={4}>
+                    <Button
+                        onClick={() => {
+                            const {array} = numberSequenceAttr;
+                            let temp = [];
+                            for (let i = 0; i < array; i++) {
+                                const serie: Serie = {
+                                    id: cryptoRandomString({length: 4}),
+                                    data: generateNumberSequence(),
+                                };
+                                temp.push(serie);
+                            }
+                            setTempData(temp);
+                        }}
+                    >
+                        模拟数据
+                    </Button>
+                    <Button type={'link'}>高级设置</Button>
+                </Space>
+            </Space>
         </div>
     );
 }
