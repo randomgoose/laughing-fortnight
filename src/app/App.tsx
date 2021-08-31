@@ -11,9 +11,11 @@ import {ConfigProvider} from 'antd';
 import {useDispatch} from 'react-redux';
 // import {loadState} from './features/chart/lineChartSlice';
 import {setSelectionId} from './features/app/appSlice';
+import {setScale} from './features/chart/lineChartSlice';
 
 function App() {
     const {chartType} = useSelector((state: RootState) => state.app);
+    const {scale} = useSelector((state: RootState) => state.line);
     const dispatch = useDispatch();
 
     React.useEffect(() => {
@@ -43,10 +45,16 @@ function App() {
                     style={{
                         display: 'flex',
                         position: 'relative',
+                        width: '100%',
                         flexDirection: 'column',
                         flexGrow: 1,
                         maxWidth: 1200,
                         borderRight: '1px solid rgba(0, 0, 0, .1)',
+                        overflow: 'hidden',
+                        background: '#f2f2f2',
+                    }}
+                    onWheel={(e) => {
+                        dispatch(setScale(scale - e.deltaY * 0.002));
                     }}
                 >
                     <Canvas />

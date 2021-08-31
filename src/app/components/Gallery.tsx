@@ -1,13 +1,16 @@
-import {Tabs} from 'antd';
+import {Slider, Space, Tabs} from 'antd';
 import * as React from 'react';
 import {FcPuzzle} from 'react-icons/fc';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../redux/store';
 import DataMock from './Data/DataMock';
 import DataSource from './Data/DataSource';
 import DataTable from './Data/DataTable';
 import DataUpload from './Data/DataUpload';
 import {Rnd} from 'react-rnd';
+import {Handle} from './StyledComponents/StyledComponents';
+import {setScale} from '../features/chart/lineChartSlice';
+import {ZoomInOutlined, ZoomOutOutlined} from '@ant-design/icons';
 
 function Sample({title}: {title: string}) {
     return (
@@ -28,10 +31,19 @@ function Sample({title}: {title: string}) {
 
 export default function Gallery() {
     const {dataSource} = useSelector((state: RootState) => state.app);
+    const {scale} = useSelector((state: RootState) => state.line);
     const [height, setHeight] = React.useState('320px');
     const [width, setWidth] = React.useState('100%');
     const [x, setX] = React.useState(0);
     const [y, setY] = React.useState(window.innerHeight - 320);
+    const [showSlider, setShowSlider] = React.useState(false);
+    const dispatch = useDispatch();
+
+    React.useEffect(() => {
+        setShowSlider(true);
+
+        setTimeout(() => setShowSlider(false), 3000);
+    }, [scale]);
 
     return (
         <Rnd
@@ -42,6 +54,9 @@ export default function Gallery() {
                 setX(position.x);
                 setY(position.y);
             }}
+            resizeHandleComponent={{
+                top: <Handle pos={'top'} hovering={true} scale={1} />,
+            }}
             position={{
                 x: x,
                 y: y,
@@ -51,7 +66,40 @@ export default function Gallery() {
                 height: height,
             }}
         >
-            <div className={'Gallery'} style={{padding: '0 12px', width: '100%', height: '100%', background: 'white'}}>
+            <div
+                className={'Gallery'}
+                style={{padding: '0 12px', width: '100%', height: '100%', background: 'white'}}
+                onMouseOver={() => setShowSlider(true)}
+                onMouseOut={() => setShowSlider(false)}
+            >
+                <Space
+                    align={'center'}
+                    style={{
+                        position: 'absolute',
+                        top: -72,
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        display: 'flex',
+                        background: `rgba(255, 255, 255, ${showSlider ? 0.8 : 0})`,
+                        padding: '8px 16px',
+                        borderRadius: 100,
+                        opacity: showSlider ? 1 : 0,
+                        transition: 'opacity .4s',
+                    }}
+                >
+                    <ZoomOutOutlined style={{color: 'gray'}} />
+                    <Slider
+                        min={0.1}
+                        max={3}
+                        step={0.01}
+                        value={scale}
+                        onChange={(value) => {
+                            dispatch(setScale(value));
+                        }}
+                        style={{width: 196}}
+                    />
+                    <ZoomInOutlined style={{color: 'gray'}} />
+                </Space>
                 <Tabs defaultActiveKey={'data'}>
                     <Tabs.TabPane key={'data'} tab={'数据'}>
                         {!dataSource ? (

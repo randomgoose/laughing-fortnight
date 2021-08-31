@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../redux/store';
 import {ChartState, setPartialState} from '../../../features/chart/lineChartSlice';
 import {colorSchemes} from '@nivo/colors';
-import {AreaChartOutlined, ColumnWidthOutlined, GatewayOutlined, HighlightOutlined} from '@ant-design/icons';
+import {AreaChartOutlined, ColumnWidthOutlined, HighlightOutlined} from '@ant-design/icons';
 import {FcSettings} from 'react-icons/fc';
 
 const colorSchemeList = Object.keys(colorSchemes);
@@ -40,6 +40,10 @@ export default function GeneralConfig() {
     const [form] = Form.useForm();
 
     React.useEffect(() => {
+        form.setFieldsValue({scale});
+    }, [scale]);
+
+    React.useEffect(() => {
         console.log(enableArea);
     }, [enableArea]);
 
@@ -59,6 +63,8 @@ export default function GeneralConfig() {
                         dispatch(setPartialState({colors: {scheme: changedValues.colors}}));
                     } else if (changedValues.xScale) {
                         dispatch(setPartialState({xScale: {type: changedValues.xScale}}));
+                    } else if (changedValues.yScale) {
+                        dispatch(setPartialState({yScale: {type: changedValues.yScale}}));
                     } else {
                         dispatch(setPartialState(changedValues));
                     }
@@ -73,18 +79,15 @@ export default function GeneralConfig() {
                     areaBaselineValue,
                 }}
             >
-                <Form.Item
-                    label={
-                        <Space>
-                            <GatewayOutlined />
-                            尺寸
-                        </Space>
-                    }
-                    name={'scale'}
-                >
-                    <Slider min={0.1} max={3} step={0.1} />
-                </Form.Item>
                 <Form.Item name={'xScale'} label={'xScale'}>
+                    <Select
+                        options={scaleTypes.map((type) => ({
+                            title: type,
+                            value: type,
+                        }))}
+                    ></Select>
+                </Form.Item>
+                <Form.Item name={'yScale'} label={'yScale'}>
                     <Select
                         options={scaleTypes.map((type) => ({
                             title: type,
