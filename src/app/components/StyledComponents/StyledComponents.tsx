@@ -20,8 +20,8 @@ export const Handle = styled.div`
     height: ${(props) =>
         props.pos === 'top' || props.pos === 'bottom' ? `${4 / props.scale}px` : `${24 / props.scale}px`};
     border-radius: 10000px;
-    border: ${(props) => 1 / props.scale}px solid red;
-    background: pink;
+    border: ${(props) => 1 / props.scale}px solid gray;
+    background: lightgray;
     position: absolute;
     top: ${(props) => (props.pos === 'left' || props.pos === 'right' ? '50% !important' : '')};
     left: ${(props) => (props.pos === 'top' || props.pos === 'bottom' ? '50% !important' : '')};

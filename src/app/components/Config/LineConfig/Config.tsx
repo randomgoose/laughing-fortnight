@@ -11,7 +11,7 @@ import GeneralConfig from './GeneralConfig';
 import LinesConfig from './LinesConfig';
 import PointsConfig from './PointsConfig';
 import {StyledTabPane} from '../../StyledComponents/StyledComponents';
-import {FcAbout, FcDatabase, FcGrid, FcLineChart, FcOrgUnit, FcRuler, FcSettings} from 'react-icons/fc';
+import {FcAbout, FcDatabase, FcGrid, FcLineChart, FcOrgUnit, FcRuler, FcSettings, FcViewDetails} from 'react-icons/fc';
 
 export default function LineConfig() {
     const {activeSerie} = useSelector((state: RootState) => state.line);
@@ -62,6 +62,7 @@ export default function LineConfig() {
                 <StyledTabPane key={'points'} tab={<FcOrgUnit />}>
                     <PointsConfig />
                 </StyledTabPane>
+                <StyledTabPane key={'code'} tab={<FcViewDetails />}></StyledTabPane>
             </Tabs>
             <Button
                 style={{

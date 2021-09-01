@@ -50,7 +50,7 @@ export default function MarginInput(props: Props) {
                 <InputNumber
                     type={'number'}
                     className={'margin-top'}
-                    value={values.top || props.value.top}
+                    value={props.value.top || values.top}
                     style={{width: '100%'}}
                     onFocus={() => focusHandler('top')}
                     onBlur={() => setEditingMargin(null)}
@@ -59,7 +59,7 @@ export default function MarginInput(props: Props) {
                 <InputNumber
                     type={'number'}
                     className={'margin-left'}
-                    value={values.left || props.value.left}
+                    value={props.value.left || values.left}
                     style={{width: '100%'}}
                     onFocus={() => focusHandler('left')}
                     onBlur={() => setEditingMargin(null)}
@@ -68,7 +68,7 @@ export default function MarginInput(props: Props) {
                 <InputNumber
                     type={'number'}
                     className={'margin-right'}
-                    value={values.right || props.value.right}
+                    value={props.value.right || values.right}
                     style={{width: '100%'}}
                     onFocus={() => focusHandler('right')}
                     onBlur={() => setEditingMargin(null)}
@@ -77,7 +77,7 @@ export default function MarginInput(props: Props) {
                 <InputNumber
                     type={'number'}
                     className={'margin-bottom'}
-                    value={values.bottom || props.value.bottom}
+                    value={props.value.bottom || values.bottom}
                     style={{width: '100%'}}
                     onFocus={() => focusHandler('bottom')}
                     onBlur={() => setEditingMargin(null)}

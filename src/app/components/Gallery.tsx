@@ -1,4 +1,4 @@
-import {Slider, Space, Tabs} from 'antd';
+import {Button, Slider, Space, Tabs} from 'antd';
 import * as React from 'react';
 import {FcPuzzle} from 'react-icons/fc';
 import {useDispatch, useSelector} from 'react-redux';
@@ -10,7 +10,7 @@ import DataUpload from './Data/DataUpload';
 import {Rnd} from 'react-rnd';
 import {Handle} from './StyledComponents/StyledComponents';
 import {setScale} from '../features/chart/lineChartSlice';
-import {ZoomInOutlined, ZoomOutOutlined} from '@ant-design/icons';
+import {ArrowsAltOutlined, ZoomInOutlined, ZoomOutOutlined} from '@ant-design/icons';
 
 function Sample({title}: {title: string}) {
     return (
@@ -42,7 +42,11 @@ export default function Gallery() {
     React.useEffect(() => {
         setShowSlider(true);
 
-        setTimeout(() => setShowSlider(false), 3000);
+        const timer = setTimeout(() => setShowSlider(false), 3000);
+
+        return () => {
+            clearTimeout(timer);
+        };
     }, [scale]);
 
     return (
@@ -100,6 +104,7 @@ export default function Gallery() {
                     />
                     <ZoomInOutlined style={{color: 'gray'}} />
                 </Space>
+                <Button icon={<ArrowsAltOutlined rotate={90} />} style={{position: 'absolute', top: -48, right: 24}} />
                 <Tabs defaultActiveKey={'data'}>
                     <Tabs.TabPane key={'data'} tab={'数据'}>
                         {!dataSource ? (

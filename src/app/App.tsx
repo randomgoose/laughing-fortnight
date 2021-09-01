@@ -5,6 +5,7 @@ import Canvas from './components/Canvas';
 import LineConfig from './components/Config/LineConfig/Config';
 import Gallery from './components/Gallery';
 import PieConfig from './components/Config/PieConfig/Config';
+import BarConfig from './components/Config/BarConfig/Config';
 import {useSelector} from 'react-redux';
 import {RootState} from './redux/store';
 import {ConfigProvider} from 'antd';
@@ -54,13 +55,21 @@ function App() {
                         background: '#f2f2f2',
                     }}
                     onWheel={(e) => {
-                        dispatch(setScale(scale - e.deltaY * 0.002));
+                        if (scale > 0.1) dispatch(setScale(scale - e.deltaY * 0.002));
                     }}
                 >
                     <Canvas />
                     <Gallery />
                 </div>
-                {chartType === 'line' ? <LineConfig /> : chartType === 'pie' ? <PieConfig /> : <div />}
+                {chartType === 'line' ? (
+                    <LineConfig />
+                ) : chartType === 'pie' ? (
+                    <PieConfig />
+                ) : chartType === 'bar' ? (
+                    <BarConfig />
+                ) : (
+                    <div />
+                )}
             </div>
         </ConfigProvider>
     );

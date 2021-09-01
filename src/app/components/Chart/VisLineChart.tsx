@@ -22,6 +22,7 @@ export default function VisLineChart() {
         enablePoints,
         pointColor,
         xScale,
+        yScale,
         // legendAlign,
         // legendVerticalAlign,
         // lines,
@@ -47,7 +48,7 @@ export default function VisLineChart() {
             enableGridX={showGridX}
             enableGridY={showGridY}
             xScale={xScale}
-            yScale={{type: 'linear', min: 0, max: 'auto', reverse: false}}
+            yScale={yScale}
             yFormat=" >-.2f"
             // axisTop={null}
             // axisRight={null}

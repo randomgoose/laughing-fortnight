@@ -5,13 +5,14 @@ import VisLineChart from './Chart/VisLineChart';
 import VisPieChart from './Chart/VisPieChart';
 import {Rnd} from 'react-rnd';
 import {Handle} from './StyledComponents/StyledComponents';
+import VisBarChart from './Chart/VisBarChart';
 
 export default function Canvas() {
     const {chartType} = useSelector((state: RootState) => state.app);
     const {scale} = useSelector((state: RootState) => state.line);
-    const [height, setHeight] = React.useState('400px');
-    const [width, setWidth] = React.useState('300px');
-    const [x, setX] = React.useState(300);
+    const [height, setHeight] = React.useState('300px');
+    const [width, setWidth] = React.useState('400px');
+    const [x, setX] = React.useState(400);
     const [y, setY] = React.useState(100);
     const [hovering, setHovering] = React.useState(false);
 
@@ -27,6 +28,9 @@ export default function Canvas() {
             break;
         case 'pie':
             chart = <VisPieChart />;
+            break;
+        case 'bar':
+            chart = <VisBarChart />;
             break;
         default:
             chart = <VisLineChart />;
