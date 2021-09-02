@@ -8,7 +8,7 @@ import {setPartialState} from '../../../features/chart/barChartSlice';
 import MarginInput from '../../CustomInput/MarginInput';
 
 export default function GeneralConfig() {
-    const {groupMode, layout, margin, padding} = useSelector((state: RootState) => state.bar);
+    const {groupMode, layout, margin, padding, innerPadding} = useSelector((state: RootState) => state.bar);
     const dispatch = useDispatch();
 
     React.useEffect(() => {
@@ -23,6 +23,7 @@ export default function GeneralConfig() {
                     layout,
                     margin,
                     padding,
+                    innerPadding,
                 }}
                 onValuesChange={(changedValues) => {
                     dispatch(setPartialState(changedValues));
@@ -57,6 +58,9 @@ export default function GeneralConfig() {
                 </Form.Item>
                 <Form.Item name="padding">
                     <Slider min={0.1} max={0.9} step={0.1} />
+                </Form.Item>
+                <Form.Item name="innerPadding">
+                    <Slider step={1} max={9} />
                 </Form.Item>
                 <Form.Item name="margin">
                     <MarginInput />

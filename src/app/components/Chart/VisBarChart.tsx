@@ -5,7 +5,9 @@ import {RootState} from '../../redux/store';
 
 const VisBarChart = () => {
     // const { data } = useSelector((state:RootState) => state.bar);
-    const {data, groupMode, layout, reverse, padding, margin} = useSelector((state: RootState) => state.bar);
+    const {data, groupMode, layout, reverse, padding, margin, innerPadding} = useSelector(
+        (state: RootState) => state.bar
+    );
 
     return (
         <ResponsiveBar
@@ -14,9 +16,13 @@ const VisBarChart = () => {
             reverse={reverse}
             data={data}
             keys={['hot dog', 'burger', 'sandwich', 'kebab', 'fries', 'donut']}
+            onClick={(e) => {
+                console.log(e);
+            }}
             indexBy="country"
             margin={margin}
             padding={padding}
+            innerPadding={innerPadding}
             valueScale={{type: 'linear'}}
             indexScale={{type: 'band', round: true}}
             // valueFormat={{format: '', enabled: false}}
