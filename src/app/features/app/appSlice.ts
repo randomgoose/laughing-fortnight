@@ -5,6 +5,7 @@ export interface AppState {
     dataSource: 'mock' | 'file' | 'sheet' | null;
     selectionId: string;
     showAdvancedConfig: boolean;
+    rndEnabled: boolean;
 }
 
 const initialState: AppState = {
@@ -12,6 +13,7 @@ const initialState: AppState = {
     dataSource: null,
     selectionId: '',
     showAdvancedConfig: false,
+    rndEnabled: false,
 };
 
 export const appSlice = createSlice({
@@ -27,9 +29,12 @@ export const appSlice = createSlice({
         setDataSource: (state, action: PayloadAction<'mock' | 'file' | 'sheet' | null>) => {
             state.dataSource = action.payload;
         },
+        setRndEnabled: (state, action: PayloadAction<boolean>) => {
+            state.rndEnabled = action.payload;
+        },
     },
 });
 
-export const {setChartType, setSelectionId, setDataSource} = appSlice.actions;
+export const {setChartType, setSelectionId, setDataSource, setRndEnabled} = appSlice.actions;
 
 export default appSlice.reducer;

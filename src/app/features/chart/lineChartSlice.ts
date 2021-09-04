@@ -8,6 +8,10 @@ import cryptoRandomString from 'crypto-random-string';
 import {LegendProps} from '@nivo/legends';
 import {baseLegend} from '../../data/baseLegend';
 export interface ChartState extends LineSvgProps {
+    width: number;
+    height: number;
+    x: number;
+    y: number;
     showXAxis: boolean;
     xAxisLabel: string;
     showYAxis: boolean;
@@ -28,6 +32,10 @@ export interface ChartState extends LineSvgProps {
 }
 
 const initialState: ChartState = {
+    width: 400,
+    height: 300,
+    x: 400,
+    y: 100,
     showXAxis: true,
     xAxisLabel: '',
     showYAxis: true,

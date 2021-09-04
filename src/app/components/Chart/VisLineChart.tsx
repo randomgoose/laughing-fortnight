@@ -1,11 +1,9 @@
 import * as React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-// import {LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer} from 'recharts';
-// import {CurveType} from 'recharts/types/shape/Curve';
-// import {useImmer} from 'use-immer';
 import {RootState} from '../../redux/store';
 import {ResponsiveLine} from '@nivo/line';
-import {setActiveSerie} from '../../features/chart/lineChartSlice';
+import {setActiveSerie, setPartialState} from '../../features/chart/lineChartSlice';
+import StyledRnd from '../StyledComponents/StyledRnd';
 
 export default function VisLineChart() {
     const {
@@ -37,53 +35,75 @@ export default function VisLineChart() {
         areaBlendMode,
         pointSize,
         legends,
+        width,
+        height,
+        x,
+        y,
+        scale,
     } = useSelector((state: RootState) => state.line);
 
     const dispatch = useDispatch();
 
+    function onDragStop(_e, d) {
+        dispatch(setPartialState({x: d.x, y: d.y}));
+    }
+
+    function onResize(_e, _direction, ref, _delta, position) {
+        dispatch(
+            setPartialState({
+                width: ref.style.width,
+                height: ref.style.height,
+                x: position.x,
+                y: position.y,
+            })
+        );
+    }
+
     return (
-        <ResponsiveLine
-            margin={margin}
-            data={data.filter((item) => lines.includes(item.id))}
-            enableGridX={showGridX}
-            enableGridY={showGridY}
-            xScale={xScale}
-            yScale={yScale}
-            yFormat=" >-.2f"
-            // axisTop={null}
-            // axisRight={null}
-            axisBottom={showXAxis ? axisBottom : null}
-            axisLeft={
-                showYAxis
-                    ? {
-                          tickSize: 5,
-                          tickPadding: 5,
-                          tickRotation: 0,
-                          legend: 'count',
-                          legendOffset: -40,
-                          legendPosition: 'middle',
-                      }
-                    : null
-            }
-            colors={colors}
-            enablePoints={enablePoints}
-            pointColor={pointColor}
-            pointSize={pointSize}
-            pointBorderColor={{theme: 'background'}}
-            pointLabelYOffset={-12}
-            onClick={(point) => {
-                console.log(point);
-                dispatch(setActiveSerie(point.serieId));
-            }}
-            curve={curve}
-            enableArea={enableArea}
-            areaBaselineValue={areaBaselineValue}
-            areaOpacity={areaOpacity}
-            areaBlendMode={areaBlendMode}
-            useMesh={true}
-            lineWidth={lineWidth}
-            legends={legends}
-        />
+        <StyledRnd scale={scale} width={width} height={height} x={x} y={y} onDragStop={onDragStop} onResize={onResize}>
+            <ResponsiveLine
+                margin={margin}
+                data={data.filter((item) => lines.includes(item.id))}
+                enableGridX={showGridX}
+                enableGridY={showGridY}
+                xScale={xScale}
+                yScale={yScale}
+                yFormat=" >-.2f"
+                // axisTop={null}
+                // axisRight={null}
+                axisBottom={showXAxis ? axisBottom : null}
+                axisLeft={
+                    showYAxis
+                        ? {
+                              tickSize: 5,
+                              tickPadding: 5,
+                              tickRotation: 0,
+                              legend: 'count',
+                              legendOffset: -40,
+                              legendPosition: 'middle',
+                          }
+                        : null
+                }
+                colors={colors}
+                enablePoints={enablePoints}
+                pointColor={pointColor}
+                pointSize={pointSize}
+                pointBorderColor={{theme: 'background'}}
+                pointLabelYOffset={-12}
+                onClick={(point) => {
+                    console.log(point);
+                    dispatch(setActiveSerie(point.serieId));
+                }}
+                curve={curve}
+                enableArea={enableArea}
+                areaBaselineValue={areaBaselineValue}
+                areaOpacity={areaOpacity}
+                areaBlendMode={areaBlendMode}
+                useMesh={true}
+                lineWidth={lineWidth}
+                legends={legends}
+            />
+        </StyledRnd>
     );
 }
 // data={data}

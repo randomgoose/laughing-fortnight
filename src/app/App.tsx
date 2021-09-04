@@ -12,11 +12,9 @@ import {ConfigProvider} from 'antd';
 import {useDispatch} from 'react-redux';
 // import {loadState} from './features/chart/lineChartSlice';
 import {setSelectionId} from './features/app/appSlice';
-import {setScale} from './features/chart/lineChartSlice';
 
 function App() {
     const {chartType} = useSelector((state: RootState) => state.app);
-    const {scale} = useSelector((state: RootState) => state.line);
     const dispatch = useDispatch();
 
     React.useEffect(() => {
@@ -53,9 +51,6 @@ function App() {
                         borderRight: '1px solid rgba(0, 0, 0, .1)',
                         overflow: 'hidden',
                         background: '#f2f2f2',
-                    }}
-                    onWheel={(e) => {
-                        if (scale > 0.1) dispatch(setScale(scale - e.deltaY * 0.002));
                     }}
                 >
                     <Canvas />
