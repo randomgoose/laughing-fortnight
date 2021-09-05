@@ -26,6 +26,7 @@ const VisBarChart = () => {
         x,
         y,
         scale,
+        indexBy,
     } = useSelector((state: RootState) => state.bar);
 
     const {rndEnabled} = useSelector((state: RootState) => state.app);
@@ -61,7 +62,7 @@ const VisBarChart = () => {
                 onClick={() => {
                     dispatch(setRndEnabled(true));
                 }}
-                indexBy="country"
+                indexBy={indexBy}
                 margin={margin}
                 padding={padding}
                 innerPadding={innerPadding}

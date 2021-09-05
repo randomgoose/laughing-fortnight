@@ -21,6 +21,7 @@
 		"crypto-random-string": "^4.0.0",
 		"csv": "^5.5.0",
 		"immer": "^9.0.5",
+		"lodash": "^4.17.21",
 		"normal-distribution": "^1.1.1",
 		"react": "^17.0.2",
 		"react-color": "^2.19.3",

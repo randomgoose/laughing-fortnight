@@ -31,7 +31,7 @@ export default function DataSource() {
             className={'data-type'}
             style={{
                 width: '100%',
-                height: '100%',
+                // height: '100%',
                 display: 'flex',
                 justifyContent: 'space-between',
             }}

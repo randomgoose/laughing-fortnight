@@ -2,7 +2,7 @@ import * as React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../redux/store';
 import {ResponsiveLine} from '@nivo/line';
-import {setActiveSerie, setPartialState} from '../../features/chart/lineChartSlice';
+import {setPartialState} from '../../features/chart/lineChartSlice';
 import StyledRnd from '../StyledComponents/StyledRnd';
 
 export default function VisLineChart() {
@@ -90,10 +90,10 @@ export default function VisLineChart() {
                 pointSize={pointSize}
                 pointBorderColor={{theme: 'background'}}
                 pointLabelYOffset={-12}
-                onClick={(point) => {
-                    console.log(point);
-                    dispatch(setActiveSerie(point.serieId));
-                }}
+                // onClick={(point) => {
+                //     console.log(point);
+                //     dispatch(setActiveSerie(point.serieId));
+                // }}
                 curve={curve}
                 enableArea={enableArea}
                 areaBaselineValue={areaBaselineValue}

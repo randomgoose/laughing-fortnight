@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {ArrowLeftOutlined} from '@ant-design/icons';
-import {Space, Button, Collapse, Input} from 'antd';
+import {Space, Button, Form, Input} from 'antd';
 import {useDispatch, useSelector} from 'react-redux';
 import {setActiveSerie} from '../../../features/chart/lineChartSlice';
 import Label from '../../Typography/Label';
@@ -19,7 +19,7 @@ export default function () {
     }, ref);
 
     return (
-        <>
+        <div style={{padding: 12}}>
             <Space style={{fontSize: 16, lineHeight: '24px', fontWeight: 'bold'}}>
                 <Button
                     icon={<ArrowLeftOutlined />}
@@ -29,27 +29,27 @@ export default function () {
                         dispatch(setActiveSerie(null));
                     }}
                 ></Button>
-                Line
+                Line {activeSerie}
             </Space>
-            <Collapse ghost accordion style={{background: 'white', padding: 0}}>
-                <Collapse.Panel header={'Basic'} key={'basic'}>
-                    <Label>Key</Label>
+            <Form>
+                <Form.Item label={'Key'} name={'key'}>
                     <Input disabled value={activeSerie} />
-                    <div ref={ref}>
-                        <Label>Color</Label>
-                        <Button onClick={() => setDisplayColorPicker(true)} block>
-                            <div
-                                style={{
-                                    width: '100%',
-                                    height: 16,
-                                    borderRadius: 2,
-                                }}
-                            ></div>
-                        </Button>
-                        {displayColorPicker ? <SketchPicker /> : null}
-                    </div>
-                </Collapse.Panel>
-            </Collapse>
-        </>
+                </Form.Item>
+            </Form>
+
+            <Label>Key</Label>
+
+            <Label>Color</Label>
+            <Button onClick={() => setDisplayColorPicker(true)} block>
+                <div
+                    style={{
+                        width: '100%',
+                        height: 16,
+                        borderRadius: 2,
+                    }}
+                ></div>
+            </Button>
+            {displayColorPicker ? <SketchPicker /> : null}
+        </div>
     );
 }

@@ -1,7 +1,7 @@
-import {Button, Tabs} from 'antd';
+import {Tabs} from 'antd';
 import * as React from 'react';
 import {FcPuzzle} from 'react-icons/fc';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {RootState} from '../redux/store';
 import DataMock from './Data/DataMock';
 import DataSource from './Data/DataSource';
@@ -9,8 +9,7 @@ import DataTable from './Data/DataTable';
 import DataUpload from './Data/DataUpload';
 import {Rnd} from 'react-rnd';
 import {Handle} from './StyledComponents/StyledComponents';
-import {ArrowsAltOutlined} from '@ant-design/icons';
-import {setRndEnabled} from '../features/app/appSlice';
+import {CameraFilled} from '@ant-design/icons';
 
 function Sample({title}: {title: string}) {
     return (
@@ -35,7 +34,6 @@ export default function Gallery() {
     const [width, setWidth] = React.useState('100%');
     const [x, setX] = React.useState(0);
     const [y, setY] = React.useState(window.innerHeight - 320);
-    const dispatch = useDispatch();
 
     return (
         <Rnd
@@ -57,27 +55,23 @@ export default function Gallery() {
                 width: width,
                 height: height,
             }}
+            style={{cursor: 'default'}}
         >
             <div className={'Gallery'} style={{padding: '0 12px', width: '100%', height: '100%', background: 'white'}}>
-                <Button
-                    icon={<ArrowsAltOutlined rotate={90} />}
-                    style={{position: 'absolute', top: -48, right: 24}}
-                    onClick={() => dispatch(setRndEnabled(true))}
-                />
-                <Tabs defaultActiveKey={'data'}>
-                    <Tabs.TabPane key={'data'} tab={'数据'}>
+                <Tabs defaultActiveKey={'data'} style={{height: '100%'}}>
+                    <Tabs.TabPane key={'data'} tab={'数据'} style={{height: '100%', overflow: 'scroll'}}>
                         {!dataSource ? (
                             <DataSource />
                         ) : dataSource === 'mock' ? (
-                            <>
+                            <div style={{height: 240, overflow: 'scroll'}}>
                                 <DataMock />
                                 <DataTable />
-                            </>
+                            </div>
                         ) : dataSource === 'file' ? (
                             <DataUpload />
                         ) : null}
                     </Tabs.TabPane>
-                    <Tabs.TabPane key={'gallery'} tab={'示例图表'}>
+                    <Tabs.TabPane key={'gallery'} tab={'示例图表'} style={{height: '100%', overflow: 'scroll'}}>
                         <div
                             style={{display: 'flex', alignItems: 'center', marginBottom: 8}}
                             className={'Gallery__title'}
@@ -98,6 +92,19 @@ export default function Gallery() {
                             }}
                             className={'Gallery__display'}
                         >
+                            <div
+                                style={{
+                                    background: '#f2f3f5',
+                                    borderRadius: 8,
+                                    marginBottom: 8,
+                                    height: 120,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}
+                            >
+                                <CameraFilled style={{color: 'gray'}} />
+                            </div>
                             <Sample title={'双线图'} />
                             <Sample title={'双线图'} />
                             <Sample title={'双线图'} />

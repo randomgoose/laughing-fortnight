@@ -2,29 +2,12 @@ import * as React from 'react';
 import {FcPieChart} from 'react-icons/fc';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../../redux/store';
-import {Button, Tabs} from 'antd';
+import {Tabs} from 'antd';
 
 export default function PieConfig() {
     const {activeSerie} = useSelector((state: RootState) => state.line);
     const chartConfig = useSelector((state: RootState) => state.line);
     const {selectionId} = useSelector((state: RootState) => state.app);
-
-    React.useEffect(() => {
-        console.log(activeSerie);
-    }, [activeSerie]);
-
-    function renderChart() {
-        window.parent.postMessage(
-            {
-                pluginMessage: {
-                    type: 'render-chart',
-                    svg: document.querySelector('.recharts-surface').outerHTML,
-                    config: chartConfig,
-                },
-            },
-            '*'
-        );
-    }
 
     React.useEffect(() => {
         if (selectionId.length > 0) {
@@ -56,9 +39,6 @@ export default function PieConfig() {
                 <Tabs.TabPane key={'lines'} tab={'线条'}></Tabs.TabPane>
                 <Tabs.TabPane key={'points'} tab={'数据点'}></Tabs.TabPane>
             </Tabs>
-            <Button style={{width: '100%'}} type={'primary'} onClick={() => renderChart()} shape={'round'}>
-                渲染
-            </Button>
         </>
     );
 

@@ -8,14 +8,30 @@ import PieConfig from './components/Config/PieConfig/Config';
 import BarConfig from './components/Config/BarConfig/Config';
 import {useSelector} from 'react-redux';
 import {RootState} from './redux/store';
-import {ConfigProvider} from 'antd';
+import {ConfigProvider, Button} from 'antd';
 import {useDispatch} from 'react-redux';
 // import {loadState} from './features/chart/lineChartSlice';
 import {setSelectionId} from './features/app/appSlice';
 
 function App() {
-    const {chartType} = useSelector((state: RootState) => state.app);
+    const {chartType, hideInterface, selectionId} = useSelector((state: RootState) => state.app);
     const dispatch = useDispatch();
+
+    function renderChart() {
+        window.parent.postMessage(
+            {
+                pluginMessage: {
+                    type: 'render-chart',
+                    svg: `<svg>${document.querySelector('.canvas').querySelector('svg').innerHTML}</svg>`.replace(
+                        /transparent/g,
+                        '#ffffff'
+                    ),
+                    // config: chartConfig,
+                },
+            },
+            '*'
+        );
+    }
 
     React.useEffect(() => {
         window.onmessage = async (e: {
@@ -38,7 +54,7 @@ function App() {
     return (
         <ConfigProvider componentSize={'small'}>
             <div className={'App'} style={{width: '100%', height: '100%', display: 'flex'}}>
-                <SideBar />
+                {!hideInterface ? <SideBar /> : null}
                 <div
                     className={'App__content'}
                     style={{
@@ -47,24 +63,39 @@ function App() {
                         width: '100%',
                         flexDirection: 'column',
                         flexGrow: 1,
-                        maxWidth: 1200,
                         borderRight: '1px solid rgba(0, 0, 0, .1)',
                         overflow: 'hidden',
                         background: '#f2f2f2',
                     }}
                 >
                     <Canvas />
-                    <Gallery />
+                    {!hideInterface ? <Gallery /> : null}
                 </div>
-                {chartType === 'line' ? (
+                {!hideInterface && chartType === 'line' ? (
                     <LineConfig />
-                ) : chartType === 'pie' ? (
+                ) : !hideInterface && chartType === 'pie' ? (
                     <PieConfig />
-                ) : chartType === 'bar' ? (
+                ) : !hideInterface && chartType === 'bar' ? (
                     <BarConfig />
-                ) : (
-                    <div />
-                )}
+                ) : null}
+                <Button
+                    style={{
+                        position: 'fixed',
+                        bottom: '48px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        boxShadow: '0 10px 10px rgba(0, 0, 0, .1)',
+                        fontSize: 16,
+                        lineHeight: 24,
+                    }}
+                    type={'primary'}
+                    size={'large'}
+                    onClick={renderChart}
+                    shape={'round'}
+                    disabled={!(selectionId.length > 0)}
+                >
+                    {selectionId.length > 0 ? '渲染图表' : '未选择 Frame'}
+                </Button>
             </div>
         </ConfigProvider>
     );

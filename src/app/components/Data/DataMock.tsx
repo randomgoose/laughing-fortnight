@@ -3,60 +3,49 @@ import {Button, Form, InputNumber, Radio, Space} from 'antd';
 import * as React from 'react';
 import {useImmer} from 'use-immer';
 // import {useDispatch} from 'react-redux';
-import {
-    generateDecreasingNumberSequence,
-    generateGaussianSequence,
-    generateIncreasingNumberSequence,
-} from '../../utils/generateNumbers';
+import {generateDatumSequence, generateNumberSequence, Trend} from '../../utils/generateNumbers';
 import cryptoRandomString from 'crypto-random-string';
 import {Serie} from '@nivo/line';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {setNewData} from '../../features/chart/lineChartSlice';
 import {FallOutlined, RiseOutlined} from '@ant-design/icons';
 import Header from '../Typography/Header';
 import {setDataSource} from '../../features/app/appSlice';
+import {RootState} from '../../redux/store';
+import {setPartialState} from '../../features/chart/barChartSlice';
 
 export default function DataMock() {
     const dispatch = useDispatch();
-    const [numberSequenceAttr, setNumberSequenceAttr] = useImmer<
-        Partial<{
-            min: number;
-            max: number;
-            count: number;
-            array: number;
-            mean: number;
-            std: number;
-            trend: 'rise' | 'fall' | 'normal-distribution';
-        }>
-    >({
+    const {chartType} = useSelector((state: RootState) => state.app);
+    const [numberSequenceAttr, setNumberSequenceAttr] = useImmer<{
+        min: number;
+        max: number;
+        length: number;
+        count: number;
+        trend: Trend;
+    }>({
         min: 0,
         max: 1000,
-        count: 12,
-        array: 1,
+        length: 12,
+        count: 1,
         trend: 'rise',
     });
 
     const [tempData, setTempData] = useImmer<Serie[]>([]);
 
-    const generateNumberSequence = React.useCallback(() => {
-        const {count, max, min, trend, mean, std} = numberSequenceAttr;
-        if (trend === 'rise') {
-            return generateIncreasingNumberSequence(count, max, min).map((num, index) => {
-                return {x: index, y: num};
-            });
-        } else if (trend === 'fall') {
-            return generateDecreasingNumberSequence(count, max, min).map((num, index) => {
-                return {x: index, y: num};
-            });
-        } else {
-            return generateGaussianSequence(count, mean, std).map((num, index) => {
-                return {x: index, y: num};
-            });
-        }
-    }, [numberSequenceAttr]);
-
     React.useEffect(() => {
-        if (tempData.length > 0) dispatch(setNewData(tempData));
+        if (tempData.length > 0) {
+            switch (chartType) {
+                case 'line':
+                    dispatch(setNewData(tempData));
+                    break;
+                case 'bar':
+                    dispatch(setPartialState({data: tempData, keys: ['a', 'b', 'c'], indexBy: 'a'}));
+                    break;
+                default:
+                    return;
+            }
+        }
     }, [tempData]);
 
     return (
@@ -84,43 +73,47 @@ export default function DataMock() {
                             ]}
                         ></Radio.Group>
                     </Form.Item>
-                    {numberSequenceAttr.trend !== 'normal-distribution' ? (
-                        <>
-                            <Form.Item name={'min'} label={'最小值'} fieldKey={'min'}>
-                                <InputNumber style={{maxWidth: 48}} />
-                            </Form.Item>
-                            <Form.Item name={'max'} label={'最大值'} fieldKey={'max'}>
-                                <InputNumber style={{maxWidth: 48}} />
-                            </Form.Item>
-                        </>
-                    ) : (
-                        <>
-                            <Form.Item name={'mean'} label={'均值'} fieldKey={'mean'}>
-                                <InputNumber style={{maxWidth: 48}} />
-                            </Form.Item>
-                            <Form.Item name={'std'} label={'标准差'} fieldKey={'std'}>
-                                <InputNumber style={{maxWidth: 48}} />
-                            </Form.Item>
-                        </>
-                    )}
-                    <Form.Item name={'count'} label={'数组长度'} fieldKey={'count'}>
+
+                    <Form.Item name={'min'} label={'最小值'} fieldKey={'min'}>
                         <InputNumber style={{maxWidth: 48}} />
                     </Form.Item>
-                    <Form.Item name={'array'} label={'数组数'} fieldKey={'array'}>
+                    <Form.Item name={'max'} label={'最大值'} fieldKey={'max'}>
+                        <InputNumber style={{maxWidth: 48}} />
+                    </Form.Item>
+
+                    <Form.Item name={'length'} label={'数组长度'} fieldKey={'length'}>
+                        <InputNumber style={{maxWidth: 48}} />
+                    </Form.Item>
+                    <Form.Item name={'count'} label={'数组数'} fieldKey={'count'}>
                         <InputNumber style={{maxWidth: 36}} />
                     </Form.Item>
                 </Form>
                 <Space size={4}>
                     <Button
                         onClick={() => {
-                            const {array} = numberSequenceAttr;
+                            const {count} = numberSequenceAttr;
                             let temp = [];
-                            for (let i = 0; i < array; i++) {
-                                const serie: Serie = {
-                                    id: cryptoRandomString({length: 4}),
-                                    data: generateNumberSequence(),
-                                };
-                                temp.push(serie);
+                            switch (chartType) {
+                                case 'line':
+                                    for (let i = 0; i < count; i++) {
+                                        const serie: Serie = {
+                                            id: cryptoRandomString({length: 4}),
+                                            data: generateNumberSequence(numberSequenceAttr),
+                                        };
+                                        temp.push(serie);
+                                    }
+                                    break;
+                                case 'bar':
+                                    temp = [
+                                        ...generateDatumSequence({
+                                            attrs: ['a', 'b', 'c'],
+                                            length: count,
+                                            min: 1,
+                                            max: 10,
+                                        }),
+                                    ];
+                                    console.log(temp);
+                                    break;
                             }
                             setTempData(temp);
                         }}

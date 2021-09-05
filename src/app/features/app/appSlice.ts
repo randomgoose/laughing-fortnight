@@ -6,6 +6,7 @@ export interface AppState {
     selectionId: string;
     showAdvancedConfig: boolean;
     rndEnabled: boolean;
+    hideInterface: boolean;
 }
 
 const initialState: AppState = {
@@ -14,6 +15,7 @@ const initialState: AppState = {
     selectionId: '',
     showAdvancedConfig: false,
     rndEnabled: false,
+    hideInterface: false,
 };
 
 export const appSlice = createSlice({
@@ -32,9 +34,12 @@ export const appSlice = createSlice({
         setRndEnabled: (state, action: PayloadAction<boolean>) => {
             state.rndEnabled = action.payload;
         },
+        setHideInterface: (state, action: PayloadAction<boolean>) => {
+            state.hideInterface = action.payload;
+        },
     },
 });
 
-export const {setChartType, setSelectionId, setDataSource, setRndEnabled} = appSlice.actions;
+export const {setChartType, setSelectionId, setDataSource, setRndEnabled, setHideInterface} = appSlice.actions;
 
 export default appSlice.reducer;

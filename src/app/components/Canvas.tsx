@@ -1,4 +1,3 @@
-//@ts-nocheck
 import * as React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../redux/store';
@@ -10,10 +9,12 @@ import {setPartialState as setBar} from '../features/chart/barChartSlice';
 import {usePinch} from 'react-use-gesture';
 import {useSpring, to} from '@react-spring/core';
 import {animated} from '@react-spring/web';
+import {Button} from 'antd';
+import {ArrowsAltOutlined, ShrinkOutlined} from '@ant-design/icons';
+import {setHideInterface} from '../features/app/appSlice';
 
 export default function Canvas() {
-    const {chartType} = useSelector((state: RootState) => state.app);
-    const {line, bar} = useSelector((state: RootState) => state);
+    const {chartType, hideInterface} = useSelector((state: RootState) => state.app);
     const dispatch = useDispatch();
 
     const [{zoom, scale}, set] = useSpring(() => ({
@@ -45,14 +46,9 @@ export default function Canvas() {
             chart = <VisLineChart />;
     }
 
-    function getScale() {
-        if (chartType === 'line') return line.scale;
-        if (chartType === 'bar') return bar.scale;
-    }
-
     const bind = usePinch(
-        ({offset: [d, a], direction, delta}) => {
-            set({zoom: d / 1000});
+        ({offset: [d]}) => {
+            set({zoom: d / 1600});
         },
         {domTarget, eventOptions: {passive: false}}
     );
@@ -81,6 +77,19 @@ export default function Canvas() {
             >
                 {chart}
             </animated.div>
+            {!hideInterface ? (
+                <Button
+                    icon={<ArrowsAltOutlined />}
+                    style={{position: 'absolute', top: 16, right: 16}}
+                    onClick={() => dispatch(setHideInterface(true))}
+                />
+            ) : (
+                <Button
+                    icon={<ShrinkOutlined />}
+                    style={{position: 'absolute', top: 16, right: 16}}
+                    onClick={() => dispatch(setHideInterface(false))}
+                />
+            )}
         </div>
     );
 }
