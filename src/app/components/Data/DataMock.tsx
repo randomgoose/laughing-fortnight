@@ -112,7 +112,6 @@ export default function DataMock() {
                                             max: 10,
                                         }),
                                     ];
-                                    console.log(temp);
                                     break;
                             }
                             setTempData(temp);

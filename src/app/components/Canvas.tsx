@@ -9,12 +9,14 @@ import {setPartialState as setBar} from '../features/chart/barChartSlice';
 import {usePinch} from 'react-use-gesture';
 import {useSpring, to} from '@react-spring/core';
 import {animated} from '@react-spring/web';
-import {Button} from 'antd';
+import {Button, Space, Radio} from 'antd';
 import {ArrowsAltOutlined, ShrinkOutlined} from '@ant-design/icons';
 import {setHideInterface} from '../features/app/appSlice';
+import DimensionIndicator from './DimensionIndicator';
 
 export default function Canvas() {
     const {chartType, hideInterface} = useSelector((state: RootState) => state.app);
+    const {line, bar} = useSelector((state: RootState) => state);
     const dispatch = useDispatch();
 
     const [{zoom, scale}, set] = useSpring(() => ({
@@ -60,6 +62,11 @@ export default function Canvas() {
             className={'canvas'}
             ref={domTarget}
         >
+            <DimensionIndicator
+                width={chartType === 'line' ? line.width : chartType === 'bar' ? bar.width : 0}
+                height={chartType === 'line' ? line.height : chartType === 'bar' ? bar.height : 0}
+                style={{position: 'absolute', top: 24, left: '50%', transform: 'translate(-50%, -50%)'}}
+            />
             <animated.div
                 ref={ref}
                 style={{
@@ -77,19 +84,26 @@ export default function Canvas() {
             >
                 {chart}
             </animated.div>
-            {!hideInterface ? (
-                <Button
-                    icon={<ArrowsAltOutlined />}
-                    style={{position: 'absolute', top: 16, right: 16}}
-                    onClick={() => dispatch(setHideInterface(true))}
-                />
-            ) : (
-                <Button
-                    icon={<ShrinkOutlined />}
-                    style={{position: 'absolute', top: 16, right: 16}}
-                    onClick={() => dispatch(setHideInterface(false))}
-                />
-            )}
+            <Space style={{position: 'absolute', top: 16, right: 16}}>
+                <Radio.Group
+                    options={[
+                        {
+                            value: 'svg',
+                            label: 'SVG',
+                        },
+                        {
+                            value: 'canvas',
+                            label: 'Canvas',
+                        },
+                    ]}
+                    optionType={'button'}
+                ></Radio.Group>
+                {!hideInterface ? (
+                    <Button icon={<ArrowsAltOutlined />} onClick={() => dispatch(setHideInterface(true))} />
+                ) : (
+                    <Button icon={<ShrinkOutlined />} onClick={() => dispatch(setHideInterface(false))} />
+                )}
+            </Space>
         </div>
     );
 }

@@ -1,4 +1,4 @@
-import {Space} from 'antd';
+import {Tag} from 'antd';
 import * as React from 'react';
 import {FcDataSheet, FcTimeline, FcUpload} from 'react-icons/fc';
 import {useDispatch} from 'react-redux';
@@ -14,6 +14,11 @@ const TypeButton = styled.button`
     cursor: pointer;
     border-radius: 8px;
     transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
 
     &:hover {
         background-color: #f2f3f5;
@@ -37,22 +42,18 @@ export default function DataSource() {
             }}
         >
             <TypeButton onClick={() => dispatch(setDataSource('mock'))}>
-                <Space direction={'vertical'}>
-                    <FcTimeline />
-                    模拟数据
-                </Space>
+                <FcTimeline />
+                模拟数据
             </TypeButton>
             <TypeButton onClick={() => dispatch(setDataSource('file'))}>
-                <Space direction={'vertical'}>
-                    <FcUpload />
-                    上传数据
-                </Space>
+                <FcUpload />
+                上传数据
+                <Tag color={'blue'}>敬请期待</Tag>
             </TypeButton>
-            <TypeButton onClick={() => dispatch(setDataSource('sheet'))}>
-                <Space direction={'vertical'}>
-                    <FcDataSheet />
-                    在线文档
-                </Space>
+            <TypeButton /* onClick={() => dispatch(setDataSource('sheet'))} */>
+                <FcDataSheet />
+                在线文档
+                <Tag color={'blue'}>敬请期待</Tag>
             </TypeButton>
         </div>
     );

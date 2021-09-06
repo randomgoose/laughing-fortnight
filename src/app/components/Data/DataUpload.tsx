@@ -7,10 +7,13 @@ import {parse} from 'csv';
 import {useImmer} from 'use-immer';
 import {RootState} from '../../redux/store';
 import {setNewData} from '../../features/chart/lineChartSlice';
+import {setPartialState} from '../../features/chart/barChartSlice';
+import _ from 'lodash';
 
 export default function DataUpload() {
     const dispatch = useDispatch();
 
+    const {chartType} = useSelector((state: RootState) => state.app);
     const {data} = useSelector((state: RootState) => state.line);
     console.log(data);
 
@@ -56,18 +59,35 @@ export default function DataUpload() {
                     if (err) console.log(err);
                     const columns = Object.keys(output[0]);
 
-                    dispatch(
-                        setNewData(
-                            columns.map((column) => {
-                                return {
-                                    id: column,
-                                    data: output.map((p, i) => {
-                                        return {x: i, y: p[column]};
-                                    }),
-                                };
+                    if (chartType === 'line') {
+                        dispatch(
+                            setNewData(
+                                columns.map((column) => {
+                                    return {
+                                        id: column,
+                                        data: output.map((p, i) => {
+                                            return {x: i, y: p[column]};
+                                        }),
+                                    };
+                                })
+                            )
+                        );
+                    } else if (chartType === 'bar') {
+                        console.log(output);
+                        dispatch(
+                            setPartialState({
+                                data: output.map((datum, index) => {
+                                    return {
+                                        ...datum,
+                                        id: index,
+                                    };
+                                }),
+                                keys: ['total_bill', 'tip', 'size'],
+                                indexBy: 'id',
                             })
-                        )
-                    );
+                        );
+                    }
+
                     setTempData(output);
                 }
             );

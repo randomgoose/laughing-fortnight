@@ -65,6 +65,10 @@ body * {
     margin-right: 8px !important;
 }
 
+.Gallery .ant-tag {
+    margin-right: 0;
+}
+
 .left-handle,
 .right-handle,
 .top-handle,

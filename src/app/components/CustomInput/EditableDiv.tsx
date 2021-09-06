@@ -7,15 +7,21 @@ import {useImmer} from 'use-immer';
 interface Props {
     value: number | string;
     onFinishEditing?: (value: number | string) => void;
+    validate?: (value: number | string) => boolean;
 }
 
-export default function EditableDiv({value, onFinishEditing}: Props) {
+export default function EditableDiv({value, onFinishEditing, validate}: Props) {
     const [editing, setEditing] = useImmer(false);
     const [temp, setTemp] = useImmer(value);
+    // const [error, setError] = useImmer(false);
     const ref = useRef(null);
 
     function finishEditing() {
-        setEditing(false);
+        if (!validate(temp)) {
+            setEditing(false);
+        } else {
+            setEditing(true);
+        }
         onFinishEditing(temp);
     }
 
@@ -23,8 +29,9 @@ export default function EditableDiv({value, onFinishEditing}: Props) {
         finishEditing();
     }, ref);
 
-    useKeyPress('Enter', () => {
-        finishEditing();
+    useKeyPress('Enter', (e) => {
+        e.preventDefault();
+        editing ? finishEditing() : null;
     });
 
     return editing ? (

@@ -44,7 +44,7 @@ const initialState: ChartState = {
     enableLabel: true,
     valueScale: {type: 'linear'},
     indexScale: {type: 'band', round: true},
-    labelSkipWidth: 0,
+    labelSkipWidth: 4,
     labelSkipHeight: 0,
     isInteractive: true,
     labelTextColor: {from: 'theme', theme: 'labels.text.fill'},

@@ -28,12 +28,14 @@ export default function BarDataTable() {
                             <Space>
                                 <EditableDiv
                                     value={key}
+                                    validate={(value: string) => keys.filter((item) => item !== key).includes(value)}
                                     onFinishEditing={(value: string) => {
-                                        if (keys.includes(value)) {
+                                        if (keys.filter((item) => item !== key).includes(value)) {
                                             message.error(`${value} 已存在`);
                                             return;
+                                        } else {
+                                            dispatch(setKey({key, newKey: value}));
                                         }
-                                        dispatch(setKey({key, newKey: value}));
                                     }}
                                 />
                                 <Button icon={<DeleteOutlined />} onClick={() => dispatch(removeKey(key))}></Button>
