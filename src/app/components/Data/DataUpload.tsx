@@ -73,7 +73,17 @@ export default function DataUpload() {
                             )
                         );
                     } else if (chartType === 'bar') {
-                        console.log(output);
+                        let numberColumns = [...columns];
+                        columns.forEach((column) =>
+                            output.forEach((item) => {
+                                console.log(parseFloat(item[column]));
+                                if (_.isNaN(parseFloat(item[column]))) {
+                                    numberColumns = numberColumns.filter((col) => col !== column);
+                                    return;
+                                }
+                            })
+                        );
+                        console.log(numberColumns);
                         dispatch(
                             setPartialState({
                                 data: output.map((datum, index) => {
@@ -82,7 +92,7 @@ export default function DataUpload() {
                                         id: index,
                                     };
                                 }),
-                                keys: ['total_bill', 'tip', 'size'],
+                                keys: numberColumns,
                                 indexBy: 'id',
                             })
                         );

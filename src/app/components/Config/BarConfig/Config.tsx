@@ -19,6 +19,7 @@ export default function LineConfig() {
                 <StyledTabPane key={'grid'} tab={<FcGrid />}>
                     <GridConfig />
                 </StyledTabPane>
+                <StyledTabPane key={'legend'}></StyledTabPane>
             </Tabs>
         </>
     );
