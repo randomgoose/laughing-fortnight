@@ -14,6 +14,7 @@ export interface ChartState extends BarSvgProps<BarDatum> {
     x: number;
     y: number;
     scale: 1;
+    render: 'svg' | 'canvas';
 }
 
 const initialState: ChartState = {
@@ -50,6 +51,7 @@ const initialState: ChartState = {
     labelTextColor: {from: 'theme', theme: 'labels.text.fill'},
     colorBy: 'id',
     colors: {scheme: 'nivo'},
+    render: 'svg',
 };
 
 export const chartSlice = createSlice({

@@ -86,6 +86,12 @@ export default function Canvas() {
             </animated.div>
             <Space style={{position: 'absolute', top: 16, right: 16}}>
                 <Radio.Group
+                    value={chartType === 'line' ? line.render : chartType === 'bar' ? bar.render : 'svg'}
+                    onChange={(e) => {
+                        console.log(e.target.value);
+                        if (chartType === 'line') dispatch(setLine({render: e.target.value}));
+                        if (chartType === 'bar') dispatch(setBar({render: e.target.value}));
+                    }}
                     options={[
                         {
                             value: 'svg',

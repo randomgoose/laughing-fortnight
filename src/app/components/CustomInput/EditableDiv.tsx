@@ -17,10 +17,12 @@ export default function EditableDiv({value, onFinishEditing, validate}: Props) {
     const ref = useRef(null);
 
     function finishEditing() {
-        if (!validate(temp)) {
-            setEditing(false);
-        } else {
-            setEditing(true);
+        if (validate) {
+            if (!validate(temp)) {
+                setEditing(false);
+            } else {
+                setEditing(true);
+            }
         }
         onFinishEditing(temp);
     }

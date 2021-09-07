@@ -29,6 +29,7 @@ export interface ChartState extends LineSvgProps {
     lines: Array<string | number>;
     activeSerie: string | number;
     scale: number;
+    render: 'svg' | 'canvas';
 }
 
 const initialState: ChartState = {
@@ -62,6 +63,7 @@ const initialState: ChartState = {
         tickPadding: 0,
     },
     xScale: {type: 'point'},
+    render: 'svg',
 };
 
 export const chartSlice = createSlice({
