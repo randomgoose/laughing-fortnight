@@ -1,7 +1,8 @@
-import {BarSvgProps, BarDatum} from '@nivo/bar';
+import {BarSvgProps, BarDatum, BarLegendProps} from '@nivo/bar';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {data} from '../../data/baseBarData';
 import _ from 'lodash';
+import {baseLegend} from '../../data/baseLegend';
 
 export interface ChartState extends BarSvgProps<BarDatum> {
     data: BarDatum[];
@@ -52,6 +53,7 @@ const initialState: ChartState = {
     colorBy: 'id',
     colors: {scheme: 'nivo'},
     render: 'svg',
+    legends: baseLegend.map((legend) => ({...legend, dataFrom: 'keys'})),
 };
 
 export const chartSlice = createSlice({
@@ -82,6 +84,13 @@ export const chartSlice = createSlice({
                 datum = _.omit(datum, [action.payload]);
             });
             state.keys = state.keys.filter((key) => key !== action.payload);
+        },
+        setLegend: (state, action: PayloadAction<{index: number; newLegend: BarLegendProps}>) => {
+            const {index, newLegend} = action.payload;
+            state.legends[index] = {...state.legends[index], ...newLegend};
+        },
+        removeLegendByIndex: (state, action: PayloadAction<number>) => {
+            state.legends = state.legends.filter((_legend, index) => index !== action.payload);
         },
     },
 });

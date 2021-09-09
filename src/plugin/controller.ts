@@ -1,3 +1,6 @@
+import {sendMessage} from './functions/message';
+import {loadSnapshots, removeSnapshotById, saveSnapshot} from './functions/snapshots';
+
 figma.showUI(__html__);
 figma.ui.resize(800, 600);
 
@@ -13,7 +16,7 @@ function saveChartConfig(node: FrameNode, config) {
     node.setPluginData('chart-data', JSON.stringify(config));
 }
 
-figma.ui.onmessage = (msg) => {
+figma.ui.onmessage = async (msg) => {
     switch (msg.type) {
         case 'render-chart':
             const selection = figma.currentPage.selection;
@@ -22,6 +25,14 @@ figma.ui.onmessage = (msg) => {
                 saveChartConfig(chart, msg.config);
             }
             break;
+        case 'load-snapshots':
+            sendMessage('load-snapshots', await loadSnapshots());
+            break;
+        case 'save-snapshot':
+            sendMessage('save-snapshot', await saveSnapshot(msg.data));
+            break;
+        case 'delete-snapshot':
+            sendMessage('delete-snapshot', await removeSnapshotById(msg.data));
         default:
             console.log(msg.type);
     }
@@ -31,16 +42,10 @@ figma.on('selectionchange', () => {
     if (figma.currentPage.selection.length === 1) {
         const item = figma.currentPage.selection[0];
         if (item.getPluginData('chart-data')) {
-            figma.ui.postMessage({type: 'get-chart-data', data: item.getPluginData('chart-data')});
+            sendMessage('get-chart-data', item.getPluginData('chart-data'));
         }
-        figma.ui.postMessage({
-            type: 'set-selection',
-            data: figma.currentPage.selection[0] ? figma.currentPage.selection[0].id : '',
-        });
+        sendMessage('set-selection', figma.currentPage.selection[0] ? figma.currentPage.selection[0].id : '');
     } else {
-        figma.ui.postMessage({
-            type: 'set-selection',
-            data: '',
-        });
+        sendMessage('set-selection', '');
     }
 });

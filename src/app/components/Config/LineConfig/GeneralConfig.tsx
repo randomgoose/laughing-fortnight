@@ -40,8 +40,8 @@ export default function GeneralConfig() {
     const [form] = Form.useForm();
 
     React.useEffect(() => {
-        form.setFieldsValue({scale});
-    }, [scale]);
+        form.setFieldsValue({scale, enableArea, margin, areaBaselineValue, areaOpacity, areaBlendMode});
+    }, [scale, enableArea, margin, areaBaselineValue, areaOpacity, areaBlendMode]);
 
     React.useEffect(() => {
         console.log(enableArea);

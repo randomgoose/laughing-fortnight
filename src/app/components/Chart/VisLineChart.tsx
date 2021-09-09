@@ -90,10 +90,6 @@ export default function VisLineChart() {
                 pointSize={pointSize}
                 pointBorderColor={{theme: 'background'}}
                 pointLabelYOffset={-12}
-                // onClick={(point) => {
-                //     console.log(point);
-                //     dispatch(setActiveSerie(point.serieId));
-                // }}
                 curve={curve}
                 enableArea={enableArea}
                 areaBaselineValue={areaBaselineValue}

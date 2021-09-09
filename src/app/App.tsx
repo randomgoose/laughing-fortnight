@@ -11,7 +11,7 @@ import {RootState} from './redux/store';
 import {ConfigProvider, Button} from 'antd';
 import {useDispatch} from 'react-redux';
 // import {loadState} from './features/chart/lineChartSlice';
-import {setSelectionId} from './features/app/appSlice';
+import {addSnapshot, removeSnapshotById, setSelectionId, setSnapshots} from './features/app/appSlice';
 
 function App() {
     const {chartType, hideInterface, selectionId} = useSelector((state: RootState) => state.app);
@@ -22,10 +22,9 @@ function App() {
             {
                 pluginMessage: {
                     type: 'render-chart',
-                    svg: `<svg>${document.querySelector('.canvas').querySelector('svg').innerHTML}</svg>`.replace(
-                        /transparent/g,
-                        '#ffffff'
-                    ),
+                    svg: `<svg xmlns="http://www.w3.org/2000/svg">${
+                        document.querySelector('.canvas').querySelector('svg').innerHTML
+                    }</svg>`.replace(/transparent/g, '#ffffff'),
                     // config: chartConfig,
                 },
             },
@@ -45,8 +44,16 @@ function App() {
                 case 'set-selection':
                     dispatch(setSelectionId(data));
                     break;
+                case 'load-snapshots':
+                    dispatch(setSnapshots(data));
+                    break;
+                case 'save-snapshot':
+                    dispatch(addSnapshot(data));
+                    break;
+                case 'delete-snapshot':
+                    dispatch(removeSnapshotById(data.id));
+                    break;
                 default:
-                    console.log(data);
             }
         };
     }, []);

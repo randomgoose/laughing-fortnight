@@ -1,4 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {SnapshotProps} from '../../components/Snapshot/index';
 
 export interface AppState {
     chartType: 'line' | 'bar' | 'pie' | 'area';
@@ -7,6 +8,7 @@ export interface AppState {
     showAdvancedConfig: boolean;
     rndEnabled: boolean;
     hideInterface: boolean;
+    snapshots: SnapshotProps[];
 }
 
 const initialState: AppState = {
@@ -16,6 +18,7 @@ const initialState: AppState = {
     showAdvancedConfig: false,
     rndEnabled: false,
     hideInterface: false,
+    snapshots: [],
 };
 
 export const appSlice = createSlice({
@@ -37,9 +40,27 @@ export const appSlice = createSlice({
         setHideInterface: (state, action: PayloadAction<boolean>) => {
             state.hideInterface = action.payload;
         },
+        setSnapshots: (state, action: PayloadAction<SnapshotProps[]>) => {
+            state.snapshots = action.payload;
+        },
+        addSnapshot: (state, action: PayloadAction<SnapshotProps>) => {
+            state.snapshots = [action.payload, ...state.snapshots];
+        },
+        removeSnapshotById: (state, action: PayloadAction<string>) => {
+            state.snapshots = state.snapshots.filter((item) => item.id !== action.payload);
+        },
     },
 });
 
-export const {setChartType, setSelectionId, setDataSource, setRndEnabled, setHideInterface} = appSlice.actions;
+export const {
+    setChartType,
+    setSelectionId,
+    setDataSource,
+    setRndEnabled,
+    setHideInterface,
+    setSnapshots,
+    addSnapshot,
+    removeSnapshotById,
+} = appSlice.actions;
 
 export default appSlice.reducer;

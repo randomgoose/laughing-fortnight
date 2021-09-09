@@ -10,30 +10,64 @@ import DataUpload from './Data/DataUpload';
 import {Rnd} from 'react-rnd';
 import {Handle} from './StyledComponents/StyledComponents';
 import {CameraFilled} from '@ant-design/icons';
+import styled from 'styled-components';
+import cryptoRandomString from 'crypto-random-string';
+import {sendMessage} from '../utils/send-message';
+import {SnapshotProps} from './Snapshot';
+import Snapshot from './Snapshot/Snapshot';
 
-function Sample({title}: {title: string}) {
-    return (
-        <div className={'Sample'}>
-            <div
-                style={{
-                    background: 'lightgray',
-                    borderRadius: 8,
-                    marginBottom: 8,
-                    height: 120,
-                }}
-                className={'Sample__image'}
-            ></div>
-            <div className={'Sample__title'}>{title}</div>
-        </div>
-    );
-}
+const Shutter = styled.div`
+    background: #f7f8fa;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &:hover {
+        background: #f2f3f5;
+    }
+
+    &:active {
+        background: #eeeeee;
+    }
+`;
 
 export default function Gallery() {
-    const {dataSource} = useSelector((state: RootState) => state.app);
+    const {dataSource, chartType, snapshots} = useSelector((state: RootState) => state.app);
+    const {bar, line} = useSelector((state: RootState) => state);
     const [height, setHeight] = React.useState('320px');
     const [width, setWidth] = React.useState('100%');
     const [x, setX] = React.useState(0);
     const [y, setY] = React.useState(window.innerHeight - 320);
+
+    function loadSnapShots() {
+        sendMessage('load-snapshots');
+    }
+
+    React.useEffect(() => {
+        loadSnapShots();
+    }, []);
+
+    function takeSnapShot() {
+        const str = new XMLSerializer().serializeToString(document.querySelector('.canvas').querySelector('svg'));
+
+        const snapShot: SnapshotProps = {
+            state: chartType === 'bar' ? bar : line,
+            svg: window.btoa(unescape(encodeURIComponent(str))),
+            id: cryptoRandomString({length: 8}),
+            type: chartType,
+            title: 'untitled',
+        };
+
+        return snapShot;
+    }
+
+    function saveSnapShot(snapshot: SnapshotProps) {
+        sendMessage('save-snapshot', snapshot);
+    }
 
     return (
         <Rnd
@@ -92,23 +126,17 @@ export default function Gallery() {
                             }}
                             className={'Gallery__display'}
                         >
-                            <div
-                                style={{
-                                    background: '#f2f3f5',
-                                    borderRadius: 8,
-                                    marginBottom: 8,
-                                    height: 120,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
+                            <Shutter
+                                onClick={() => {
+                                    saveSnapShot(takeSnapShot());
+                                    loadSnapShots();
                                 }}
                             >
                                 <CameraFilled style={{color: 'gray'}} />
-                            </div>
-                            <Sample title={'双线图'} />
-                            <Sample title={'双线图'} />
-                            <Sample title={'双线图'} />
-                            <Sample title={'双线图'} />
+                            </Shutter>
+                            {snapshots.map((i) => {
+                                if (i.type === chartType) return <Snapshot snapshot={i} />;
+                            })}
                         </div>
                     </Tabs.TabPane>
                 </Tabs>

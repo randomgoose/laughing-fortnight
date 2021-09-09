@@ -25,9 +25,7 @@ export default function Canvas() {
         config: {mass: 5, tension: 350, friction: 80},
     }));
 
-    React.useEffect(() => {
-        console.log(zoom);
-    }, [zoom]);
+    React.useEffect(() => {}, [zoom]);
 
     const domTarget = React.useRef(null);
     const ref = React.useRef(null);
@@ -88,7 +86,6 @@ export default function Canvas() {
                 <Radio.Group
                     value={chartType === 'line' ? line.render : chartType === 'bar' ? bar.render : 'svg'}
                     onChange={(e) => {
-                        console.log(e.target.value);
                         if (chartType === 'line') dispatch(setLine({render: e.target.value}));
                         if (chartType === 'bar') dispatch(setBar({render: e.target.value}));
                     }}

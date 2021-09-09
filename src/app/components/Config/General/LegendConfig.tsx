@@ -2,7 +2,8 @@ import * as React from 'react';
 import {Radio, Form, Slider, Collapse, Button, Space, Typography} from 'antd';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../redux/store';
-import {setLegend, setPartialState, removeLegendByIndex} from '../../../features/chart/lineChartSlice';
+import {chartSlice as lineSlice} from '../../../features/chart/lineChartSlice';
+import {chartSlice as barSlice} from '../../../features/chart/barChartSlice';
 import {
     AlignCenterOutlined,
     AlignLeftOutlined,
@@ -20,18 +21,45 @@ import {baseLegend} from '../../../data/baseLegend';
 
 export default () => {
     const dispatch = useDispatch();
-    const {legends} = useSelector((state: RootState) => state.line);
-    useThrottle(legends, {wait: 500});
+    const {line, bar} = useSelector((state: RootState) => state);
+    const {chartType} = useSelector((state: RootState) => state.app);
+    useThrottle(line.legends, {wait: 500});
+    useThrottle(bar.legends, {wait: 500});
 
     const addLegend = React.useCallback(() => {
-        dispatch(setPartialState({legends: [...legends, {...baseLegend[0]}]}));
-    }, [legends]);
+        switch (chartType) {
+            case 'line':
+                dispatch(lineSlice.actions.setPartialState({legends: [...line.legends, {...baseLegend[0]}]}));
+                break;
+            case 'bar':
+                dispatch(
+                    barSlice.actions.setPartialState({legends: [...bar.legends, {...baseLegend[0], dataFrom: 'keys'}]})
+                );
+                break;
+        }
+    }, [line.legends, chartType, bar.legends]);
+
+    const getLegends = React.useCallback(() => {
+        switch (chartType) {
+            case 'line':
+                return line.legends;
+            case 'bar':
+                return bar.legends;
+        }
+    }, [line.legends, bar.legends, chartType]);
 
     const deleteLegendByIndex = React.useCallback(
         (index: number) => {
-            dispatch(removeLegendByIndex(index));
+            switch (chartType) {
+                case 'line':
+                    dispatch(lineSlice.actions.removeLegendByIndex(index));
+                    break;
+                case 'bar':
+                    dispatch(barSlice.actions.removeLegendByIndex(index));
+                    break;
+            }
         },
-        [legends]
+        [line.legends, chartType, bar.legends]
     );
 
     return (
@@ -43,7 +71,7 @@ export default () => {
                 </Space>
             </Typography.Title>
             <Collapse collapsible={'header'} ghost>
-                {legends.map((legend, index) => {
+                {getLegends().map((legend, index) => {
                     return (
                         <StyledCollapsePanel
                             key={index}
@@ -61,7 +89,21 @@ export default () => {
                         >
                             <Form
                                 onValuesChange={(changedValues) => {
-                                    dispatch(setLegend({index: index, newLegend: changedValues}));
+                                    switch (chartType) {
+                                        case 'line':
+                                            dispatch(
+                                                lineSlice.actions.setLegend({index: index, newLegend: changedValues})
+                                            );
+                                            break;
+                                        case 'bar':
+                                            dispatch(
+                                                barSlice.actions.setLegend({
+                                                    index: index,
+                                                    newLegend: {...changedValues, dataFrom: 'keys'},
+                                                })
+                                            );
+                                            break;
+                                    }
                                 }}
                                 initialValues={legend}
                                 layout={'vertical'}

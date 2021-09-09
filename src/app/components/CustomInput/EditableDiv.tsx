@@ -23,7 +23,10 @@ export default function EditableDiv({value, onFinishEditing, validate}: Props) {
             } else {
                 setEditing(true);
             }
+        } else {
+            setEditing(false);
         }
+
         onFinishEditing(temp);
     }
 

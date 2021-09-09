@@ -2,9 +2,10 @@ import * as React from 'react';
 import {Tabs} from 'antd';
 import GeneralConfig from './GeneralConfig';
 import {StyledTabPane} from '../../StyledComponents/StyledComponents';
-import {FcGrid, FcRuler, FcSettings} from 'react-icons/fc';
+import {FcAbout, FcGrid, FcRuler, FcSettings} from 'react-icons/fc';
 import AxisConfig from './AxisConfig';
 import GridConfig from './GridConfig';
+import LegendConfig from '../General/LegendConfig';
 
 export default function LineConfig() {
     const config = (
@@ -19,7 +20,9 @@ export default function LineConfig() {
                 <StyledTabPane key={'grid'} tab={<FcGrid />}>
                     <GridConfig />
                 </StyledTabPane>
-                <StyledTabPane key={'legend'}></StyledTabPane>
+                <StyledTabPane key={'legend'} tab={<FcAbout />}>
+                    <LegendConfig />
+                </StyledTabPane>
             </Tabs>
         </>
     );

@@ -28,14 +28,10 @@ const VisBarChart = () => {
         y,
         scale,
         indexBy,
+        legends,
     } = useSelector((state: RootState) => state.bar);
 
-    const {rndEnabled} = useSelector((state: RootState) => state.app);
     const dispatch = useDispatch();
-
-    React.useEffect(() => {
-        console.log(rndEnabled);
-    }, [rndEnabled]);
 
     React.useEffect(() => {
         if (data.length > 10) {
@@ -83,53 +79,30 @@ const VisBarChart = () => {
                     borderColor={{from: 'color', modifiers: [['darker', 1.6]]}}
                     axisTop={null}
                     axisRight={null}
-                    // axisBottom={
-                    //     showXAxis && {
-                    //         tickSize: 5,
-                    //         tickPadding: 5,
-                    //         tickRotation: 0,
-                    //         legend: 'country',
-                    //         legendPosition: 'middle',
-                    //         legendOffset: 32,
-                    //     }
-                    // }
-                    // axisLeft={
-                    //     showYAxis && {
-                    //         tickSize: 5,
-                    //         tickPadding: 5,
-                    //         tickRotation: 0,
-                    //         legend: 'food',
-                    //         legendPosition: 'middle',
-                    //         legendOffset: -40,
-                    //     }
-                    // }
+                    axisBottom={
+                        showXAxis && {
+                            tickSize: 5,
+                            tickPadding: 5,
+                            tickRotation: 0,
+                            // legend: 'country',
+                            // legendPosition: 'middle',
+                            legendOffset: 32,
+                        }
+                    }
+                    axisLeft={
+                        showYAxis && {
+                            tickSize: 5,
+                            tickPadding: 5,
+                            tickRotation: 0,
+                            // legend: 'food',
+                            // legendPosition: 'middle',
+                            legendOffset: -40,
+                        }
+                    }
                     labelSkipWidth={12}
                     labelSkipHeight={12}
                     labelTextColor={{from: 'color', modifiers: [['darker', 1.6]]}}
-                    legends={[
-                        {
-                            dataFrom: 'keys',
-                            anchor: 'bottom-right',
-                            direction: 'column',
-                            justify: false,
-                            translateX: 120,
-                            translateY: 0,
-                            itemsSpacing: 2,
-                            itemWidth: 100,
-                            itemHeight: 20,
-                            itemDirection: 'left-to-right',
-                            itemOpacity: 0.85,
-                            symbolSize: 20,
-                            effects: [
-                                {
-                                    on: 'hover',
-                                    style: {
-                                        itemOpacity: 1,
-                                    },
-                                },
-                            ],
-                        },
-                    ]}
+                    legends={legends}
                 ></ResponsiveBarCanvas>
             ) : (
                 <ResponsiveBar
@@ -211,30 +184,7 @@ const VisBarChart = () => {
                     labelSkipWidth={12}
                     labelSkipHeight={12}
                     labelTextColor={{from: 'color', modifiers: [['darker', 1.6]]}}
-                    legends={[
-                        {
-                            dataFrom: 'keys',
-                            anchor: 'bottom-right',
-                            direction: 'column',
-                            justify: false,
-                            translateX: 120,
-                            translateY: 0,
-                            itemsSpacing: 2,
-                            itemWidth: 100,
-                            itemHeight: 20,
-                            itemDirection: 'left-to-right',
-                            itemOpacity: 0.85,
-                            symbolSize: 20,
-                            effects: [
-                                {
-                                    on: 'hover',
-                                    style: {
-                                        itemOpacity: 1,
-                                    },
-                                },
-                            ],
-                        },
-                    ]}
+                    legends={legends}
                 />
             )}
         </StyledRnd>
