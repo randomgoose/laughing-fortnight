@@ -2,7 +2,6 @@ import {useHover} from 'ahooks';
 import * as React from 'react';
 import {Rnd} from 'react-rnd';
 import {Handle} from './StyledComponents';
-
 interface Props {
     children: React.ReactNode;
     width: number;

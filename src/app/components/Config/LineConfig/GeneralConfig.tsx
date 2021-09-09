@@ -7,6 +7,7 @@ import {ChartState, setPartialState} from '../../../features/chart/lineChartSlic
 import {colorSchemes} from '@nivo/colors';
 import {AreaChartOutlined, ColumnWidthOutlined, HighlightOutlined} from '@ant-design/icons';
 import {FcSettings} from 'react-icons/fc';
+import _ from 'lodash';
 
 const colorSchemeList = Object.keys(colorSchemes);
 
@@ -33,7 +34,7 @@ const blendModeList = [
 
 export default function GeneralConfig() {
     const dispatch = useDispatch();
-    const {scale, colors, enableArea, margin, areaBaselineValue, areaOpacity, areaBlendMode} = useSelector(
+    const {scale, colors, enableArea, margin, areaBaselineValue, areaOpacity, areaBlendMode, data} = useSelector(
         (state: RootState) => state.line
     );
 
@@ -137,7 +138,15 @@ export default function GeneralConfig() {
                     <Switch size={'small'} />
                 </Form.Item>
                 <Form.Item name={'areaBaselineValue'} label={<Space>面积图基线</Space>}>
-                    <Slider />
+                    <Slider
+                        min={0}
+                        max={
+                            _.maxBy(
+                                data.map((datum) => _.maxBy(datum.data, (d) => d.y)),
+                                (d) => d.y
+                            ).y
+                        }
+                    />
                 </Form.Item>
                 <Form.Item name={'areaOpacity'} label={<Space>面积图透明度</Space>}>
                     <Slider step={0.01} min={0} max={1} />

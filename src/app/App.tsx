@@ -11,7 +11,7 @@ import {RootState} from './redux/store';
 import {ConfigProvider, Button} from 'antd';
 import {useDispatch} from 'react-redux';
 // import {loadState} from './features/chart/lineChartSlice';
-import {addSnapshot, removeSnapshotById, setSelectionId, setSnapshots} from './features/app/appSlice';
+import {addSnapshot, editSnapshotById, removeSnapshotById, setSelectionId, setSnapshots} from './features/app/appSlice';
 
 function App() {
     const {chartType, hideInterface, selectionId} = useSelector((state: RootState) => state.app);
@@ -52,6 +52,9 @@ function App() {
                     break;
                 case 'delete-snapshot':
                     dispatch(removeSnapshotById(data.id));
+                    break;
+                case 'edit-snapshot':
+                    dispatch(editSnapshotById(data));
                     break;
                 default:
             }

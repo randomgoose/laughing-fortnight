@@ -42,3 +42,11 @@ export const removeSnapshotById = async (id): Promise<Snapshot> => {
     );
     return snapshots.find((item) => item.id === id);
 };
+
+export const editSnapshotById = async ({id, values}: {id: string; values: Partial<Snapshot>}): Promise<Snapshot> => {
+    const snapshots = await loadSnapshots();
+    const snapshot = snapshots.find((item) => item.id === id);
+    Object.assign(snapshot, values);
+    await figma.clientStorage.setAsync('snapshots', snapshots);
+    return snapshot;
+};

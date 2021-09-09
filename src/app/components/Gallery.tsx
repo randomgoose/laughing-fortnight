@@ -3,7 +3,7 @@ import * as React from 'react';
 import {FcPuzzle} from 'react-icons/fc';
 import {useSelector} from 'react-redux';
 import {RootState} from '../redux/store';
-import DataMock from './Data/DataMock';
+import DataMock from './Data/DataMock/DataMock';
 import DataSource from './Data/DataSource';
 import DataTable from './Data/DataTable';
 import DataUpload from './Data/DataUpload';
@@ -134,9 +134,11 @@ export default function Gallery() {
                             >
                                 <CameraFilled style={{color: 'gray'}} />
                             </Shutter>
-                            {snapshots.map((i) => {
-                                if (i.type === chartType) return <Snapshot snapshot={i} />;
-                            })}
+                            {snapshots
+                                ? snapshots.map((i) => {
+                                      if (i.type === chartType) return <Snapshot snapshot={i} />;
+                                  })
+                                : []}
                         </div>
                     </Tabs.TabPane>
                 </Tabs>

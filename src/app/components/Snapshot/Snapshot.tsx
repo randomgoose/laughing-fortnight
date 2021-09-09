@@ -1,13 +1,30 @@
 import {DeleteOutlined} from '@ant-design/icons';
 import {Button, Popconfirm} from 'antd';
 import * as React from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {SnapshotProps} from '.';
+import {setPartialState as setLine} from '../../features/chart/lineChartSlice';
+import {setPartialState as setBar} from '../../features/chart/barChartSlice';
+
+import {RootState} from '../../redux/store';
 import {sendMessage} from '../../utils/send-message';
+import EditableDiv from '../CustomInput/EditableDiv';
 
 export default function Snapshot({snapshot}: {snapshot: SnapshotProps}) {
     const [showDeleteButton, setShowDeleteButton] = React.useState(false);
+    const {chartType} = useSelector((state: RootState) => state.app);
+    const dispatch = useDispatch();
+
+    function setData(state) {
+        if (chartType === 'bar') {
+            dispatch(setBar({...state}));
+        } else if (chartType === 'line') {
+            dispatch(setLine({...state}));
+        }
+    }
+
     return (
-        <div className={'Sample'}>
+        <div className={'Snapshot'}>
             <div
                 style={{
                     background: '#f2f3f5',
@@ -18,9 +35,12 @@ export default function Snapshot({snapshot}: {snapshot: SnapshotProps}) {
                     textAlign: 'center',
                     cursor: 'pointer',
                     position: 'relative',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                 }}
                 className={'Sample__image'}
-                // onClick={onClick}
+                onClick={() => setData(snapshot.state)}
                 onMouseEnter={() => setShowDeleteButton(true)}
                 onMouseLeave={() => setShowDeleteButton(false)}
             >
@@ -41,15 +61,14 @@ export default function Snapshot({snapshot}: {snapshot: SnapshotProps}) {
                         icon={<DeleteOutlined />}
                     ></Button>
                 </Popconfirm>
-                <img src={'data:image/svg+xml;base64,' + snapshot.svg} height={'100%'} />
+                <img src={'data:image/svg+xml;base64,' + snapshot.svg} width={'80%'} />
             </div>
-            {snapshot.title}
-            {/* <EditableDiv
+            <EditableDiv
                 onFinishEditing={(value: string) => {
-                    onChangeTitle(value);
+                    sendMessage('edit-snapshot', {id: snapshot.id, values: {title: value}});
                 }}
-                value={title}
-            /> */}
+                value={snapshot.title}
+            />
         </div>
     );
 }

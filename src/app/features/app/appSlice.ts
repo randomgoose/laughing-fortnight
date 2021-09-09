@@ -49,6 +49,12 @@ export const appSlice = createSlice({
         removeSnapshotById: (state, action: PayloadAction<string>) => {
             state.snapshots = state.snapshots.filter((item) => item.id !== action.payload);
         },
+        editSnapshotById: (state, action: PayloadAction<SnapshotProps>) => {
+            Object.assign(
+                state.snapshots.find((item) => item.id === action.payload.id),
+                action.payload
+            );
+        },
     },
 });
 
@@ -61,6 +67,7 @@ export const {
     setSnapshots,
     addSnapshot,
     removeSnapshotById,
+    editSnapshotById,
 } = appSlice.actions;
 
 export default appSlice.reducer;

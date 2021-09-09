@@ -3,6 +3,7 @@ import lineReducer from '../features/chart/lineChartSlice';
 import appReducer from '../features/app/appSlice';
 import pieReducer from '../features/chart/pieChartSlice';
 import barReducer from '../features/chart/barChartSlice';
+import dataMockReducer from '../features/data/dataMockSlice';
 
 export const store = configureStore({
     reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
         line: lineReducer,
         pie: pieReducer,
         bar: barReducer,
+        dataMock: dataMockReducer,
     },
 });
 

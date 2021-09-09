@@ -1,5 +1,5 @@
 import {sendMessage} from './functions/message';
-import {loadSnapshots, removeSnapshotById, saveSnapshot} from './functions/snapshots';
+import {editSnapshotById, loadSnapshots, removeSnapshotById, saveSnapshot} from './functions/snapshots';
 
 figma.showUI(__html__);
 figma.ui.resize(800, 600);
@@ -33,6 +33,9 @@ figma.ui.onmessage = async (msg) => {
             break;
         case 'delete-snapshot':
             sendMessage('delete-snapshot', await removeSnapshotById(msg.data));
+            break;
+        case 'edit-snapshot':
+            sendMessage('edit-snapshot', await editSnapshotById(msg.data));
         default:
             console.log(msg.type);
     }

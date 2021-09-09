@@ -1,22 +1,24 @@
 // import {Serie} from '@nivo/line';
-import {Button, Form, InputNumber, Radio, Space} from 'antd';
+import {Button, Drawer, Form, InputNumber, Radio, Space} from 'antd';
 import * as React from 'react';
 import {useImmer} from 'use-immer';
 // import {useDispatch} from 'react-redux';
-import {generateDatumSequence, generateNumberSequence, Trend} from '../../utils/generateNumbers';
+import {generateDatumSequence, generateNumberSequence, Trend} from '../../../utils/generateNumbers';
 import cryptoRandomString from 'crypto-random-string';
 import {Serie} from '@nivo/line';
 import {useDispatch, useSelector} from 'react-redux';
-import {setNewData} from '../../features/chart/lineChartSlice';
+import {setNewData} from '../../../features/chart/lineChartSlice';
 import {FallOutlined, RiseOutlined} from '@ant-design/icons';
-import Header from '../Typography/Header';
-import {setDataSource} from '../../features/app/appSlice';
-import {RootState} from '../../redux/store';
-import {setPartialState} from '../../features/chart/barChartSlice';
+import Header from '../../Typography/Header';
+import {setDataSource} from '../../../features/app/appSlice';
+import {RootState} from '../../../redux/store';
+import {setPartialState} from '../../../features/chart/barChartSlice';
+import AdvancedConfig from './AdvancedConfig';
 
 export default function DataMock() {
     const dispatch = useDispatch();
     const {chartType} = useSelector((state: RootState) => state.app);
+    const [showAdvancedSettings, setShowAdvancedSettings] = React.useState(false);
     const [numberSequenceAttr, setNumberSequenceAttr] = useImmer<{
         min: number;
         max: number;
@@ -119,7 +121,17 @@ export default function DataMock() {
                     >
                         模拟数据
                     </Button>
-                    <Button type={'link'}>高级设置</Button>
+                    <Button type={'link'} onClick={() => setShowAdvancedSettings(true)}>
+                        高级设置
+                    </Button>
+                    <Drawer
+                        title="Basic Drawer"
+                        placement="right"
+                        onClose={() => setShowAdvancedSettings(false)}
+                        visible={showAdvancedSettings}
+                    >
+                        <AdvancedConfig />
+                    </Drawer>
                 </Space>
             </Space>
         </div>
