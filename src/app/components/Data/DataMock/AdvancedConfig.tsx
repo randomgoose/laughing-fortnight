@@ -9,9 +9,14 @@ export default function AdvancedConfig() {
     const dispatch = useDispatch();
 
     return (
-        <Form initialValues={{decimalDigit}} onValuesChange={(values) => dispatch(setPartialState(values))}>
-            <Form.Item name={'decimalDigit'}>
-                <InputNumber />
+        <Form
+            initialValues={{decimalDigit}}
+            onValuesChange={(changedValues) => {
+                dispatch(setPartialState(changedValues));
+            }}
+        >
+            <Form.Item name={'decimalDigit'} label={'小数位'}>
+                <InputNumber min={0} />
             </Form.Item>
         </Form>
     );

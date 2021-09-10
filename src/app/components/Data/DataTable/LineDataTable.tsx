@@ -11,7 +11,12 @@ export default function LineDataTable() {
     const dispatch = useDispatch();
 
     return (
-        <Tabs type={'editable-card'}>
+        <Tabs
+            type={'editable-card'}
+            onEdit={(targetKey, action) => {
+                console.log(targetKey, action);
+            }}
+        >
             {data.map((item, index) => (
                 <Tabs.TabPane
                     key={item.id}

@@ -3,18 +3,28 @@ import {BarDatum} from '@nivo/bar';
 
 export type Trend = 'rise' | 'fall';
 
-export const generateIncreasingNumberSequence = (count: number, max: number = 100, min: number = 1): number[] => {
+export const generateIncreasingNumberSequence = (
+    length: number,
+    max: number = 100,
+    min: number = 1,
+    decimalDigit: number = 2
+): number[] => {
     let res = [];
-    for (let i = 0; i < count; i++) {
-        res.push((Math.random() * (max - min) + min).toFixed(2));
+    for (let i = 0; i < length; i++) {
+        res.push((Math.random() * (max - min) + min).toFixed(decimalDigit));
     }
     return res.sort((a, b) => a - b);
 };
 
-export const generateDecreasingNumberSequence = (count: number, max: number = 100, min: number = 1): number[] => {
+export const generateDecreasingNumberSequence = (
+    length: number,
+    max: number = 100,
+    min: number = 1,
+    decimalDigit: number = 2
+): number[] => {
     let res = [];
-    for (let i = 0; i < count; i++) {
-        res.push((Math.random() * (max - min) + min).toFixed(2));
+    for (let i = 0; i < length; i++) {
+        res.push((Math.random() * (max - min) + min).toFixed(decimalDigit));
     }
     return res.sort((a, b) => b - a);
 };
@@ -29,31 +39,43 @@ export const generateGaussianSequence = (count: number, mean: number, std: numbe
 };
 
 export const generateNumberSequence = ({
-    count,
+    length,
     max,
     min,
     trend,
+    decimalDigit,
 }: {
-    count: number;
+    length: number;
     max: number;
     min: number;
     trend: Trend;
+    decimalDigit: number;
 }) => {
     if (trend === 'rise') {
-        return generateIncreasingNumberSequence(count, max, min).map((num, index) => {
+        return generateIncreasingNumberSequence(length, max, min, decimalDigit).map((num, index) => {
             return {x: index, y: num};
         });
     } else if (trend === 'fall') {
-        return generateDecreasingNumberSequence(count, max, min).map((num, index) => {
+        return generateDecreasingNumberSequence(length, max, min, decimalDigit).map((num, index) => {
             return {x: index, y: num};
         });
     }
 };
 
-export const generateDatum = ({attrs, min, max}: {attrs: string[]; min: number; max: number}): BarDatum => {
+export const generateDatum = ({
+    attrs,
+    min,
+    max,
+    decimalDigit = 2,
+}: {
+    attrs: string[];
+    min: number;
+    max: number;
+    decimalDigit: number;
+}): BarDatum => {
     let datum = {};
     attrs.forEach((attr) => {
-        datum[attr] = (Math.random() * (max - min) + min).toFixed(2);
+        datum[attr] = (Math.random() * (max - min) + min).toFixed(decimalDigit);
     });
     return datum;
 };
@@ -63,15 +85,17 @@ export const generateDatumSequence = ({
     length,
     min,
     max,
+    decimalDigit,
 }: {
     attrs: string[];
     length: number;
     min: number;
     max: number;
+    decimalDigit: number;
 }): BarDatum[] => {
     let res = [];
     for (let i = 0; i < length; i++) {
-        res.push(generateDatum({attrs, min, max}));
+        res.push(generateDatum({attrs, min, max, decimalDigit}));
     }
     return res;
 };

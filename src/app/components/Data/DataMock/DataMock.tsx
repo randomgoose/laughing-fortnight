@@ -19,19 +19,26 @@ export default function DataMock() {
     const dispatch = useDispatch();
     const {chartType} = useSelector((state: RootState) => state.app);
     const [showAdvancedSettings, setShowAdvancedSettings] = React.useState(false);
+    const {decimalDigit} = useSelector((state: RootState) => state.dataMock);
     const [numberSequenceAttr, setNumberSequenceAttr] = useImmer<{
         min: number;
         max: number;
         length: number;
         count: number;
         trend: Trend;
+        decimalDigit: number;
     }>({
         min: 0,
         max: 1000,
         length: 12,
         count: 1,
         trend: 'rise',
+        decimalDigit: decimalDigit,
     });
+
+    React.useEffect(() => {
+        setNumberSequenceAttr({...numberSequenceAttr, decimalDigit});
+    }, [decimalDigit]);
 
     const [tempData, setTempData] = useImmer<Serie[]>([]);
 
@@ -112,6 +119,7 @@ export default function DataMock() {
                                             length: count,
                                             min: 1,
                                             max: 10,
+                                            decimalDigit: decimalDigit,
                                         }),
                                     ];
                                     break;
