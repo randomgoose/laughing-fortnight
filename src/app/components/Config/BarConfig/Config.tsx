@@ -6,25 +6,27 @@ import {FcAbout, FcGrid, FcRuler, FcSettings} from 'react-icons/fc';
 import AxisConfig from './AxisConfig';
 import GridConfig from './GridConfig';
 import LegendConfig from '../General/LegendConfig';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../redux/store';
+import BarConfig from './BarConfig';
 
-export default function LineConfig() {
+export default function Config() {
+    const {activeIndex} = useSelector((state: RootState) => state.bar);
     const config = (
-        <>
-            <Tabs tabPosition={'left'} type={'card'} style={{height: '100%'}}>
-                <StyledTabPane key={'general'} tab={<FcSettings />}>
-                    <GeneralConfig />
-                </StyledTabPane>
-                <StyledTabPane key={'axis'} tab={<FcRuler />}>
-                    <AxisConfig />
-                </StyledTabPane>
-                <StyledTabPane key={'grid'} tab={<FcGrid />}>
-                    <GridConfig />
-                </StyledTabPane>
-                <StyledTabPane key={'legend'} tab={<FcAbout />}>
-                    <LegendConfig />
-                </StyledTabPane>
-            </Tabs>
-        </>
+        <Tabs tabPosition={'left'} type={'card'} style={{height: '100%'}}>
+            <StyledTabPane key={'general'} tab={<FcSettings />}>
+                <GeneralConfig />
+            </StyledTabPane>
+            <StyledTabPane key={'axis'} tab={<FcRuler />}>
+                <AxisConfig />
+            </StyledTabPane>
+            <StyledTabPane key={'grid'} tab={<FcGrid />}>
+                <GridConfig />
+            </StyledTabPane>
+            <StyledTabPane key={'legend'} tab={<FcAbout />}>
+                <LegendConfig />
+            </StyledTabPane>
+        </Tabs>
     );
 
     return (
@@ -36,7 +38,7 @@ export default function LineConfig() {
                 flexShrink: 0,
             }}
         >
-            {config}
+            {activeIndex >= 0 ? <BarConfig /> : config}
         </div>
     );
 }

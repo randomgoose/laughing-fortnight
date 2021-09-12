@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../redux/store';
-import {ResponsiveLine} from '@nivo/line';
+import {LineSvgProps, ResponsiveLine, ResponsiveLineCanvas} from '@nivo/line';
 import {setPartialState} from '../../features/chart/lineChartSlice';
 import StyledRnd from '../StyledComponents/StyledRnd';
 
@@ -40,6 +40,7 @@ export default function VisLineChart() {
         x,
         y,
         scale,
+        render,
     } = useSelector((state: RootState) => state.line);
 
     const dispatch = useDispatch();
@@ -59,46 +60,44 @@ export default function VisLineChart() {
         );
     }
 
+    const props: LineSvgProps = {
+        margin,
+        data: data.filter((item) => lines.includes(item.id)),
+        enableGridX: showGridX,
+        enableGridY: showGridY,
+        xScale,
+        yScale,
+        yFormat: ' >-.2f',
+        axisBottom: showXAxis ? axisBottom : null,
+        axisLeft: showYAxis
+            ? {
+                  tickSize: 5,
+                  tickPadding: 5,
+                  tickRotation: 0,
+                  legend: 'count',
+                  legendOffset: -40,
+                  legendPosition: 'middle',
+              }
+            : null,
+        colors,
+        enablePoints,
+        pointColor,
+        pointSize,
+        pointBorderColor: {theme: 'background'},
+        pointLabelYOffset: -12,
+        curve,
+        enableArea,
+        areaBaselineValue,
+        areaOpacity,
+        areaBlendMode,
+        useMesh: true,
+        lineWidth,
+        legends,
+    };
+
     return (
         <StyledRnd scale={scale} width={width} height={height} x={x} y={y} onDragStop={onDragStop} onResize={onResize}>
-            <ResponsiveLine
-                margin={margin}
-                data={data.filter((item) => lines.includes(item.id))}
-                enableGridX={showGridX}
-                enableGridY={showGridY}
-                xScale={xScale}
-                yScale={yScale}
-                yFormat=" >-.2f"
-                // axisTop={null}
-                // axisRight={null}
-                axisBottom={showXAxis ? axisBottom : null}
-                axisLeft={
-                    showYAxis
-                        ? {
-                              tickSize: 5,
-                              tickPadding: 5,
-                              tickRotation: 0,
-                              legend: 'count',
-                              legendOffset: -40,
-                              legendPosition: 'middle',
-                          }
-                        : null
-                }
-                colors={colors}
-                enablePoints={enablePoints}
-                pointColor={pointColor}
-                pointSize={pointSize}
-                pointBorderColor={{theme: 'background'}}
-                pointLabelYOffset={-12}
-                curve={curve}
-                enableArea={enableArea}
-                areaBaselineValue={areaBaselineValue}
-                areaOpacity={areaOpacity}
-                areaBlendMode={areaBlendMode}
-                useMesh={true}
-                lineWidth={lineWidth}
-                legends={legends}
-            />
+            {render === 'svg' ? <ResponsiveLine {...props} /> : <ResponsiveLineCanvas {...props} />}
         </StyledRnd>
     );
 }

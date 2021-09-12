@@ -1,4 +1,4 @@
-import {BarSvgProps, BarDatum, BarLegendProps} from '@nivo/bar';
+import {BarSvgProps, BarDatum, BarLegendProps, ComputedDatum} from '@nivo/bar';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {data} from '../../data/baseBarData';
 import _ from 'lodash';
@@ -16,6 +16,11 @@ export interface ChartState extends BarSvgProps<BarDatum> {
     y: number;
     scale: 1;
     render: 'svg' | 'canvas';
+    activeBar: string;
+    activeIndex: number;
+    activeDatum: ComputedDatum<BarDatum> & {
+        color: string;
+    };
 }
 
 const initialState: ChartState = {
@@ -54,6 +59,9 @@ const initialState: ChartState = {
     colors: {scheme: 'nivo'},
     render: 'svg',
     legends: baseLegend.map((legend) => ({...legend, dataFrom: 'keys'})),
+    activeBar: '',
+    activeIndex: -1,
+    activeDatum: null,
 };
 
 export const chartSlice = createSlice({

@@ -1,14 +1,12 @@
-import {ResponsiveBar, ResponsiveBarCanvas} from '@nivo/bar';
+import {BarDatum, BarSvgProps, ResponsiveBar, ResponsiveBarCanvas} from '@nivo/bar';
 import * as React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {setRndEnabled} from '../../features/app/appSlice';
 import {setPartialState} from '../../features/chart/barChartSlice';
 import {RootState} from '../../redux/store';
 import StyledRnd from '../StyledComponents/StyledRnd';
 import {message} from 'antd';
 
 const VisBarChart = () => {
-    // const { data } = useSelector((state:RootState) => state.bar);
     const {
         data,
         groupMode,
@@ -29,6 +27,9 @@ const VisBarChart = () => {
         scale,
         indexBy,
         legends,
+        render,
+        colors,
+        // activeIndex,
     } = useSelector((state: RootState) => state.bar);
 
     const dispatch = useDispatch();
@@ -37,7 +38,12 @@ const VisBarChart = () => {
         if (data.length > 10) {
             message.info('当前数据量较大，自动切换为性能更佳的 Canvas');
         }
+        // dispatch(setPartialState({activeIndex: -1}));
     }, [data]);
+
+    // React.useEffect(() => {
+    //     console.log(activeIndex);
+    // }, [activeIndex]);
 
     function onDragStop(_e, d) {
         dispatch(setPartialState({x: d.x, y: d.y}));
@@ -54,28 +60,32 @@ const VisBarChart = () => {
         );
     }
 
+    const props: Omit<BarSvgProps<BarDatum>, 'width' | 'height' | 'onMouseEnter' | 'onMouseLeave' | 'layers'> = {
+        groupMode,
+        layout,
+        reverse,
+        data,
+        keys,
+        indexBy,
+        margin,
+        padding,
+        innerPadding,
+        enableGridX,
+        enableGridY,
+        colors,
+    };
+
     return (
         <StyledRnd scale={scale} width={width} height={height} x={x} y={y} onDragStop={onDragStop} onResize={onResize}>
-            {data.length > 10 ? (
+            {render === 'canvas' ? (
                 <ResponsiveBarCanvas
-                    groupMode={groupMode}
-                    layout={layout}
-                    reverse={reverse}
-                    data={data}
-                    keys={keys}
-                    onClick={() => {
-                        dispatch(setRndEnabled(true));
+                    {...props}
+                    onClick={(datum, event) => {
+                        console.log(datum, event);
                     }}
-                    indexBy={indexBy}
-                    margin={margin}
-                    padding={padding}
-                    innerPadding={innerPadding}
-                    // enableGridX={enableGridX}
-                    // enableGridY={enableGridY}
                     valueScale={{type: 'linear'}}
                     indexScale={{type: 'band', round: true}}
                     // valueFormat={{format: '', enabled: false}}
-                    colors={{scheme: 'nivo'}}
                     borderColor={{from: 'color', modifiers: [['darker', 1.6]]}}
                     axisTop={null}
                     axisRight={null}
@@ -106,58 +116,14 @@ const VisBarChart = () => {
                 ></ResponsiveBarCanvas>
             ) : (
                 <ResponsiveBar
-                    groupMode={groupMode}
-                    layout={layout}
-                    reverse={reverse}
-                    data={data}
-                    keys={keys}
-                    onClick={() => {
-                        dispatch(setRndEnabled(true));
+                    {...props}
+                    onClick={(datum, e) => {
+                        console.log(e.currentTarget.style);
+                        dispatch(setPartialState({activeIndex: datum.index, activeDatum: datum}));
                     }}
-                    indexBy={indexBy}
-                    margin={margin}
-                    padding={padding}
-                    innerPadding={innerPadding}
-                    enableGridX={enableGridX}
-                    enableGridY={enableGridY}
                     valueScale={{type: 'linear'}}
                     indexScale={{type: 'band', round: true}}
                     // valueFormat={{format: '', enabled: false}}
-                    colors={{scheme: 'nivo'}}
-                    defs={[
-                        {
-                            id: 'dots',
-                            type: 'patternDots',
-                            background: 'inherit',
-                            color: '#38bcb2',
-                            size: 4,
-                            padding: 1,
-                            stagger: true,
-                        },
-                        {
-                            id: 'lines',
-                            type: 'patternLines',
-                            background: 'inherit',
-                            color: '#eed312',
-                            rotation: -45,
-                            lineWidth: 6,
-                            spacing: 10,
-                        },
-                    ]}
-                    fill={[
-                        {
-                            match: {
-                                id: 'fries',
-                            },
-                            id: 'dots',
-                        },
-                        {
-                            match: {
-                                id: 'sandwich',
-                            },
-                            id: 'lines',
-                        },
-                    ]}
                     borderColor={{from: 'color', modifiers: [['darker', 1.6]]}}
                     axisTop={null}
                     axisRight={null}
@@ -185,6 +151,16 @@ const VisBarChart = () => {
                     labelSkipHeight={12}
                     labelTextColor={{from: 'color', modifiers: [['darker', 1.6]]}}
                     legends={legends}
+                    onMouseEnter={(_datum, e: React.MouseEvent<SVGRectElement, MouseEvent>) => {
+                        e.currentTarget.style.stroke = '#00BCD4';
+                        e.currentTarget.style.strokeWidth = '2';
+                        e.currentTarget.style.cursor = 'pointer';
+                    }}
+                    onMouseLeave={(_datum, e: React.MouseEvent<SVGRectElement, MouseEvent>) => {
+                        e.currentTarget.style.stroke = null;
+                        e.currentTarget.style.opacity = '0.8';
+                        e.currentTarget.style.strokeWidth = '0';
+                    }}
                 />
             )}
         </StyledRnd>

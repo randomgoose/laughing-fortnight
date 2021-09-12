@@ -9,7 +9,7 @@ import {setPartialState as setBar} from '../features/chart/barChartSlice';
 import {usePinch} from 'react-use-gesture';
 import {useSpring, to} from '@react-spring/core';
 import {animated} from '@react-spring/web';
-import {Button, Space, Radio} from 'antd';
+import {Button, Space, Radio, message} from 'antd';
 import {ArrowsAltOutlined, ShrinkOutlined} from '@ant-design/icons';
 import {setHideInterface} from '../features/app/appSlice';
 import DimensionIndicator from './DimensionIndicator';
@@ -86,6 +86,7 @@ export default function Canvas() {
                 <Radio.Group
                     value={chartType === 'line' ? line.render : chartType === 'bar' ? bar.render : 'svg'}
                     onChange={(e) => {
+                        message.info(`渲染方式切换为 ${e.target.value}`);
                         if (chartType === 'line') dispatch(setLine({render: e.target.value}));
                         if (chartType === 'bar') dispatch(setBar({render: e.target.value}));
                     }}
