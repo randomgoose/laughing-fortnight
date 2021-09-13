@@ -14,8 +14,6 @@ export default function DataUpload() {
     const dispatch = useDispatch();
 
     const {chartType} = useSelector((state: RootState) => state.app);
-    const {data} = useSelector((state: RootState) => state.line);
-    console.log(data);
 
     const [tempData, setTempData] = useImmer([]);
     const [tempColumns, setTempColumns] = useImmer([]);
@@ -56,7 +54,7 @@ export default function DataUpload() {
                     },
                 },
                 function (err, output) {
-                    if (err) console.log(err);
+                    if (err) console.error(err);
                     const columns = Object.keys(output[0]);
 
                     if (chartType === 'line') {
@@ -76,14 +74,12 @@ export default function DataUpload() {
                         let numberColumns = [...columns];
                         columns.forEach((column) =>
                             output.forEach((item) => {
-                                console.log(parseFloat(item[column]));
                                 if (_.isNaN(parseFloat(item[column]))) {
                                     numberColumns = numberColumns.filter((col) => col !== column);
                                     return;
                                 }
                             })
                         );
-                        console.log(numberColumns);
                         dispatch(
                             setPartialState({
                                 data: output.map((datum, index) => {

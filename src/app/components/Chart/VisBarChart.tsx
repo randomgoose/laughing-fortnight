@@ -114,8 +114,7 @@ const VisBarChart = () => {
             ) : (
                 <ResponsiveBar
                     {...props}
-                    onClick={(datum, e) => {
-                        console.log(e.currentTarget.style);
+                    onClick={(datum) => {
                         dispatch(setPartialState({activeIndex: datum.index, activeDatum: datum}));
                     }}
                     valueScale={{type: 'linear'}}

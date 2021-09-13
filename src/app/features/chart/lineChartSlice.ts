@@ -159,9 +159,7 @@ export const chartSlice = createSlice({
             state.legends[index] = {...state.legends[index], ...newLegend};
         },
         removeLegendByIndex: (state, action: PayloadAction<number>) => {
-            // console.log([...state.legends.slice(0, action.payload), ...state.legends.slice(action.payload)]);
             state.legends = state.legends.filter((_legend, index) => index !== action.payload);
-            // state.legends = [...state.legends.slice(0, action.payload), ...state.legends.slice(action.payload)];
         },
     },
 });

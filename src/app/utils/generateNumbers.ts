@@ -1,5 +1,6 @@
 import NormalDistribution from 'normal-distribution';
 import {BarDatum} from '@nivo/bar';
+import cryptoRandomString from 'crypto-random-string';
 
 export type Trend = 'rise' | 'fall';
 
@@ -76,6 +77,7 @@ export const generateDatum = ({
     let datum = {};
     attrs.forEach((attr) => {
         datum[attr] = (Math.random() * (max - min) + min).toFixed(decimalDigit);
+        datum['id'] = cryptoRandomString({length: 4});
     });
     return datum;
 };

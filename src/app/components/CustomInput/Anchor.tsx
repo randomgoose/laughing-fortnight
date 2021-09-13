@@ -30,9 +30,7 @@ const Point = styled.div`
 export default function Anchor({value, onChange}: Props) {
     const [activePoint, setActivePoint] = React.useState(value ? value : 'center');
 
-    React.useEffect(() => {
-        console.log(activePoint);
-    }, [activePoint]);
+    React.useEffect(() => {}, [activePoint]);
 
     return (
         <div

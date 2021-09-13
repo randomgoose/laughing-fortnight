@@ -32,7 +32,6 @@ export default function PointsConfig() {
                 layout={'vertical'}
                 initialValues={{pointSize, enablePoints, pointColor}}
                 onValuesChange={(changedValues) => {
-                    console.log(changedValues);
                     if (Object.keys(changedValues).includes('pointColor')) {
                         if (regHex.test(changedValues.pointColor)) {
                             dispatch(setPartialState(changedValues));

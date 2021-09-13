@@ -12,10 +12,6 @@ export default function BarDataTable() {
     const {data, keys} = useSelector((state: RootState) => state.bar);
     const dispatch = useDispatch();
 
-    React.useEffect(() => {
-        console.log(data, keys);
-    }, [data, keys]);
-
     return (
         <Table
             dataSource={data}

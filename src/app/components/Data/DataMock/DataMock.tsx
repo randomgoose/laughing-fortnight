@@ -49,7 +49,7 @@ export default function DataMock() {
                     dispatch(setNewData(tempData));
                     break;
                 case 'bar':
-                    dispatch(setPartialState({data: tempData, keys: ['a', 'b', 'c'], indexBy: 'a'}));
+                    dispatch(setPartialState({data: tempData}));
                     break;
                 default:
                     return;
@@ -89,7 +89,6 @@ export default function DataMock() {
                     <Form.Item name={'max'} label={'最大值'} fieldKey={'max'}>
                         <InputNumber style={{maxWidth: 48}} />
                     </Form.Item>
-
                     <Form.Item name={'length'} label={'数组长度'} fieldKey={'length'}>
                         <InputNumber style={{maxWidth: 48}} />
                     </Form.Item>
@@ -100,7 +99,7 @@ export default function DataMock() {
                 <Space size={4}>
                     <Button
                         onClick={() => {
-                            const {count} = numberSequenceAttr;
+                            const {count, length, min, max} = numberSequenceAttr;
                             let temp = [];
                             switch (chartType) {
                                 case 'line':
@@ -113,15 +112,22 @@ export default function DataMock() {
                                     }
                                     break;
                                 case 'bar':
+                                    let attrs = [];
+                                    for (let i = 0; i < length; i++) {
+                                        attrs.push(cryptoRandomString({length: 4}));
+                                    }
                                     temp = [
                                         ...generateDatumSequence({
-                                            attrs: ['a', 'b', 'c'],
+                                            attrs: attrs,
                                             length: count,
-                                            min: 1,
-                                            max: 10,
+                                            min: min,
+                                            max: max,
                                             decimalDigit: decimalDigit,
                                         }),
                                     ];
+                                    console.log('hussar', temp);
+                                    console.log('huss', attrs);
+                                    dispatch(setPartialState({keys: attrs, indexBy: 'id'}));
                                     break;
                             }
                             setTempData(temp);
