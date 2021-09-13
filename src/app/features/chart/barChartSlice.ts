@@ -3,6 +3,7 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {data} from '../../data/baseBarData';
 import _ from 'lodash';
 import {baseLegend} from '../../data/baseLegend';
+import {AxisProps} from '@nivo/axes';
 
 export interface ChartState extends BarSvgProps<BarDatum> {
     data: BarDatum[];
@@ -62,6 +63,22 @@ const initialState: ChartState = {
     activeBar: '',
     activeIndex: -1,
     activeDatum: null,
+    axisBottom: {
+        tickSize: 5,
+        tickPadding: 5,
+        tickRotation: 0,
+        legend: 'country',
+        legendPosition: 'middle',
+        legendOffset: 32,
+    },
+    axisLeft: {
+        tickSize: 5,
+        tickPadding: 5,
+        tickRotation: 0,
+        legend: 'food',
+        legendPosition: 'middle',
+        legendOffset: -40,
+    },
 };
 
 export const chartSlice = createSlice({
@@ -83,6 +100,16 @@ export const chartSlice = createSlice({
             });
             state.keys.splice(state.keys.indexOf(key), 1, newKey);
         },
+        setAxis: (
+            state,
+            action: PayloadAction<{
+                which: 'axisBottom' | 'axisLeft' | 'axisTop' | 'axisRight';
+                props: Partial<AxisProps>;
+            }>
+        ) => {
+            const {which, props} = action.payload;
+            !state[which] ? (state[which] = props) : Object.assign(state[which], props);
+        },
         addKey: (state, action: PayloadAction<string>) => {
             state.data.forEach((datum) => (datum[action.payload] = Math.random()));
             state.keys.push(action.payload);
@@ -103,6 +130,6 @@ export const chartSlice = createSlice({
     },
 });
 
-export const {setPartialState, setData, setKey, addKey, removeKey} = chartSlice.actions;
+export const {setPartialState, setData, setKey, addKey, removeKey, setAxis} = chartSlice.actions;
 
 export default chartSlice.reducer;

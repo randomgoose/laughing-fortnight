@@ -15,8 +15,6 @@ export default function GeneralConfig() {
     const {groupMode, layout, margin, padding, innerPadding, colors} = useSelector((state: RootState) => state.bar);
     const dispatch = useDispatch();
 
-    React.useEffect(() => {}, [groupMode]);
-
     return (
         <ConfigPage title={'通用设置'} icon={<FcSettings />}>
             <Form

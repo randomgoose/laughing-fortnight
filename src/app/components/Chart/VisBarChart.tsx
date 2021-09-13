@@ -5,6 +5,7 @@ import {setPartialState} from '../../features/chart/barChartSlice';
 import {RootState} from '../../redux/store';
 import StyledRnd from '../StyledComponents/StyledRnd';
 import {message} from 'antd';
+import _ from 'lodash';
 
 const VisBarChart = () => {
     const {
@@ -29,6 +30,8 @@ const VisBarChart = () => {
         legends,
         render,
         colors,
+        axisLeft,
+        axisBottom,
         // activeIndex,
     } = useSelector((state: RootState) => state.bar);
 
@@ -73,6 +76,8 @@ const VisBarChart = () => {
         enableGridX,
         enableGridY,
         colors,
+        axisBottom,
+        axisLeft,
     };
 
     return (
@@ -91,22 +96,14 @@ const VisBarChart = () => {
                     axisRight={null}
                     axisBottom={
                         showXAxis && {
-                            tickSize: 5,
-                            tickPadding: 5,
-                            tickRotation: 0,
-                            // legend: 'country',
-                            // legendPosition: 'middle',
-                            legendOffset: 32,
+                            ...axisBottom,
+                            legend: _.isString(axisBottom.legend) ? (axisBottom.legend as string) : 'title',
                         }
                     }
                     axisLeft={
                         showYAxis && {
-                            tickSize: 5,
-                            tickPadding: 5,
-                            tickRotation: 0,
-                            // legend: 'food',
-                            // legendPosition: 'middle',
-                            legendOffset: -40,
+                            ...axisLeft,
+                            legend: _.isString(axisLeft.legend) ? (axisLeft.legend as string) : 'title',
                         }
                     }
                     labelSkipWidth={12}
@@ -127,26 +124,8 @@ const VisBarChart = () => {
                     borderColor={{from: 'color', modifiers: [['darker', 1.6]]}}
                     axisTop={null}
                     axisRight={null}
-                    axisBottom={
-                        showXAxis && {
-                            tickSize: 5,
-                            tickPadding: 5,
-                            tickRotation: 0,
-                            legend: 'country',
-                            legendPosition: 'middle',
-                            legendOffset: 32,
-                        }
-                    }
-                    axisLeft={
-                        showYAxis && {
-                            tickSize: 5,
-                            tickPadding: 5,
-                            tickRotation: 0,
-                            legend: 'food',
-                            legendPosition: 'middle',
-                            legendOffset: -40,
-                        }
-                    }
+                    axisBottom={showXAxis && axisBottom}
+                    axisLeft={showYAxis && axisLeft}
                     labelSkipWidth={12}
                     labelSkipHeight={12}
                     labelTextColor={{from: 'color', modifiers: [['darker', 1.6]]}}

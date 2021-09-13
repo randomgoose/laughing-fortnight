@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Switch, Collapse, Form, Input, Radio, Slider, InputNumber, Typography, Space} from 'antd';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../redux/store';
-import {setAxis} from '../../../features/chart/lineChartSlice';
+import {setAxis} from '../../../features/chart/barChartSlice';
 import {AlignCenterOutlined, AlignLeftOutlined, AlignRightOutlined} from '@ant-design/icons';
 import {FcRuler} from 'react-icons/fc';
 import {StyledCollapsePanel} from '../../StyledComponents/StyledComponents';
