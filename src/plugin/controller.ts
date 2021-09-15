@@ -4,12 +4,24 @@ import {editSnapshotById, loadSnapshots, removeSnapshotById, saveSnapshot} from 
 figma.showUI(__html__);
 figma.ui.resize(800, 600);
 
-function createChart(frame: FrameNode, svg): FrameNode {
-    const chart = figma.createNodeFromSvg(svg);
-    frame.appendChild(chart);
-    frame.resize(chart.width, chart.height);
-    frame.name = 'chart';
-    return frame;
+function createChart(
+    frame: FrameNode,
+    render: 'canvas' | 'svg',
+    data,
+    size: {width: number; height: number}
+): FrameNode {
+    if (render === 'svg') {
+        const chart = figma.createNodeFromSvg(data);
+        frame.appendChild(chart);
+        frame.resize(size.width, size.height);
+        frame.name = 'chart';
+        return frame;
+    } else if (render === 'canvas') {
+        const chart = figma.createImage(Uint8Array.from(data));
+        frame.fills = [{imageHash: chart.hash, type: 'IMAGE', scaleMode: 'FIT'}];
+        frame.resize(size.width, size.height);
+        return frame;
+    }
 }
 
 function saveChartConfig(node: FrameNode, config) {
@@ -21,7 +33,7 @@ figma.ui.onmessage = async (msg) => {
         case 'render-chart':
             const selection = figma.currentPage.selection;
             if (selection[0] && selection[0].type === 'FRAME') {
-                const chart = createChart(selection[0], msg.svg);
+                const chart = createChart(selection[0], msg.render, msg.data, msg.size);
                 saveChartConfig(chart, msg.config);
             }
             break;

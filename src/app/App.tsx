@@ -15,21 +15,41 @@ import {addSnapshot, editSnapshotById, removeSnapshotById, setSelectionId, setSn
 
 function App() {
     const {chartType, hideInterface, selectionId} = useSelector((state: RootState) => state.app);
+    const {line, bar} = useSelector((state: RootState) => state);
     const dispatch = useDispatch();
 
-    function renderChart() {
-        window.parent.postMessage(
-            {
-                pluginMessage: {
-                    type: 'render-chart',
-                    svg: `<svg xmlns="http://www.w3.org/2000/svg">${
-                        document.querySelector('.canvas').querySelector('svg').innerHTML
-                    }</svg>`.replace(/transparent/g, '#ffffff'),
-                    // config: chartConfig,
+    function renderChart(render: 'canvas' | 'svg', size: {width: number; height: number}) {
+        if (render === 'svg') {
+            window.parent.postMessage(
+                {
+                    pluginMessage: {
+                        type: 'render-chart',
+                        render: 'svg',
+                        data: `<svg xmlns="http://www.w3.org/2000/svg">${
+                            document.querySelector('.canvas').querySelector('svg').innerHTML
+                        }</svg>`.replace(/transparent/g, '#ffffff'),
+                        size,
+                    },
                 },
-            },
-            '*'
-        );
+                '*'
+            );
+        } else if (render === 'canvas') {
+            document.querySelector('canvas').toBlob((blob) => {
+                blob.arrayBuffer().then((buffer) => {
+                    window.parent.postMessage(
+                        {
+                            pluginMessage: {
+                                type: 'render-chart',
+                                render: 'canvas',
+                                data: [...new Uint8Array(buffer)],
+                                size,
+                            },
+                        },
+                        '*'
+                    );
+                });
+            });
+        }
     }
 
     React.useEffect(() => {
@@ -100,7 +120,10 @@ function App() {
                     }}
                     type={'primary'}
                     size={'large'}
-                    onClick={renderChart}
+                    onClick={() => {
+                        if (chartType === 'line') renderChart(line.render, {width: line.width, height: line.height});
+                        if (chartType === 'bar') renderChart(bar.render, {width: bar.width, height: bar.height});
+                    }}
                     shape={'round'}
                     disabled={!(selectionId.length > 0)}
                 >

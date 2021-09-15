@@ -57,7 +57,7 @@ export default () => {
                         <Form.Item name={'legendOffset'} label={'标题偏移'}>
                             <Slider />
                         </Form.Item>
-                        <Form.Item name={'tickSize'} label={'标签字号'}>
+                        <Form.Item name={'tickSize'} label={'标签大小'}>
                             <InputNumber formatter={(value) => value + 'px'} />
                         </Form.Item>
                         <Form.Item name={'tickRotation'} label={'标签旋转'}>
@@ -66,7 +66,7 @@ export default () => {
                         <Form.Item name={'tickPadding'} label={'标签到轴线的距离'}>
                             <Slider min={-90} max={90} step={1} />
                         </Form.Item>
-                        <Form.Item name={'tickValues'} label={'??'}>
+                        <Form.Item name={'tickValues'} label={'标签值'}>
                             <InputNumber />
                         </Form.Item>
                     </Form>
@@ -106,7 +106,7 @@ export default () => {
                         <Form.Item name={'legendOffset'} label={'标题偏移'}>
                             <Slider />
                         </Form.Item>
-                        <Form.Item name={'tickSize'} label={'标签字号'}>
+                        <Form.Item name={'tickSize'} label={'标签大小'}>
                             <InputNumber formatter={(value) => value + 'px'} />
                         </Form.Item>
                         <Form.Item name={'tickRotation'} label={'标签旋转'}>
@@ -115,7 +115,7 @@ export default () => {
                         <Form.Item name={'tickPadding'} label={'标签到轴线的距离'}>
                             <Slider min={-90} max={90} step={1} />
                         </Form.Item>
-                        <Form.Item name={'tickValues'} label={'??'}>
+                        <Form.Item name={'tickValues'} label={'标签值'}>
                             <InputNumber />
                         </Form.Item>
                     </Form>

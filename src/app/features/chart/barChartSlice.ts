@@ -88,7 +88,7 @@ export const chartSlice = createSlice({
         setPartialState: (state, action: PayloadAction<Partial<ChartState>>) => {
             Object.assign(state, action.payload);
         },
-        setData: (state, action: PayloadAction<{index: number; key: string; value: number}>) => {
+        setData: (state, action: PayloadAction<{index: number; key: string; value: number | string}>) => {
             const {index, key, value} = action.payload;
             state.data[index][key] = value;
         },

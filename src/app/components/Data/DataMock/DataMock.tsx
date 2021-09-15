@@ -90,10 +90,10 @@ export default function DataMock() {
                         <InputNumber style={{maxWidth: 48}} />
                     </Form.Item>
                     <Form.Item name={'length'} label={'数组长度'} fieldKey={'length'}>
-                        <InputNumber style={{maxWidth: 48}} />
+                        <InputNumber style={{maxWidth: 48}} min={0} />
                     </Form.Item>
                     <Form.Item name={'count'} label={'数组数'} fieldKey={'count'}>
-                        <InputNumber style={{maxWidth: 36}} />
+                        <InputNumber style={{maxWidth: 36}} min={0} />
                     </Form.Item>
                 </Form>
                 <Space size={4}>
@@ -125,8 +125,6 @@ export default function DataMock() {
                                             decimalDigit: decimalDigit,
                                         }),
                                     ];
-                                    console.log('hussar', temp);
-                                    console.log('huss', attrs);
                                     dispatch(setPartialState({keys: attrs, indexBy: 'id'}));
                                     break;
                             }
@@ -139,7 +137,7 @@ export default function DataMock() {
                         高级设置
                     </Button>
                     <Drawer
-                        title="Basic Drawer"
+                        title="高级设置"
                         placement="right"
                         onClose={() => setShowAdvancedSettings(false)}
                         visible={showAdvancedSettings}

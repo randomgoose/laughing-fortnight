@@ -1,6 +1,6 @@
 import {Tooltip} from 'antd';
 import * as React from 'react';
-import {FcAreaChart, FcBarChart, FcLineChart, FcPieChart} from 'react-icons/fc';
+import {FcBarChart, FcLineChart} from 'react-icons/fc';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 import {setChartType} from '../features/app/appSlice';
@@ -67,12 +67,12 @@ export default function SideBar() {
             <ChartType type={'line'}>
                 <FcLineChart size={24} />
             </ChartType>
-            <ChartType type={'pie'}>
+            {/* <ChartType type={'pie'}>
                 <FcPieChart size={24} />
             </ChartType>
             <ChartType type={'area'}>
                 <FcAreaChart size={24} />
-            </ChartType>
+            </ChartType> */}
         </div>
     );
 }

@@ -45,7 +45,7 @@ export default function DataSource() {
                 <FcTimeline />
                 模拟数据
             </TypeButton>
-            <TypeButton onClick={() => dispatch(setDataSource('file'))}>
+            <TypeButton /* onClick={() => dispatch(setDataSource('file'))} */>
                 <FcUpload />
                 上传数据
                 <Tag color={'blue'}>敬请期待</Tag>

@@ -9,13 +9,33 @@ import {RootState} from '../../../redux/store';
 import EditableDiv from '../../CustomInput/EditableDiv';
 
 export default function BarDataTable() {
-    const {data, keys} = useSelector((state: RootState) => state.bar);
+    const {data, keys, indexBy} = useSelector((state: RootState) => state.bar);
     const dispatch = useDispatch();
 
     return (
         <Table
             dataSource={data}
             columns={[
+                {
+                    title: 'id',
+                    dataIndex: indexBy as string,
+                    key: 'add_column',
+                    render: (value, record) => (
+                        <EditableDiv
+                            value={value}
+                            key={value}
+                            onFinishEditing={(value: string) => {
+                                dispatch(
+                                    setData({
+                                        index: data.indexOf(record),
+                                        key: indexBy as string,
+                                        value,
+                                    })
+                                );
+                            }}
+                        />
+                    ),
+                },
                 ...keys.map((key) => {
                     return {
                         key,
