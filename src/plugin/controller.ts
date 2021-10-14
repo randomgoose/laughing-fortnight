@@ -2,7 +2,7 @@ import {sendMessage} from './functions/message';
 import {editSnapshotById, loadSnapshots, removeSnapshotById, saveSnapshot} from './functions/snapshots';
 
 figma.showUI(__html__);
-figma.ui.resize(800, 600);
+figma.ui.resize(960, 800);
 
 function createChart(
     frame: FrameNode,

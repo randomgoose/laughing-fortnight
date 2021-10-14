@@ -7,26 +7,28 @@ import {AlignCenterOutlined, AlignLeftOutlined, AlignRightOutlined} from '@ant-d
 import {FcRuler} from 'react-icons/fc';
 import {StyledCollapsePanel} from '../../StyledComponents/StyledComponents';
 import {setPartialState} from '../../../features/chart/barChartSlice';
+import {useTranslation} from 'react-i18next';
 
 export default () => {
     const dispatch = useDispatch();
     const {showXAxis, showYAxis, axisBottom} = useSelector((state: RootState) => state.bar);
 
     React.useEffect(() => {}, [showXAxis, showYAxis]);
+    const {t} = useTranslation();
 
     return (
         <>
             <Typography.Title level={5}>
                 <Space size={4}>
                     <FcRuler />
-                    坐标轴设置
+                    {t('Axis')}
                 </Space>
             </Typography.Title>
             <Collapse key={'x-axis'} ghost activeKey={[showXAxis ? 'showXAxis' : '', showYAxis ? 'showYAxis' : '']}>
                 <StyledCollapsePanel
                     collapsible={showXAxis ? 'header' : 'disabled'}
                     key={'showXAxis'}
-                    header={'显示 x 轴'}
+                    header={t('Display xAxis')}
                     extra={
                         <Switch
                             size={'small'}
@@ -42,10 +44,10 @@ export default () => {
                             dispatch(setAxis({which: 'axisBottom', props: changedValue}));
                         }}
                     >
-                        <Form.Item name={'legend'} label={'X轴标题'}>
+                        <Form.Item name={'legend'} label={t('Title')}>
                             <Input />
                         </Form.Item>
-                        <Form.Item name={'legendPosition'} label={'标题位置'}>
+                        <Form.Item name={'legendPosition'} label={t('Legend Position')}>
                             <Radio.Group
                                 optionType={'button'}
                                 options={[
@@ -55,19 +57,19 @@ export default () => {
                                 ]}
                             ></Radio.Group>
                         </Form.Item>
-                        <Form.Item name={'legendOffset'} label={'标题偏移'}>
+                        <Form.Item name={'legendOffset'} label={t('Legend Offset')}>
                             <Slider />
                         </Form.Item>
-                        <Form.Item name={'tickSize'} label={'标签字号'}>
+                        <Form.Item name={'tickSize'} label={t('Tick Size')}>
                             <InputNumber formatter={(value) => value + 'px'} />
                         </Form.Item>
-                        <Form.Item name={'tickRotation'} label={'标签旋转'}>
+                        <Form.Item name={'tickRotation'} label={t('Tick Rotation')}>
                             <Slider min={-90} max={90} step={5} />
                         </Form.Item>
-                        <Form.Item name={'tickPadding'} label={'标签到轴线的距离'}>
+                        <Form.Item name={'tickPadding'} label={t('Tick Padding')}>
                             <Slider min={-90} max={90} step={1} />
                         </Form.Item>
-                        <Form.Item name={'tickValues'} label={'??'}>
+                        <Form.Item name={'tickValues'} label={t('Tick Values')}>
                             <InputNumber />
                         </Form.Item>
                     </Form>
@@ -75,7 +77,7 @@ export default () => {
                 <StyledCollapsePanel
                     collapsible={showYAxis ? 'header' : 'disabled'}
                     key={'showYAxis'}
-                    header={'显示 y 轴'}
+                    header={t('Display yAxis')}
                     extra={
                         <Switch
                             size={'small'}

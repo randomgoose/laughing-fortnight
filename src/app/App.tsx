@@ -10,7 +10,6 @@ import {useSelector} from 'react-redux';
 import {RootState} from './redux/store';
 import {ConfigProvider, Button} from 'antd';
 import {useDispatch} from 'react-redux';
-// import {loadState} from './features/chart/lineChartSlice';
 import {addSnapshot, editSnapshotById, removeSnapshotById, setSelectionId, setSnapshots} from './features/app/appSlice';
 
 function App() {
@@ -56,28 +55,30 @@ function App() {
         window.onmessage = async (e: {
             data: {pluginMessage: PromiseLike<{type: any; data: any}> | {type: any; data: any}};
         }) => {
-            const {type, data} = await e.data.pluginMessage;
-            switch (type) {
-                case 'get-chart-data':
-                    // dispatch(loadState(JSON.parse(data)));
-                    break;
-                case 'set-selection':
-                    dispatch(setSelectionId(data));
-                    break;
-                case 'load-snapshots':
-                    dispatch(setSnapshots(data));
-                    break;
-                case 'save-snapshot':
-                    dispatch(addSnapshot(data));
-                    break;
-                case 'delete-snapshot':
-                    dispatch(removeSnapshotById(data.id));
-                    break;
-                case 'edit-snapshot':
-                    dispatch(editSnapshotById(data));
-                    break;
-                default:
-            }
+            try {
+                const {type, data} = await e.data.pluginMessage;
+                switch (type) {
+                    case 'get-chart-data':
+                        // dispatch(loadState(JSON.parse(data)));
+                        break;
+                    case 'set-selection':
+                        dispatch(setSelectionId(data));
+                        break;
+                    case 'load-snapshots':
+                        dispatch(setSnapshots(data));
+                        break;
+                    case 'save-snapshot':
+                        dispatch(addSnapshot(data));
+                        break;
+                    case 'delete-snapshot':
+                        dispatch(removeSnapshotById(data.id));
+                        break;
+                    case 'edit-snapshot':
+                        dispatch(editSnapshotById(data));
+                        break;
+                    default:
+                }
+            } catch (err) {}
         };
     }, []);
 

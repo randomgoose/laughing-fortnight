@@ -16,10 +16,6 @@ import {FcAbout, FcDatabase, FcGrid, FcLineChart, FcOrgUnit, FcRuler, FcSettings
 export default function LineConfig() {
     const {activeSerie} = useSelector((state: RootState) => state.line);
 
-    React.useEffect(() => {
-        console.log(activeSerie);
-    }, [activeSerie]);
-
     const config = (
         <>
             <Tabs tabPosition={'left'} type={'card'} style={{height: '100%'}}>

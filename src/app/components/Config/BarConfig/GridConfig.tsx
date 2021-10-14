@@ -1,12 +1,14 @@
 import {MenuOutlined} from '@ant-design/icons';
 import {Form, Space, Switch, Typography} from 'antd';
 import * as React from 'react';
+import {useTranslation} from 'react-i18next';
 import {FcGrid} from 'react-icons/fc';
 import {useDispatch, useSelector} from 'react-redux';
 import {setPartialState} from '../../../features/chart/barChartSlice';
 import {RootState} from '../../../redux/store';
 
 export default function GridConfig() {
+    // const {t} = useTranslation();
     const dispatch = useDispatch();
     const {enableGridX, enableGridY} = useSelector((state: RootState) => state.bar);
     return (

@@ -14,6 +14,8 @@ export default function BarDataTable() {
 
     return (
         <Table
+            rowKey={'id'}
+            key={'barDataTable'}
             dataSource={data}
             columns={[
                 {
@@ -43,6 +45,7 @@ export default function BarDataTable() {
                         title: (
                             <Space>
                                 <EditableDiv
+                                    key={key}
                                     value={key}
                                     validate={(value: string) => keys.filter((item) => item !== key).includes(value)}
                                     onFinishEditing={(value: string) => {

@@ -1,10 +1,12 @@
-import {Tooltip} from 'antd';
+import {Modal, Tooltip} from 'antd';
 import * as React from 'react';
-import {FcBarChart, FcLineChart} from 'react-icons/fc';
+import {FcBarChart, FcLineChart, FcSettings} from 'react-icons/fc';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 import {setChartType} from '../features/app/appSlice';
 import {RootState} from '../redux/store';
+import {useTranslation} from 'react-i18next';
+import Settings from './Settings';
 
 const SidebarButton = styled.button`
     width: 28px;
@@ -49,30 +51,49 @@ function ChartType({type, children}: {type?: 'line' | 'bar' | 'pie' | 'area'; ch
 }
 
 export default function SideBar() {
+    const [showSettings, setShowSettings] = React.useState<boolean>();
+    const {t} = useTranslation();
+
     return (
         <div
             className={'Sidebar App__sidebar'}
             style={{
                 display: 'flex',
                 flexDirection: 'column',
+                justifyContent: 'space-between',
                 height: '100%',
                 borderRight: '1px solid rgba(0, 0, 0, .1)',
                 alignItems: 'center',
                 padding: 8,
             }}
         >
-            <ChartType type={'bar'}>
-                <FcBarChart size={24} />
-            </ChartType>
-            <ChartType type={'line'}>
-                <FcLineChart size={24} />
-            </ChartType>
-            {/* <ChartType type={'pie'}>
+            <div className={'App__sidebar-button-group'}>
+                <ChartType type={'bar'}>
+                    <FcBarChart size={24} />
+                </ChartType>
+                <ChartType type={'line'}>
+                    <FcLineChart size={24} />
+                </ChartType>
+                {/* <ChartType type={'pie'}>
                 <FcPieChart size={24} />
             </ChartType>
             <ChartType type={'area'}>
                 <FcAreaChart size={24} />
             </ChartType> */}
+            </div>
+            <SidebarButton onClick={() => setShowSettings(true)}>
+                <FcSettings />
+            </SidebarButton>
+
+            <Modal
+                className={'App__settings'}
+                visible={showSettings}
+                title={t('Settings')}
+                onCancel={() => setShowSettings(false)}
+                onOk={() => setShowSettings(false)}
+            >
+                <Settings />
+            </Modal>
         </div>
     );
 }

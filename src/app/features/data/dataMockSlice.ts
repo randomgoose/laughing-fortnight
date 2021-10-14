@@ -16,7 +16,6 @@ export const dataMockSlice = createSlice({
             state.decimalDigit = action.payload;
         },
         setPartialState: (state, action: PayloadAction<Partial<DataMockState>>) => {
-            console.log('g', action.payload);
             Object.assign(state, action.payload);
         },
     },
