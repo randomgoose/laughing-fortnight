@@ -18,6 +18,7 @@ import Anchor from '../../CustomInput/Anchor';
 import {FcAbout} from 'react-icons/fc';
 import {StyledCollapsePanel} from '../../StyledComponents/StyledComponents';
 import {baseLegend} from '../../../data/baseLegend';
+import {useTranslation} from 'react-i18next';
 
 export default () => {
     const dispatch = useDispatch();
@@ -25,6 +26,7 @@ export default () => {
     const {chartType} = useSelector((state: RootState) => state.app);
     useThrottle(line.legends, {wait: 500});
     useThrottle(bar.legends, {wait: 500});
+    const {t} = useTranslation();
 
     const addLegend = React.useCallback(() => {
         switch (chartType) {
@@ -67,7 +69,7 @@ export default () => {
             <Typography.Title level={5}>
                 <Space size={4}>
                     <FcAbout />
-                    图例设置
+                    {t('Legend')}
                 </Space>
             </Typography.Title>
             <Collapse collapsible={'header'} ghost>
@@ -75,7 +77,7 @@ export default () => {
                     return (
                         <StyledCollapsePanel
                             key={index}
-                            header={`图例 ${index}`}
+                            header={`${t('Legend')} ${index}`}
                             extra={
                                 <span
                                     onClick={() => deleteLegendByIndex(index)}
@@ -108,7 +110,7 @@ export default () => {
                                 initialValues={legend}
                                 layout={'vertical'}
                             >
-                                <Form.Item name={'direction'} label={'图例方向'}>
+                                <Form.Item name={'direction'} label={t('Direction')}>
                                     <Radio.Group size={'small'}>
                                         <Radio.Button value={'column'}>
                                             <ArrowUpOutlined />
@@ -118,13 +120,13 @@ export default () => {
                                         </Radio.Button>
                                     </Radio.Group>
                                 </Form.Item>
-                                <Form.Item name={'translateX'} label={'translateX'}>
+                                <Form.Item name={'translateX'} label={t('Translate X')}>
                                     <Slider />
                                 </Form.Item>
-                                <Form.Item name={'translateY'} label={'translateY'}>
+                                <Form.Item name={'translateY'} label={t('Translate Y')}>
                                     <Slider />
                                 </Form.Item>
-                                <Form.Item name={'legendAlign'} label={'图例对齐方式'}>
+                                <Form.Item name={'legendAlign'} label={t('Legend Align')}>
                                     <Radio.Group size={'small'}>
                                         <Radio.Button value={'left'}>
                                             <AlignLeftOutlined />
@@ -137,7 +139,7 @@ export default () => {
                                         </Radio.Button>
                                     </Radio.Group>
                                 </Form.Item>
-                                <Form.Item name={'legendVerticalAlign'} label={'垂直对齐方式'}>
+                                <Form.Item name={'legendVerticalAlign'} label={t('Legend Vertical Align')}>
                                     <Radio.Group size={'small'}>
                                         <Radio.Button value={'top'}>
                                             <AlignLeftOutlined />
@@ -150,7 +152,7 @@ export default () => {
                                         </Radio.Button>
                                     </Radio.Group>
                                 </Form.Item>
-                                <Form.Item name={'anchor'} label={'位置'}>
+                                <Form.Item name={'anchor'} label={t('Anchor')}>
                                     <Anchor />
                                 </Form.Item>
                             </Form>
@@ -159,7 +161,7 @@ export default () => {
                 })}
             </Collapse>
             <Button icon={<PlusOutlined />} onClick={addLegend}>
-                新增图例
+                {t('New Legend')}
             </Button>
         </Space>
     );

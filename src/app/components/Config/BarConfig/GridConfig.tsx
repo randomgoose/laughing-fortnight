@@ -8,7 +8,7 @@ import {setPartialState} from '../../../features/chart/barChartSlice';
 import {RootState} from '../../../redux/store';
 
 export default function GridConfig() {
-    // const {t} = useTranslation();
+    const {t} = useTranslation();
     const dispatch = useDispatch();
     const {enableGridX, enableGridY} = useSelector((state: RootState) => state.bar);
     return (
@@ -16,7 +16,7 @@ export default function GridConfig() {
             <Typography.Title level={5}>
                 <Space size={4}>
                     <FcGrid />
-                    网格设置
+                    {t('Grid')}
                 </Space>
             </Typography.Title>
             <Form
@@ -34,7 +34,7 @@ export default function GridConfig() {
                     label={
                         <Space align={'center'}>
                             <MenuOutlined rotate={90} />
-                            纵向网格
+                            {t('Grid X')}
                         </Space>
                     }
                 >
@@ -46,7 +46,7 @@ export default function GridConfig() {
                     label={
                         <Space align={'center'}>
                             <MenuOutlined />
-                            横向网格
+                            {t('Grid Y')}
                         </Space>
                     }
                 >
