@@ -34,7 +34,7 @@ export interface ChartState extends LineSvgProps {
 
 const initialState: ChartState = {
     width: 400,
-    height: 300,
+    height: 150,
     x: 400,
     y: 100,
     showXAxis: true,

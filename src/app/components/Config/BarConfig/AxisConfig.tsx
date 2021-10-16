@@ -90,13 +90,13 @@ export default () => {
                         layout={'vertical'}
                         initialValues={axisBottom}
                         onValuesChange={(changedValue) => {
-                            dispatch(setAxis({which: 'axisBottom', props: changedValue}));
+                            dispatch(setAxis({which: 'axisLeft', props: changedValue}));
                         }}
                     >
-                        <Form.Item name={'legend'} label={'X轴标题'}>
+                        <Form.Item name={'legend'} label={t('Title')}>
                             <Input></Input>
                         </Form.Item>
-                        <Form.Item name={'legendPosition'} label={'标题位置'}>
+                        <Form.Item name={'legendPosition'} label={t('Legend Position')}>
                             <Radio.Group
                                 optionType={'button'}
                                 options={[
@@ -106,19 +106,19 @@ export default () => {
                                 ]}
                             ></Radio.Group>
                         </Form.Item>
-                        <Form.Item name={'legendOffset'} label={'标题偏移'}>
+                        <Form.Item name={'legendOffset'} label={t('Legend Offset')}>
                             <Slider />
                         </Form.Item>
-                        <Form.Item name={'tickSize'} label={'标签字号'}>
+                        <Form.Item name={'tickSize'} label={t('Tick Size')}>
                             <InputNumber formatter={(value) => value + 'px'} />
                         </Form.Item>
-                        <Form.Item name={'tickRotation'} label={'标签旋转'}>
+                        <Form.Item name={'tickRotation'} label={t('Tick Rotation')}>
                             <Slider min={-90} max={90} step={5} />
                         </Form.Item>
-                        <Form.Item name={'tickPadding'} label={'标签到轴线的距离'}>
+                        <Form.Item name={'tickPadding'} label={t('Tick Padding')}>
                             <Slider min={-90} max={90} step={1} />
                         </Form.Item>
-                        <Form.Item name={'tickValues'} label={'??'}>
+                        <Form.Item name={'tickValues'} label={t('Tick Values')}>
                             <InputNumber />
                         </Form.Item>
                     </Form>

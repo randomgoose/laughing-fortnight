@@ -1,5 +1,6 @@
 import {Tag} from 'antd';
 import * as React from 'react';
+import {useTranslation} from 'react-i18next';
 import {FcDataSheet, FcTimeline, FcUpload} from 'react-icons/fc';
 import {useDispatch} from 'react-redux';
 import styled from 'styled-components';
@@ -31,6 +32,7 @@ const TypeButton = styled.button`
 
 export default function DataSource() {
     const dispatch = useDispatch();
+    const {t} = useTranslation();
     return (
         <div
             className={'data-type'}
@@ -43,17 +45,17 @@ export default function DataSource() {
         >
             <TypeButton onClick={() => dispatch(setDataSource('mock'))}>
                 <FcTimeline />
-                模拟数据
+                {t('Mock Data')}
             </TypeButton>
             <TypeButton /* onClick={() => dispatch(setDataSource('file'))} */>
                 <FcUpload />
-                上传数据
-                <Tag color={'blue'}>敬请期待</Tag>
+                {t('Upload Data')}
+                <Tag color={'blue'}>{t('Coming soon')}</Tag>
             </TypeButton>
             <TypeButton /* onClick={() => dispatch(setDataSource('sheet'))} */>
                 <FcDataSheet />
-                在线文档
-                <Tag color={'blue'}>敬请期待</Tag>
+                {t('Data from Online Doc')}
+                <Tag color={'blue'}>{t('Coming soon')}</Tag>
             </TypeButton>
         </div>
     );

@@ -6,8 +6,11 @@ import {RootState} from '../../redux/store';
 import StyledRnd from '../StyledComponents/StyledRnd';
 import {message} from 'antd';
 import _ from 'lodash';
+import {useTranslation} from 'react-i18next';
 
 const VisBarChart = () => {
+    const {t} = useTranslation();
+
     const {
         data,
         groupMode,
@@ -39,7 +42,7 @@ const VisBarChart = () => {
 
     React.useEffect(() => {
         if (data.length > 10) {
-            message.info('当前数据量较大，自动切换为性能更佳的 Canvas');
+            message.info(t('Switched to canvas rendering for better performance.'));
         }
         // dispatch(setPartialState({activeIndex: -1}));
     }, [data]);

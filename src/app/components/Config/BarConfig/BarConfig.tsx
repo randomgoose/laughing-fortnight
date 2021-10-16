@@ -7,11 +7,13 @@ import {setData, setPartialState} from '../../../features/chart/barChartSlice';
 import ConfigPage from '../ConfigPage';
 import {useForm} from 'antd/lib/form/Form';
 import {useDebounceFn} from 'ahooks';
+import {useTranslation} from 'react-i18next';
 
 export default function BarConfig() {
     const {activeDatum} = useSelector((state: RootState) => state.bar);
     const dispatch = useDispatch();
     const [form] = useForm(null);
+    const {t} = useTranslation();
 
     React.useEffect(() => {
         form.setFieldsValue({
@@ -31,7 +33,7 @@ export default function BarConfig() {
     return (
         <ConfigPage style={{padding: 12}}>
             <Header showReturnButton onReturn={() => dispatch(setPartialState({activeIndex: -1}))}>
-                数据模拟
+                {t('Mock Data')}
             </Header>
             <Form
                 className={'BarConfig'}

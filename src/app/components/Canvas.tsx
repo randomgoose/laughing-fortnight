@@ -13,11 +13,13 @@ import {Button, Space, Radio, message} from 'antd';
 import {ArrowsAltOutlined, ShrinkOutlined} from '@ant-design/icons';
 import {setHideInterface} from '../features/app/appSlice';
 import DimensionIndicator from './DimensionIndicator';
+import {useTranslation} from 'react-i18next';
 
 export default function Canvas() {
     const {chartType, hideInterface} = useSelector((state: RootState) => state.app);
     const {line, bar} = useSelector((state: RootState) => state);
     const dispatch = useDispatch();
+    const {t} = useTranslation();
 
     const [{zoom, scale}, set] = useSpring(() => ({
         scale: 1,
@@ -86,7 +88,7 @@ export default function Canvas() {
                 <Radio.Group
                     value={chartType === 'line' ? line.render : chartType === 'bar' ? bar.render : 'svg'}
                     onChange={(e) => {
-                        message.info(`渲染方式切换为 ${e.target.value}`);
+                        message.info(t(`Rendering ${e.target.value} component`));
                         if (chartType === 'line') dispatch(setLine({render: e.target.value}));
                         if (chartType === 'bar') dispatch(setBar({render: e.target.value}));
                     }}

@@ -11,11 +11,13 @@ import {RootState} from './redux/store';
 import {ConfigProvider, Button} from 'antd';
 import {useDispatch} from 'react-redux';
 import {addSnapshot, editSnapshotById, removeSnapshotById, setSelectionId, setSnapshots} from './features/app/appSlice';
+import {useTranslation} from 'react-i18next';
 
 function App() {
     const {chartType, hideInterface, selectionId} = useSelector((state: RootState) => state.app);
     const {line, bar} = useSelector((state: RootState) => state);
     const dispatch = useDispatch();
+    const {t} = useTranslation();
 
     function renderChart(render: 'canvas' | 'svg', size: {width: number; height: number}) {
         if (render === 'svg') {
@@ -128,7 +130,7 @@ function App() {
                     shape={'round'}
                     disabled={!(selectionId.length > 0)}
                 >
-                    {selectionId.length > 0 ? '渲染图表' : '未选择 Frame'}
+                    {selectionId.length > 0 ? t('Render') : t('Select a Frame')}
                 </Button>
             </div>
         </ConfigProvider>

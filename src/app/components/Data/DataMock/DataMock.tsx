@@ -14,6 +14,7 @@ import {setDataSource} from '../../../features/app/appSlice';
 import {RootState} from '../../../redux/store';
 import {setPartialState} from '../../../features/chart/barChartSlice';
 import AdvancedConfig from './AdvancedConfig';
+import {useTranslation} from 'react-i18next';
 
 export default function DataMock() {
     const dispatch = useDispatch();
@@ -35,6 +36,7 @@ export default function DataMock() {
         trend: 'rise',
         decimalDigit: decimalDigit,
     });
+    const {t} = useTranslation();
 
     React.useEffect(() => {
         setNumberSequenceAttr({...numberSequenceAttr, decimalDigit});
@@ -72,7 +74,7 @@ export default function DataMock() {
                         });
                     }}
                 >
-                    <Form.Item name={'trend'} label={'趋势'} fieldKey={'trend'}>
+                    <Form.Item name={'trend'} label={t('trend')} fieldKey={'trend'}>
                         <Radio.Group
                             optionType={'button'}
                             options={[
@@ -83,16 +85,16 @@ export default function DataMock() {
                         ></Radio.Group>
                     </Form.Item>
 
-                    <Form.Item name={'min'} label={'最小值'} fieldKey={'min'}>
+                    <Form.Item name={'min'} label={t('min')} fieldKey={'min'}>
                         <InputNumber style={{maxWidth: 48}} />
                     </Form.Item>
-                    <Form.Item name={'max'} label={'最大值'} fieldKey={'max'}>
+                    <Form.Item name={'max'} label={t('max')} fieldKey={'max'}>
                         <InputNumber style={{maxWidth: 48}} />
                     </Form.Item>
-                    <Form.Item name={'length'} label={'数组长度'} fieldKey={'length'}>
+                    <Form.Item name={'length'} label={t('数组长度')} fieldKey={'length'}>
                         <InputNumber style={{maxWidth: 48}} min={0} />
                     </Form.Item>
-                    <Form.Item name={'count'} label={'数组数'} fieldKey={'count'}>
+                    <Form.Item name={'count'} label={t('')} fieldKey={'count'}>
                         <InputNumber style={{maxWidth: 36}} min={0} />
                     </Form.Item>
                 </Form>
@@ -131,13 +133,13 @@ export default function DataMock() {
                             setTempData(temp);
                         }}
                     >
-                        模拟数据
+                        {t('Mock Data')}
                     </Button>
                     <Button type={'link'} onClick={() => setShowAdvancedSettings(true)}>
-                        高级设置
+                        {t('Advanced Settings')}
                     </Button>
                     <Drawer
-                        title="高级设置"
+                        title={t('Advanced Settings')}
                         placement="right"
                         onClose={() => setShowAdvancedSettings(false)}
                         visible={showAdvancedSettings}

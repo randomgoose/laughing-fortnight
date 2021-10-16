@@ -6,8 +6,11 @@ import {addKey, removeKey, setNewData} from '../../../features/chart/lineChartSl
 import * as parse from 'csv-parse';
 import DataTable from '../../Data/DataTable';
 import {FcDatabase} from 'react-icons/fc';
+import {useTranslation} from 'react-i18next';
 
 export const DataUtil = () => {
+    const {t} = useTranslation();
+
     const showModal = () => {
         setIsModalVisible(true);
     };
@@ -84,7 +87,7 @@ export const DataUtil = () => {
             <Modal
                 centered={true}
                 visible={isModalVisible}
-                title={'数据'}
+                title={t('Data')}
                 onCancel={hideModal}
                 onOk={() => {
                     dispatch(setNewData(tempData));
@@ -96,7 +99,7 @@ export const DataUtil = () => {
             <Modal
                 onCancel={hideImportaModal}
                 onOk={hideImportaModal}
-                title={'导入数据'}
+                title={t('Import Data')}
                 visible={isImportModalVisible}
                 width={'fit-content'}
             >
