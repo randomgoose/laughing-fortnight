@@ -3,7 +3,7 @@ import {Button, Drawer, Form, InputNumber, Radio, Space} from 'antd';
 import * as React from 'react';
 import {useImmer} from 'use-immer';
 // import {useDispatch} from 'react-redux';
-import {generateDatumSequence, generateNumberSequence, Trend} from '../../../utils/generateNumbers';
+import {generateDatumSequence, generateNumberSequence} from '../../../utils/generateNumbers';
 import cryptoRandomString from 'crypto-random-string';
 import {Serie} from '@nivo/line';
 import {useDispatch, useSelector} from 'react-redux';
@@ -15,20 +15,14 @@ import {RootState} from '../../../redux/store';
 import {setPartialState} from '../../../features/chart/barChartSlice';
 import AdvancedConfig from './AdvancedConfig';
 import {useTranslation} from 'react-i18next';
+import {MockDataProps, mockLineData} from '../../../mock/mock-data';
 
 export default function DataMock() {
     const dispatch = useDispatch();
     const {chartType} = useSelector((state: RootState) => state.app);
     const [showAdvancedSettings, setShowAdvancedSettings] = React.useState(false);
     const {decimalDigit} = useSelector((state: RootState) => state.dataMock);
-    const [numberSequenceAttr, setNumberSequenceAttr] = useImmer<{
-        min: number;
-        max: number;
-        length: number;
-        count: number;
-        trend: Trend;
-        decimalDigit: number;
-    }>({
+    const [numberSequenceAttr, setNumberSequenceAttr] = useImmer<MockDataProps>({
         min: 0,
         max: 1000,
         length: 12,
@@ -63,7 +57,7 @@ export default function DataMock() {
         <div className={'data-mock'} style={{marginBottom: 8}}>
             <Space direction={'vertical'}>
                 <Header showReturnButton onReturn={() => dispatch(setDataSource(null))}>
-                    数据模拟
+                    {t('Mock Data')}
                 </Header>
                 <Form
                     layout={'inline'}
@@ -74,7 +68,7 @@ export default function DataMock() {
                         });
                     }}
                 >
-                    <Form.Item name={'trend'} label={t('trend')} fieldKey={'trend'}>
+                    <Form.Item name={'trend'} label={t('Trend')} fieldKey={'trend'}>
                         <Radio.Group
                             optionType={'button'}
                             options={[
@@ -85,16 +79,16 @@ export default function DataMock() {
                         ></Radio.Group>
                     </Form.Item>
 
-                    <Form.Item name={'min'} label={t('min')} fieldKey={'min'}>
+                    <Form.Item name={'min'} label={t('Min')} fieldKey={'min'}>
                         <InputNumber style={{maxWidth: 48}} />
                     </Form.Item>
-                    <Form.Item name={'max'} label={t('max')} fieldKey={'max'}>
+                    <Form.Item name={'max'} label={t('Max')} fieldKey={'max'}>
                         <InputNumber style={{maxWidth: 48}} />
                     </Form.Item>
-                    <Form.Item name={'length'} label={t('数组长度')} fieldKey={'length'}>
+                    <Form.Item name={'length'} label={t('Array Length')} fieldKey={'length'}>
                         <InputNumber style={{maxWidth: 48}} min={0} />
                     </Form.Item>
-                    <Form.Item name={'count'} label={t('')} fieldKey={'count'}>
+                    <Form.Item name={'count'} label={t('Count')} fieldKey={'count'}>
                         <InputNumber style={{maxWidth: 36}} min={0} />
                     </Form.Item>
                 </Form>
@@ -105,13 +99,8 @@ export default function DataMock() {
                             let temp = [];
                             switch (chartType) {
                                 case 'line':
-                                    for (let i = 0; i < count; i++) {
-                                        const serie: Serie = {
-                                            id: cryptoRandomString({length: 4}),
-                                            data: generateNumberSequence(numberSequenceAttr),
-                                        };
-                                        temp.push(serie);
-                                    }
+                                    const series = mockLineData(numberSequenceAttr);
+                                    temp.push(series);
                                     break;
                                 case 'bar':
                                     let attrs = [];

@@ -56,7 +56,7 @@ const initialState: ChartState = {
     pointColor: {from: 'color'},
     pointSize: 8,
     axisBottom: {
-        legend: 'x 轴',
+        legend: 'xAxis',
         legendPosition: 'middle',
         tickRotation: 0,
         legendOffset: 24,

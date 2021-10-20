@@ -34,15 +34,7 @@ export default function DataSource() {
     const dispatch = useDispatch();
     const {t} = useTranslation();
     return (
-        <div
-            className={'data-type'}
-            style={{
-                width: '100%',
-                // height: '100%',
-                display: 'flex',
-                justifyContent: 'space-between',
-            }}
-        >
+        <div className={'data-type flex justify-between'}>
             <TypeButton onClick={() => dispatch(setDataSource('mock'))}>
                 <FcTimeline />
                 {t('Mock Data')}

@@ -121,7 +121,7 @@ export default () => {
                                     </Radio.Group>
                                 </Form.Item>
                                 <Form.Item name={'translateX'} label={t('Translate X')}>
-                                    <Slider />
+                                    <Slider min={-500} max={500} />
                                 </Form.Item>
                                 <Form.Item name={'translateY'} label={t('Translate Y')}>
                                     <Slider />

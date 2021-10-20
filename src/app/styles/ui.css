@@ -69,54 +69,46 @@ body * {
     margin-right: 0;
 }
 
-.left-handle,
-.right-handle,
-.top-handle,
-.bottom-handle {
-    opacity: 0;
-    transition: opacity 0.6s;
+.Handle__left {
+    left: 0;
+    top: 50%;
 }
 
-/* .left-handle.on {
-    max-width: 4px;
-    max-height: 24px;
-    border-radius: 100px;
-    border: 1px solid red;
-    background: pink;
-    opacity: 1;
-    top: 50% !important;
-    transform: translateY(-50%);
+.Handle__top {
+    top: 0;
+    left: 50%;
 }
 
-.right-handle.on {
-    max-width: 4px;
-    max-height: 20px;
-    border-radius: 100px;
-    border: 1px solid red;
-    background: pink;
-    opacity: 1;
-    top: 50% !important;
-    transform: translateY(-50%);
+.Handle__right {
+    right: 0;
+    top: 50%;
 }
 
-.top-handle.on {
-    max-width: 20px;
-    max-height: 4px;
-    border-radius: 100px;
-    border: 1px solid red;
-    background: pink;
-    opacity: 1;
-    left: 50% !important;
-    transform: translateX(-50%);
+.Handle__bottom {
+    bottom: 0;
+    left: 50%;
 }
 
-.bottom-handle.on {
-    max-width: 20px;
-    max-height: 4px;
-    border-radius: 100px;
-    border: 1px solid red;
-    background: pink;
-    opacity: 1;
-    left: 50% !important;
-    transform: translateX(-50%);
-} */
+.Handle__topLeft {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.Handle__topRight {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.Handle__bottomLeft {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.Handle__bottomRight {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}

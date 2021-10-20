@@ -8,6 +8,7 @@ import {colorSchemes} from '@nivo/colors';
 import {AreaChartOutlined, ColumnWidthOutlined, HighlightOutlined} from '@ant-design/icons';
 import {FcSettings} from 'react-icons/fc';
 import _ from 'lodash';
+import {useTranslation} from 'react-i18next';
 
 const colorSchemeList = Object.keys(colorSchemes);
 
@@ -38,6 +39,8 @@ export default function GeneralConfig() {
         (state: RootState) => state.line
     );
 
+    const {t} = useTranslation();
+
     const [form] = Form.useForm();
 
     React.useEffect(() => {
@@ -53,7 +56,7 @@ export default function GeneralConfig() {
             <Typography.Title level={5}>
                 <Space align={'center'} size={4}>
                     <FcSettings />
-                    通用设置
+                    {t('General')}
                 </Space>
             </Typography.Title>
             <Form
@@ -101,7 +104,7 @@ export default function GeneralConfig() {
                     label={
                         <Space>
                             <HighlightOutlined />
-                            颜色
+                            {t('Color')}
                         </Space>
                     }
                     name={'colors'}
@@ -118,7 +121,7 @@ export default function GeneralConfig() {
                     label={
                         <Space>
                             <ColumnWidthOutlined />
-                            边距
+                            {t('Margin')}
                         </Space>
                     }
                     name={'margin'}
@@ -129,7 +132,7 @@ export default function GeneralConfig() {
                     label={
                         <Space>
                             <AreaChartOutlined />
-                            面积图
+                            {t('Enable Area')}
                         </Space>
                     }
                     name={'enableArea'}
@@ -137,7 +140,7 @@ export default function GeneralConfig() {
                 >
                     <Switch size={'small'} />
                 </Form.Item>
-                <Form.Item name={'areaBaselineValue'} label={<Space>面积图基线</Space>}>
+                <Form.Item name={'areaBaselineValue'} label={<Space>{t('Area baseline')}</Space>}>
                     <Slider
                         min={0}
                         max={
@@ -148,12 +151,12 @@ export default function GeneralConfig() {
                         }
                     />
                 </Form.Item>
-                <Form.Item name={'areaOpacity'} label={<Space>面积图透明度</Space>}>
+                <Form.Item name={'areaOpacity'} label={<Space>{t('Area Opacity')}</Space>}>
                     <Slider step={0.01} min={0} max={1} />
                 </Form.Item>
-                <Form.Item name={'areaBlendMode'} label={<Space>面积图混合方式</Space>}>
+                <Form.Item name={'areaBlendMode'} label={<Space>{t('Area blend mode')}</Space>}>
                     <Select
-                        placeholder={'选择混合方式'}
+                        placeholder={'Blend mode'}
                         options={blendModeList.map((mode) => {
                             return {
                                 value: mode,

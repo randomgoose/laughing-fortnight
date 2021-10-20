@@ -2,6 +2,7 @@ import {useClickAway} from 'ahooks';
 import {Button, Form, Radio, Slider, Space, Switch, Typography} from 'antd';
 import * as React from 'react';
 import {SketchPicker} from 'react-color';
+import {useTranslation} from 'react-i18next';
 import {FcOrgUnit} from 'react-icons/fc';
 import {useDispatch, useSelector} from 'react-redux';
 import {setPartialState} from '../../../features/chart/lineChartSlice';
@@ -15,6 +16,7 @@ export default function PointsConfig() {
     const {pointSize, enablePoints, pointColor} = useSelector((state: RootState) => state.line);
     const [showColorPicker, setShowColorPicker] = React.useState(true);
     const ref = React.useRef<HTMLDivElement>(null);
+    const {t} = useTranslation();
 
     useClickAway(() => {
         setShowColorPicker(false);
@@ -25,7 +27,7 @@ export default function PointsConfig() {
             <Typography.Title level={5}>
                 <Space size={4}>
                     <FcOrgUnit />
-                    数据点设置
+                    {t('Points')}
                 </Space>
             </Typography.Title>
             <Form
@@ -43,25 +45,23 @@ export default function PointsConfig() {
             >
                 <Form.Item
                     name={'enablePoints'}
-                    label={<Label>启用数据点</Label>}
+                    label={<Label>{t('Enable points')}</Label>}
                     fieldKey={'enable-points'}
                     valuePropName={'checked'}
                 >
                     <Switch size={'small'}></Switch>
                 </Form.Item>
-                <Form.Item name={'pointSize'} label={<Label>数据点尺寸</Label>}>
+                <Form.Item name={'pointSize'} label={<Label>{t('Point size')}</Label>}>
                     <Slider min={1} max={20} />
                 </Form.Item>
-                <Form.Item name={'pointColor'} label={'数据点颜色'}>
+                <Form.Item name={'pointColor'} label={t('Point Color')}>
                     <Radio.Group
                         optionType={'button'}
                         options={[
-                            {value: JSON.stringify({from: 'color', modifier: []}), label: '默认'},
-                            {value: '#000000', label: '自定义'},
+                            {value: JSON.stringify({from: 'color', modifier: []}), label: t('Default')},
+                            {value: '#000000', label: t('Custom')},
                         ]}
-                    >
-                        <Radio value={JSON.stringify({from: 'color', modifier: []})}>默认</Radio>
-                    </Radio.Group>
+                    />
                 </Form.Item>
             </Form>
             <div ref={ref} style={{position: 'fixed'}}>

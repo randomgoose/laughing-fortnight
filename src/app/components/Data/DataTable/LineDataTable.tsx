@@ -1,6 +1,7 @@
 import {PlusOutlined} from '@ant-design/icons';
 import {Table, Tabs, Button} from 'antd';
 import * as React from 'react';
+import {useTranslation} from 'react-i18next';
 import {useDispatch, useSelector} from 'react-redux';
 import {setSerieId, setData, addValue} from '../../../features/chart/lineChartSlice';
 import {RootState} from '../../../redux/store';
@@ -9,6 +10,7 @@ import EditableDiv from '../../CustomInput/EditableDiv';
 export default function LineDataTable() {
     const {data} = useSelector((state: RootState) => state.line);
     const dispatch = useDispatch();
+    const {t} = useTranslation();
 
     return (
         <Tabs
@@ -61,7 +63,7 @@ export default function LineDataTable() {
                                     dispatch(addValue(item.id));
                                 }}
                             >
-                                新增
+                                {t('Add entry')}
                             </Button>
                         )}
                     ></Table>

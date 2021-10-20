@@ -8,16 +8,15 @@ interface Props {
     style?: CSSProperties;
 }
 
-export default function DimensionIndicator({width, height, style}: Props) {
+export default function DimensionIndicator({width, height}: Props) {
     const {t} = useTranslation();
-
     return (
-        <div style={style}>
-            <span style={{marginRight: 8}}>
+        <div className={'DimensionIndicator absolute top-6 left-2/4 transform -translate-x-1/2 -translate-y-1/2'}>
+            <span className={'mr-2'}>
                 {t('Width')}: {width}
             </span>
             <span>
-                {t('Width')}: {height}
+                {t('Height')}: {height}
             </span>
         </div>
     );

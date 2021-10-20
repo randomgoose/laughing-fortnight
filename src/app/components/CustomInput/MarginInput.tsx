@@ -48,36 +48,32 @@ export default function MarginInput(props: Props) {
             >
                 <InputNumber
                     type={'number'}
-                    className={'margin-top'}
+                    className={'margin-top w-full'}
                     value={props.value.top || values.top}
-                    style={{width: '100%'}}
                     onFocus={() => focusHandler('top')}
                     onBlur={() => setEditingMargin(null)}
                     onChange={(value) => handleChange({...(values || props.value), top: value})}
                 />
                 <InputNumber
                     type={'number'}
-                    className={'margin-left'}
+                    className={'margin-left w-full'}
                     value={props.value.left || values.left}
-                    style={{width: '100%'}}
                     onFocus={() => focusHandler('left')}
                     onBlur={() => setEditingMargin(null)}
                     onChange={(value) => handleChange({...(values || props.value), left: value})}
                 />
                 <InputNumber
                     type={'number'}
-                    className={'margin-right'}
+                    className={'margin-right w-full'}
                     value={props.value.right || values.right}
-                    style={{width: '100%'}}
                     onFocus={() => focusHandler('right')}
                     onBlur={() => setEditingMargin(null)}
                     onChange={(value) => handleChange({...(values || props.value), right: value})}
                 />
                 <InputNumber
                     type={'number'}
-                    className={'margin-bottom'}
+                    className={'margin-bottom w-full'}
                     value={props.value.bottom || values.bottom}
-                    style={{width: '100%'}}
                     onFocus={() => focusHandler('bottom')}
                     onBlur={() => setEditingMargin(null)}
                     onChange={(value) => handleChange({...(values || props.value), bottom: value})}

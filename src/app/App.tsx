@@ -12,6 +12,7 @@ import {ConfigProvider, Button} from 'antd';
 import {useDispatch} from 'react-redux';
 import {addSnapshot, editSnapshotById, removeSnapshotById, setSelectionId, setSnapshots} from './features/app/appSlice';
 import {useTranslation} from 'react-i18next';
+import 'tailwindcss/tailwind.css';
 
 function App() {
     const {chartType, hideInterface, selectionId} = useSelector((state: RootState) => state.app);
@@ -88,19 +89,7 @@ function App() {
         <ConfigProvider componentSize={'small'}>
             <div className={'App'} style={{width: '100%', height: '100%', display: 'flex'}}>
                 {!hideInterface ? <SideBar /> : null}
-                <div
-                    className={'App__content'}
-                    style={{
-                        display: 'flex',
-                        position: 'relative',
-                        width: '100%',
-                        flexDirection: 'column',
-                        flexGrow: 1,
-                        borderRight: '1px solid rgba(0, 0, 0, .1)',
-                        overflow: 'hidden',
-                        background: '#f2f2f2',
-                    }}
-                >
+                <div className={'App__content relative flex border-r flex-grow overflow-hidden bg-gray-100'}>
                     <Canvas />
                     {!hideInterface ? <Gallery /> : null}
                 </div>
@@ -112,15 +101,7 @@ function App() {
                     <BarConfig />
                 ) : null}
                 <Button
-                    style={{
-                        position: 'fixed',
-                        bottom: '48px',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        boxShadow: '0 10px 10px rgba(0, 0, 0, .1)',
-                        fontSize: 16,
-                        lineHeight: 24,
-                    }}
+                    className={'fixed bottom-16 left-1/2 transform -translate-x-1/2 text-base overflow-visible'}
                     type={'primary'}
                     size={'large'}
                     onClick={() => {

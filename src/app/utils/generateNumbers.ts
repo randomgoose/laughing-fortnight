@@ -1,8 +1,7 @@
 import NormalDistribution from 'normal-distribution';
 import {BarDatum} from '@nivo/bar';
 import cryptoRandomString from 'crypto-random-string';
-
-export type Trend = 'rise' | 'fall';
+import {Trend} from '../mock/mock-data';
 
 export const generateIncreasingNumberSequence = (
     length: number,

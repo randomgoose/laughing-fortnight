@@ -10,20 +10,34 @@ interface Props {
 
 const Point = styled.div`
     position: absolute;
-    width: 6px;
-    height: 6px;
-    border-radius: 1px;
-    background-color: lightgray;
+    width: 12px;
+    height: 12px;
+    background: none;
 
     ${(props) =>
         props.className.includes('left') ? `left: 0` : props.className.includes('right') ? `left: 100%` : `left: 50%`};
     ${(props) =>
         props.className.includes('top') ? `top: 0` : props.className.includes('bottom') ? `top: 100%` : `top: 50%`};
+
     transform: translate(-50%, -50%);
     cursor: pointer;
 
-    &:hover {
-        background: red;
+    &::after {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: ${(props) => (props.selected ? '#00bcd4' : 'lightgray')};
+    }
+
+    &:hover::after {
+        width: 8px;
+        height: 8px;
+        background: #00bcd4;
     }
 `;
 
@@ -33,15 +47,7 @@ export default function Anchor({value, onChange}: Props) {
     React.useEffect(() => {}, [activePoint]);
 
     return (
-        <div
-            className={'anchor'}
-            style={{
-                position: 'relative',
-                width: 60,
-                height: 60,
-                border: '1px solid lightgray',
-            }}
-        >
+        <div className={'anchor relative w-14 h-14 border'}>
             {positions.map((position, index) => (
                 <Point
                     key={index}
@@ -50,9 +56,7 @@ export default function Anchor({value, onChange}: Props) {
                         setActivePoint(position);
                         onChange(position);
                     }}
-                    style={{
-                        background: value && position === value ? 'blue' : 'lightgray',
-                    }}
+                    selected={value && value === position}
                 ></Point>
             ))}
         </div>

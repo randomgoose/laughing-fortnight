@@ -2,6 +2,7 @@ import {DeleteOutlined, PlusOutlined} from '@ant-design/icons';
 import {Button, Space, Table, message} from 'antd';
 import cryptoRandomString from 'crypto-random-string';
 import * as React from 'react';
+import {useTranslation} from 'react-i18next';
 import {useDispatch, useSelector} from 'react-redux';
 import {setData, setKey, removeKey} from '../../../features/chart/barChartSlice';
 import {addKey} from '../../../features/chart/barChartSlice';
@@ -11,6 +12,7 @@ import EditableDiv from '../../CustomInput/EditableDiv';
 export default function BarDataTable() {
     const {data, keys, indexBy} = useSelector((state: RootState) => state.bar);
     const dispatch = useDispatch();
+    const {t} = useTranslation();
 
     return (
         <Table
@@ -87,7 +89,7 @@ export default function BarDataTable() {
                                 dispatch(addKey(cryptoRandomString({length: 4})));
                             }}
                         >
-                            增加列
+                            {t('Add column')}
                         </Button>
                     ),
                     key: 'add_column',

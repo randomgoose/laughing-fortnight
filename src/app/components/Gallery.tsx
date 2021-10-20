@@ -8,13 +8,13 @@ import DataSource from './Data/DataSource';
 import DataTable from './Data/DataTable';
 import DataUpload from './Data/DataUpload';
 import {Rnd} from 'react-rnd';
-import {Handle} from './StyledComponents/StyledComponents';
 import {CameraFilled} from '@ant-design/icons';
 import styled from 'styled-components';
 import cryptoRandomString from 'crypto-random-string';
 import {sendMessage} from '../utils/send-message';
 import {SnapshotProps} from './Snapshot';
 import Snapshot from './Snapshot/Snapshot';
+import {useTranslation} from 'react-i18next';
 
 const Shutter = styled.div`
     background: #f7f8fa;
@@ -42,6 +42,7 @@ export default function Gallery() {
     const [width, setWidth] = React.useState('100%');
     const [x, setX] = React.useState(0);
     const [y, setY] = React.useState(window.innerHeight - 320);
+    const {t} = useTranslation();
 
     function loadSnapShots() {
         sendMessage('load-snapshots');
@@ -79,7 +80,11 @@ export default function Gallery() {
                 setY(position.y);
             }}
             resizeHandleComponent={{
-                top: <Handle pos={'top'} hovering={true} scale={1} />,
+                top: (
+                    <div
+                        className={'absolute left-1/2 -top-1 w-6 h-1 bg-gray-200 rounded border border-gray-500'}
+                    ></div>
+                ),
             }}
             position={{
                 x: x,
@@ -89,15 +94,15 @@ export default function Gallery() {
                 width: width,
                 height: height,
             }}
-            style={{cursor: 'default'}}
+            className={'cursor-default'}
         >
             <div className={'Gallery'} style={{padding: '0 12px', width: '100%', height: '100%', background: 'white'}}>
                 <Tabs defaultActiveKey={'data'} style={{height: '100%'}}>
-                    <Tabs.TabPane key={'data'} tab={'数据'} style={{height: '100%', overflow: 'scroll'}}>
+                    <Tabs.TabPane key={'data'} tab={t('Data')}>
                         {!dataSource ? (
                             <DataSource />
                         ) : dataSource === 'mock' ? (
-                            <div style={{height: 240, overflow: 'scroll'}}>
+                            <div className={'h-60 overflow-scroll'}>
                                 <DataMock />
                                 <DataTable />
                             </div>
@@ -105,27 +110,12 @@ export default function Gallery() {
                             <DataUpload />
                         ) : null}
                     </Tabs.TabPane>
-                    <Tabs.TabPane key={'gallery'} tab={'示例图表'} style={{height: '100%', overflow: 'scroll'}}>
-                        <div
-                            style={{display: 'flex', alignItems: 'center', marginBottom: 8}}
-                            className={'Gallery__title'}
-                        >
-                            <FcPuzzle style={{marginRight: 8}} />
-                            <span style={{fontSize: 16, lineHeight: 1.5, fontWeight: 'bold'}}>示例图表</span>
+                    <Tabs.TabPane className={'h-full overflow-scroll'} key={'gallery'} tab={t('Samples')}>
+                        <div className={'Gallery__title flex items-center mb-2'}>
+                            <FcPuzzle className={'mr-2'} />
+                            <span style={{fontSize: 16, lineHeight: 1.5, fontWeight: 'bold'}}>{t('Samples')}</span>
                         </div>
-                        <div
-                            style={{
-                                display: 'grid',
-                                gridTemplateColumns: 'repeat(4, 1fr)',
-                                justifyContent: 'flex-start',
-                                alignItems: 'flex-start',
-                                columnGap: 8,
-                                rowGap: 8,
-                                width: '100%',
-                                height: 240,
-                            }}
-                            className={'Gallery__display'}
-                        >
+                        <div className={'Gallery__display grid grid-cols-4 gap-4 w-full h-60'}>
                             <Shutter
                                 onClick={() => {
                                     saveSnapShot(takeSnapShot());

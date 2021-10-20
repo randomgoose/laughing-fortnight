@@ -1,6 +1,7 @@
 import {MenuOutlined} from '@ant-design/icons';
 import {Form, Space, Switch, Typography} from 'antd';
 import * as React from 'react';
+import {useTranslation} from 'react-i18next';
 import {FcGrid} from 'react-icons/fc';
 import {useDispatch, useSelector} from 'react-redux';
 import {setPartialState} from '../../../features/chart/lineChartSlice';
@@ -9,12 +10,13 @@ import {RootState} from '../../../redux/store';
 export default function GridConfig() {
     const dispatch = useDispatch();
     const {showGridX, showGridY} = useSelector((state: RootState) => state.line);
+    const {t} = useTranslation();
     return (
         <>
             <Typography.Title level={5}>
                 <Space size={4}>
                     <FcGrid />
-                    网格设置
+                    {t('Grid')}
                 </Space>
             </Typography.Title>
             <Form
@@ -31,7 +33,7 @@ export default function GridConfig() {
                     label={
                         <Space align={'center'}>
                             <MenuOutlined rotate={90} />
-                            纵向网格
+                            {t('Grid X')}
                         </Space>
                     }
                 >
@@ -42,7 +44,7 @@ export default function GridConfig() {
                     label={
                         <Space align={'center'}>
                             <MenuOutlined />
-                            横向网格
+                            {t('Grid Y')}
                         </Space>
                     }
                 >

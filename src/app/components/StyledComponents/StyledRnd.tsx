@@ -14,6 +14,8 @@ interface Props {
     onMouseDown?: () => void;
 }
 
+const handles = ['top', 'topLeft', 'topRight', 'left', 'right', 'bottomLeft', 'bottom', 'bottomRight'];
+
 export default function StyledRnd({children, width, height, x, y, scale, onMouseDown, onResize, onDragStop}: Props) {
     const [hovering, setHovering] = React.useState(false);
     const ref = React.useRef();
@@ -28,18 +30,29 @@ export default function StyledRnd({children, width, height, x, y, scale, onMouse
         setHovering(isHovering);
     }, [isHovering]);
 
+    function createHandle(handles: string[]) {
+        const handleComponents = {};
+        handles.map((handle) => {
+            handleComponents[handle] = (
+                <Handle
+                    className={'Handle__' + handle}
+                    pos={handle}
+                    hovering={hovering}
+                    onMouseOver={enableHovering}
+                    scale={scale}
+                />
+            );
+        });
+        return handleComponents;
+    }
+
     return (
         <div ref={ref}>
             <Rnd
                 scale={scale}
                 className={'canvas'}
                 onMouseDown={onMouseDown}
-                resizeHandleComponent={{
-                    left: <Handle pos={'left'} hovering={hovering} onMouseOver={enableHovering} scale={scale} />,
-                    right: <Handle pos={'right'} hovering={hovering} onMouseOver={enableHovering} scale={scale} />,
-                    top: <Handle pos={'top'} hovering={hovering} onMouseOver={enableHovering} scale={scale} />,
-                    bottom: <Handle pos={'bottom'} hovering={hovering} onMouseOver={enableHovering} scale={scale} />,
-                }}
+                resizeHandleComponent={createHandle(handles)}
                 size={{
                     width: width,
                     height: height,
@@ -56,3 +69,11 @@ export default function StyledRnd({children, width, height, x, y, scale, onMouse
         </div>
     );
 }
+
+// {
+//     left: <Handle pos={'left'} hovering={hovering} onMouseOver={enableHovering} scale={scale} />,
+//     right: <Handle pos={'right'} hovering={hovering} onMouseOver={enableHovering} scale={scale} />,
+//     top: <Handle pos={'top'} hovering={hovering} onMouseOver={enableHovering} scale={scale} />,
+//     bottom: <Handle pos={'bottom'} hovering={hovering} onMouseOver={enableHovering} scale={scale} />,
+//     topLeft: <Handle pos={'top_left'} scale={scale} hovering={hovering} onMouseOver={enableHovering} />,
+// }

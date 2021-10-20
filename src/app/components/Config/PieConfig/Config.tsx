@@ -32,12 +32,12 @@ export default function PieConfig() {
             </div>
             <Tabs tabPosition={'left'}>
                 <Tabs.TabPane key={'general'} tab={'General'} style={{width: 'fit-content'}}></Tabs.TabPane>
-                <Tabs.TabPane key={'axes'} tab={'坐标轴'}></Tabs.TabPane>
-                <Tabs.TabPane key={'grid'} tab={'网格'}></Tabs.TabPane>
-                <Tabs.TabPane key={'legend'} tab={'图例'}></Tabs.TabPane>
-                <Tabs.TabPane key={'data'} tab={'数据'}></Tabs.TabPane>
-                <Tabs.TabPane key={'lines'} tab={'线条'}></Tabs.TabPane>
-                <Tabs.TabPane key={'points'} tab={'数据点'}></Tabs.TabPane>
+                <Tabs.TabPane key={'axes'} tab={'Axis'}></Tabs.TabPane>
+                <Tabs.TabPane key={'grid'} tab={'Grid'}></Tabs.TabPane>
+                <Tabs.TabPane key={'legend'} tab={'Legend'}></Tabs.TabPane>
+                <Tabs.TabPane key={'data'} tab={'Data'}></Tabs.TabPane>
+                <Tabs.TabPane key={'lines'} tab={'Lines'}></Tabs.TabPane>
+                <Tabs.TabPane key={'points'} tab={'Points'}></Tabs.TabPane>
             </Tabs>
         </>
     );

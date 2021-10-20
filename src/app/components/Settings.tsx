@@ -1,6 +1,6 @@
 import * as React from 'react';
 import i18n from '../../i18n/i18n';
-import {Form, Select} from 'antd';
+import {Radio} from 'antd';
 import {useTranslation} from 'react-i18next';
 
 const languages: {name: string; key: string}[] = [
@@ -8,29 +8,24 @@ const languages: {name: string; key: string}[] = [
     {name: 'English', key: 'en'},
 ];
 
-const initialValues = {
-    language: 'en',
-};
-
 export default function Settings() {
     const {t} = useTranslation();
-
     return (
-        <div>
-            <Form initialValues={initialValues} layout={'vertical'}>
-                <Form.Item name={'language'} label={t('Language')}>
-                    <Select
-                        style={{width: '100%'}}
-                        options={languages.map((item) => ({
-                            value: item.key,
-                            label: item.name,
-                        }))}
-                        onChange={(value: string) => {
-                            i18n.changeLanguage(value);
-                        }}
-                    />
-                </Form.Item>
-            </Form>
-        </div>
+        <>
+            <h6 className={'mb-2 font-bold'}>{t('Language')}</h6>
+            <Radio.Group
+                defaultValue={i18n.language}
+                className={'w-full'}
+                optionType={'button'}
+                buttonStyle={'outline'}
+                options={languages.map((item) => ({
+                    value: item.key,
+                    label: item.name,
+                }))}
+                onChange={(e) => {
+                    i18n.changeLanguage(e.target.value);
+                }}
+            />
+        </>
     );
 }

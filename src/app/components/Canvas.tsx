@@ -56,23 +56,15 @@ export default function Canvas() {
     );
 
     return (
-        <div
-            {...bind()}
-            style={{width: '100%', height: '100%', overflow: 'scroll', position: 'relative'}}
-            className={'canvas'}
-            ref={domTarget}
-        >
+        <div {...bind()} className={'canvas'} ref={domTarget}>
             <DimensionIndicator
                 width={chartType === 'line' ? line.width : chartType === 'bar' ? bar.width : 0}
                 height={chartType === 'line' ? line.height : chartType === 'bar' ? bar.height : 0}
-                style={{position: 'absolute', top: 24, left: '50%', transform: 'translate(-50%, -50%)'}}
             />
             <animated.div
                 ref={ref}
+                className={'w-full h-full absolute'}
                 style={{
-                    width: '100%',
-                    height: '100%',
-                    position: 'absolute',
                     scale: to([scale, zoom], (s, z) => {
                         if (s + z >= 0) {
                             if (chartType === 'line') dispatch(setLine({scale: s + z}));
@@ -84,7 +76,7 @@ export default function Canvas() {
             >
                 {chart}
             </animated.div>
-            <Space style={{position: 'absolute', top: 16, right: 16}}>
+            <Space className={'absolute top-4 right-4'}>
                 <Radio.Group
                     value={chartType === 'line' ? line.render : chartType === 'bar' ? bar.render : 'svg'}
                     onChange={(e) => {

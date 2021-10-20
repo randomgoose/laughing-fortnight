@@ -91,7 +91,6 @@ export const DataUtil = () => {
                 onCancel={hideModal}
                 onOk={() => {
                     dispatch(setNewData(tempData));
-                    // hideModal();
                 }}
             >
                 <DataTable />
@@ -113,10 +112,10 @@ export const DataUtil = () => {
                 )}
             </Modal>
             <Button onClick={showModal} block type={'primary'}>
-                编辑数据
+                {t('Edit Data')}
             </Button>
             <Button onClick={showImportModal} block>
-                导入数据
+                {t('Import Data')}
             </Button>
         </>
     );
@@ -125,12 +124,13 @@ export const DataUtil = () => {
 export default () => {
     const dispatch = useDispatch();
     const {data, lines} = useSelector((state: RootState) => state.line);
+    const {t} = useTranslation();
     return (
         <Space direction={'vertical'}>
             <Typography.Title level={5}>
                 <Space size={4}>
                     <FcDatabase />
-                    数据设置
+                    {t('Data')}
                 </Space>
             </Typography.Title>
             {data.map((item) => (

@@ -47,7 +47,7 @@ export default function BarConfig() {
                     name={'value'}
                     label={
                         <Space>
-                            <div style={{width: 8, height: 8, background: activeDatum.color, borderRadius: 1}}></div>
+                            <div className={'w-2 h-2 rounded-sm'} style={{background: activeDatum.color}}></div>
                             {`${activeDatum.indexValue} ${activeDatum.id}`}
                         </Space>
                     }
