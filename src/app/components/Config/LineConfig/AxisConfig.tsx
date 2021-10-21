@@ -105,19 +105,19 @@ export default () => {
                                 ]}
                             ></Radio.Group>
                         </Form.Item>
-                        <Form.Item name={'legendOffset'} label={t('Legend offset')}>
+                        <Form.Item name={'legendOffset'} label={t('Legend Offset')}>
                             <Slider />
                         </Form.Item>
-                        <Form.Item name={'tickSize'} label={t('Tick size')}>
+                        <Form.Item name={'tickSize'} label={t('Tick Size')}>
                             <InputNumber formatter={(value) => value + 'px'} />
                         </Form.Item>
-                        <Form.Item name={'tickRotation'} label={t('Tick rotation')}>
+                        <Form.Item name={'tickRotation'} label={t('Tick Rotation')}>
                             <Slider min={-90} max={90} step={5} />
                         </Form.Item>
-                        <Form.Item name={'tickPadding'} label={t('Tick padding')}>
+                        <Form.Item name={'tickPadding'} label={t('Tick Padding')}>
                             <Slider min={-90} max={90} step={1} />
                         </Form.Item>
-                        <Form.Item name={'tickValues'} label={t('Tick values')}>
+                        <Form.Item name={'tickValues'} label={t('Tick Values')}>
                             <InputNumber />
                         </Form.Item>
                     </Form>

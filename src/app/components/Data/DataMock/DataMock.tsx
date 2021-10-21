@@ -3,7 +3,7 @@ import {Button, Drawer, Form, InputNumber, Radio, Space} from 'antd';
 import * as React from 'react';
 import {useImmer} from 'use-immer';
 // import {useDispatch} from 'react-redux';
-import {generateDatumSequence, generateNumberSequence} from '../../../utils/generateNumbers';
+import {generateDatumSequence} from '../../../utils/generateNumbers';
 import cryptoRandomString from 'crypto-random-string';
 import {Serie} from '@nivo/line';
 import {useDispatch, useSelector} from 'react-redux';
@@ -39,6 +39,7 @@ export default function DataMock() {
     const [tempData, setTempData] = useImmer<Serie[]>([]);
 
     React.useEffect(() => {
+        console.log(tempData);
         if (tempData.length > 0) {
             switch (chartType) {
                 case 'line':
@@ -100,7 +101,7 @@ export default function DataMock() {
                             switch (chartType) {
                                 case 'line':
                                     const series = mockLineData(numberSequenceAttr);
-                                    temp.push(series);
+                                    temp = series;
                                     break;
                                 case 'bar':
                                     let attrs = [];

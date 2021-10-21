@@ -124,7 +124,7 @@ export default () => {
                                     <Slider min={-500} max={500} />
                                 </Form.Item>
                                 <Form.Item name={'translateY'} label={t('Translate Y')}>
-                                    <Slider />
+                                    <Slider min={-500} max={500} />
                                 </Form.Item>
                                 <Form.Item name={'legendAlign'} label={t('Legend Align')}>
                                     <Radio.Group size={'small'}>

@@ -115,7 +115,7 @@ export const chartSlice = createSlice({
             const {serieIndex, datumIndex, key, value} = action.payload;
             state.data[serieIndex]['data'][datumIndex][key] = value;
         },
-        setNewData: (state, action: PayloadAction<ChartState['data']>) => {
+        setNewData: (state, action: PayloadAction<Serie[]>) => {
             state.data = action.payload;
             state.lines = action.payload
                 .filter((serie) => serie.data.filter((datum) => isNaN(parseFloat(datum.y as string))).length === 0)

@@ -102,7 +102,7 @@ export default function Gallery() {
                         {!dataSource ? (
                             <DataSource />
                         ) : dataSource === 'mock' ? (
-                            <div className={'h-60 overflow-scroll'}>
+                            <div className={'h-60'}>
                                 <DataMock />
                                 <DataTable />
                             </div>
@@ -110,7 +110,7 @@ export default function Gallery() {
                             <DataUpload />
                         ) : null}
                     </Tabs.TabPane>
-                    <Tabs.TabPane className={'h-full overflow-scroll'} key={'gallery'} tab={t('Samples')}>
+                    <Tabs.TabPane className={'h-full'} key={'gallery'} tab={t('Samples')}>
                         <div className={'Gallery__title flex items-center mb-2'}>
                             <FcPuzzle className={'mr-2'} />
                             <span style={{fontSize: 16, lineHeight: 1.5, fontWeight: 'bold'}}>{t('Samples')}</span>
