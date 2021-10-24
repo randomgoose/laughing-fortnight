@@ -1,57 +1,23 @@
 import * as React from 'react';
-import {FcPieChart} from 'react-icons/fc';
-import {useSelector} from 'react-redux';
-import {RootState} from '../../../redux/store';
+import {FcSettings} from 'react-icons/fc';
 import {Tabs} from 'antd';
+import {StyledTabPane} from '../../StyledComponents/StyledComponents';
+import GeneralConfig from './GeneralConfig';
 
 export default function PieConfig() {
-    const {activeSerie} = useSelector((state: RootState) => state.line);
-    const chartConfig = useSelector((state: RootState) => state.line);
-    const {selectionId} = useSelector((state: RootState) => state.app);
-
-    React.useEffect(() => {
-        if (selectionId.length > 0) {
-            window.parent.postMessage(
-                {
-                    pluginMessage: {
-                        type: 'update-chart',
-                        svg: document.querySelector('.recharts-surface').outerHTML,
-                        config: chartConfig,
-                    },
-                },
-                '*'
-            );
-        }
-    }, [chartConfig, selectionId]);
-
     const config = (
-        <>
-            <div style={{display: 'flex', alignItems: 'center', marginBottom: 8}}>
-                <FcPieChart style={{marginRight: 8}} />
-                <div style={{fontSize: 16, lineHeight: '24px', fontWeight: 'bold'}}>饼图</div>
-            </div>
-            <Tabs tabPosition={'left'}>
-                <Tabs.TabPane key={'general'} tab={'General'} style={{width: 'fit-content'}}></Tabs.TabPane>
-                <Tabs.TabPane key={'axes'} tab={'Axis'}></Tabs.TabPane>
-                <Tabs.TabPane key={'grid'} tab={'Grid'}></Tabs.TabPane>
-                <Tabs.TabPane key={'legend'} tab={'Legend'}></Tabs.TabPane>
-                <Tabs.TabPane key={'data'} tab={'Data'}></Tabs.TabPane>
-                <Tabs.TabPane key={'lines'} tab={'Lines'}></Tabs.TabPane>
-                <Tabs.TabPane key={'points'} tab={'Points'}></Tabs.TabPane>
-            </Tabs>
-        </>
+        <Tabs tabPosition={'left'} type={'card'} className={'h-full'}>
+            <StyledTabPane key={'general'} tab={<FcSettings />}>
+                <GeneralConfig />
+            </StyledTabPane>
+            {/* <StyledTabPane key={'axes'} tab={'Axis'}></StyledTabPane>
+                <StyledTabPane key={'grid'} tab={'Grid'}></StyledTabPane>
+                <StyledTabPane key={'legend'} tab={'Legend'}></StyledTabPane>
+                <StyledTabPane key={'data'} tab={'Data'}></StyledTabPane>
+                <StyledTabPane key={'lines'} tab={'Lines'}></StyledTabPane>
+                <StyledTabPane key={'points'} tab={'Points'}></StyledTabPane> */}
+        </Tabs>
     );
 
-    return (
-        <div
-            className={'Config'}
-            style={{
-                width: 260,
-                height: '100%',
-                padding: 16,
-            }}
-        >
-            {activeSerie ? <div></div> : config}
-        </div>
-    );
+    return <div className={'Config h-full w-48 flex-shrink-0'}>{config}</div>;
 }

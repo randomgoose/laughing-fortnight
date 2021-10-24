@@ -9,6 +9,7 @@ export interface AppState {
     rndEnabled: boolean;
     hideInterface: boolean;
     snapshots: SnapshotProps[];
+    scale: number;
 }
 
 const initialState: AppState = {
@@ -19,12 +20,16 @@ const initialState: AppState = {
     rndEnabled: false,
     hideInterface: false,
     snapshots: [],
+    scale: 1,
 };
 
 export const appSlice = createSlice({
     name: 'app',
     initialState,
     reducers: {
+        setPartialState: (state, action) => {
+            Object.assign(state, action.payload);
+        },
         setChartType: (state, action: PayloadAction<'line' | 'bar' | 'pie' | 'area'>) => {
             state.chartType = action.payload;
         },
@@ -68,6 +73,7 @@ export const {
     addSnapshot,
     removeSnapshotById,
     editSnapshotById,
+    setPartialState,
 } = appSlice.actions;
 
 export default appSlice.reducer;

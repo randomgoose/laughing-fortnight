@@ -15,7 +15,7 @@ export interface ChartState extends BarSvgProps<BarDatum> {
     height: number;
     x: number;
     y: number;
-    scale: 1;
+    scale: number;
     render: 'svg' | 'canvas';
     activeBar: string;
     activeIndex: number;

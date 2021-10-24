@@ -39,9 +39,10 @@ export default function VisLineChart() {
         height,
         x,
         y,
-        scale,
         render,
     } = useSelector((state: RootState) => state.line);
+
+    const {scale} = useSelector((state: RootState) => state.app);
 
     const dispatch = useDispatch();
 

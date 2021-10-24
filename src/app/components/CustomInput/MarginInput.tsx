@@ -4,11 +4,10 @@ import styled from 'styled-components';
 import {useState} from 'react';
 
 const Box = styled.div`
-    border-right: ${(props) => (props['data-editingMargin'] === 'right' ? '3px solid #00BCD4' : '1px solid lightgray')};
-    border-left: ${(props) => (props['data-editingMargin'] === 'left' ? '3px solid #00BCD4' : '1px solid lightgray')};
-    border-top: ${(props) => (props['data-editingMargin'] === 'top' ? '3px solid #00BCD4' : '1px solid lightgray')};
-    border-bottom: ${(props) =>
-        props['data-editingMargin'] === 'bottom' ? '3px solid #00BCD4' : '1px solid lightgray'};
+    border-right: ${(props) => (props['editingMargin'] === 'right' ? '3px solid #00BCD4' : '1px solid lightgray')};
+    border-left: ${(props) => (props['editingMargin'] === 'left' ? '3px solid #00BCD4' : '1px solid lightgray')};
+    border-top: ${(props) => (props['editingMargin'] === 'top' ? '3px solid #00BCD4' : '1px solid lightgray')};
+    border-bottom: ${(props) => (props['editingMargin'] === 'bottom' ? '3px solid #00BCD4' : '1px solid lightgray')};
     width: 96px;
 `;
 
@@ -34,7 +33,7 @@ export default function MarginInput(props: Props) {
     return (
         <div className={'MarginInput'} style={{display: 'flex', width: '100%'}}>
             <Space></Space>
-            <Box className={'MarginInput__box'} data-editingMargin={editingMargin} />
+            <Box className={'MarginInput__box'} editingMargin={editingMargin} />
             <div
                 className={'MarginInput__group'}
                 style={{

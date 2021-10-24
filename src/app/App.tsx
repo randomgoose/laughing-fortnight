@@ -13,6 +13,7 @@ import {useDispatch} from 'react-redux';
 import {addSnapshot, editSnapshotById, removeSnapshotById, setSelectionId, setSnapshots} from './features/app/appSlice';
 import {useTranslation} from 'react-i18next';
 import 'tailwindcss/tailwind.css';
+import {PieConfigProvider} from './context/pie-context';
 
 function App() {
     const {chartType, hideInterface, selectionId} = useSelector((state: RootState) => state.app);
@@ -87,33 +88,36 @@ function App() {
 
     return (
         <ConfigProvider componentSize={'small'}>
-            <div className={'App'} style={{width: '100%', height: '100%', display: 'flex'}}>
-                {!hideInterface ? <SideBar /> : null}
-                <div className={'App__content relative flex border-r flex-grow overflow-hidden bg-gray-100'}>
-                    <Canvas />
-                    {!hideInterface ? <Gallery /> : null}
+            <PieConfigProvider>
+                <div className={'App'} style={{width: '100%', height: '100%', display: 'flex'}}>
+                    {!hideInterface ? <SideBar /> : null}
+                    <div className={'App__content relative flex border-r flex-grow overflow-hidden bg-gray-100'}>
+                        <Canvas />
+                        {!hideInterface ? <Gallery /> : null}
+                    </div>
+                    {!hideInterface && chartType === 'line' ? (
+                        <LineConfig />
+                    ) : !hideInterface && chartType === 'pie' ? (
+                        <PieConfig />
+                    ) : !hideInterface && chartType === 'bar' ? (
+                        <BarConfig />
+                    ) : null}
+                    <Button
+                        className={'fixed bottom-16 left-1/2 transform -translate-x-1/2 text-base overflow-visible'}
+                        type={'primary'}
+                        size={'large'}
+                        onClick={() => {
+                            if (chartType === 'line')
+                                renderChart(line.render, {width: line.width, height: line.height});
+                            if (chartType === 'bar') renderChart(bar.render, {width: bar.width, height: bar.height});
+                        }}
+                        shape={'round'}
+                        disabled={!(selectionId.length > 0)}
+                    >
+                        {selectionId.length > 0 ? t('Render') : t('Select a Frame')}
+                    </Button>
                 </div>
-                {!hideInterface && chartType === 'line' ? (
-                    <LineConfig />
-                ) : !hideInterface && chartType === 'pie' ? (
-                    <PieConfig />
-                ) : !hideInterface && chartType === 'bar' ? (
-                    <BarConfig />
-                ) : null}
-                <Button
-                    className={'fixed bottom-16 left-1/2 transform -translate-x-1/2 text-base overflow-visible'}
-                    type={'primary'}
-                    size={'large'}
-                    onClick={() => {
-                        if (chartType === 'line') renderChart(line.render, {width: line.width, height: line.height});
-                        if (chartType === 'bar') renderChart(bar.render, {width: bar.width, height: bar.height});
-                    }}
-                    shape={'round'}
-                    disabled={!(selectionId.length > 0)}
-                >
-                    {selectionId.length > 0 ? t('Render') : t('Select a Frame')}
-                </Button>
-            </div>
+            </PieConfigProvider>
         </ConfigProvider>
     );
 }

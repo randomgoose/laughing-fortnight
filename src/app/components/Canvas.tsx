@@ -10,8 +10,8 @@ import {usePinch} from 'react-use-gesture';
 import {useSpring, to} from '@react-spring/core';
 import {animated} from '@react-spring/web';
 import {Button, Space, Radio, message} from 'antd';
-import {ArrowsAltOutlined, ShrinkOutlined} from '@ant-design/icons';
-import {setHideInterface} from '../features/app/appSlice';
+import {AimOutlined, ArrowsAltOutlined, ShrinkOutlined} from '@ant-design/icons';
+import {setHideInterface, setPartialState} from '../features/app/appSlice';
 import DimensionIndicator from './DimensionIndicator';
 import {useTranslation} from 'react-i18next';
 
@@ -27,8 +27,6 @@ export default function Canvas() {
         config: {mass: 5, tension: 350, friction: 80},
     }));
 
-    React.useEffect(() => {}, [zoom]);
-
     const domTarget = React.useRef(null);
     const ref = React.useRef(null);
 
@@ -39,13 +37,14 @@ export default function Canvas() {
             chart = <VisLineChart />;
             break;
         case 'pie':
-            chart = <VisPieChart />;
+            chart = <VisPieChart id={'pie'} />;
             break;
         case 'bar':
             chart = <VisBarChart />;
             break;
         default:
             chart = <VisLineChart />;
+            break;
     }
 
     const bind = usePinch(
@@ -67,8 +66,7 @@ export default function Canvas() {
                 style={{
                     scale: to([scale, zoom], (s, z) => {
                         if (s + z >= 0) {
-                            if (chartType === 'line') dispatch(setLine({scale: s + z}));
-                            if (chartType === 'bar') dispatch(setBar({scale: s + z}));
+                            dispatch(setPartialState({scale: s + z}));
                             return s + z;
                         }
                     }),
@@ -101,6 +99,13 @@ export default function Canvas() {
                 ) : (
                     <Button icon={<ShrinkOutlined />} onClick={() => dispatch(setHideInterface(false))} />
                 )}
+                <Button
+                    icon={<AimOutlined />}
+                    onClick={() => {
+                        dispatch(setPartialState({scale: 1}));
+                        set({scale: 1, zoom: 0});
+                    }}
+                ></Button>
             </Space>
         </div>
     );

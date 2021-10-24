@@ -28,7 +28,6 @@ const VisBarChart = () => {
         height,
         x,
         y,
-        scale,
         indexBy,
         legends,
         render,
@@ -37,6 +36,8 @@ const VisBarChart = () => {
         axisBottom,
         // activeIndex,
     } = useSelector((state: RootState) => state.bar);
+
+    const {scale} = useSelector((state: RootState) => state.app);
 
     const dispatch = useDispatch();
 

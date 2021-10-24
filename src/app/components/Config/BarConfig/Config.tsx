@@ -29,16 +29,5 @@ export default function Config() {
         </Tabs>
     );
 
-    return (
-        <div
-            className={'Config'}
-            style={{
-                height: '100%',
-                width: 200,
-                flexShrink: 0,
-            }}
-        >
-            {activeIndex >= 0 ? <BarConfig /> : config}
-        </div>
-    );
+    return <div className={'Config h-full w-48 flex-shrink-0'}>{activeIndex >= 0 ? <BarConfig /> : config}</div>;
 }

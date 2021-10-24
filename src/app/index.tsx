@@ -3,10 +3,13 @@ import * as ReactDOM from 'react-dom';
 import App from './App';
 import {Provider} from 'react-redux';
 import {store} from './redux/store';
+import {RecoilRoot} from 'recoil';
 
 ReactDOM.render(
     <Provider store={store}>
-        <App />
+        <RecoilRoot>
+            <App />
+        </RecoilRoot>
     </Provider>,
     document.getElementById('react-page')
 );
