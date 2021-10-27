@@ -1,8 +1,10 @@
 import * as React from 'react';
-import {FcSettings} from 'react-icons/fc';
+import {FcAbout, FcPieChart, FcSettings} from 'react-icons/fc';
 import {Tabs} from 'antd';
 import {StyledTabPane} from '../../StyledComponents/StyledComponents';
 import GeneralConfig from './GeneralConfig';
+import ArcConfig from './ArcConfig';
+import LegendConfig from '../General/LegendConfig';
 
 export default function PieConfig() {
     const config = (
@@ -10,12 +12,12 @@ export default function PieConfig() {
             <StyledTabPane key={'general'} tab={<FcSettings />}>
                 <GeneralConfig />
             </StyledTabPane>
-            {/* <StyledTabPane key={'axes'} tab={'Axis'}></StyledTabPane>
-                <StyledTabPane key={'grid'} tab={'Grid'}></StyledTabPane>
-                <StyledTabPane key={'legend'} tab={'Legend'}></StyledTabPane>
-                <StyledTabPane key={'data'} tab={'Data'}></StyledTabPane>
-                <StyledTabPane key={'lines'} tab={'Lines'}></StyledTabPane>
-                <StyledTabPane key={'points'} tab={'Points'}></StyledTabPane> */}
+            <StyledTabPane key={'arc'} tab={<FcPieChart />}>
+                <ArcConfig />
+            </StyledTabPane>
+            <StyledTabPane key={'legend'} tab={<FcAbout />}>
+                <LegendConfig />
+            </StyledTabPane>
         </Tabs>
     );
 

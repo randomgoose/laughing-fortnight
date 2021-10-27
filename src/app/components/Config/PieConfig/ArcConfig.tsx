@@ -7,7 +7,7 @@ import {useRecoilState} from 'recoil';
 import {pieStateFamily, PieState} from '../../../atoms/pieStateFamily';
 import MarginInput from '../../CustomInput/MarginInput';
 
-export default function GeneralConfig() {
+export default function ArcConfig() {
     const {t} = useTranslation();
     const [pie, setPie] = useRecoilState(pieStateFamily('pie'));
 
@@ -22,14 +22,14 @@ export default function GeneralConfig() {
                 initialValues={initialValues}
                 onValuesChange={(changedValues) => setPie({...pie, ...changedValues})}
             >
-                <Form.Item name={'innerRadius'} label={t('Inner Radius')}>
-                    <Slider min={0} max={1} step={0.01} />
+                <Form.Item name={'enableArcLabels'} label={t('Enable arc labels')} valuePropName={'checked'}>
+                    <Switch />
                 </Form.Item>
-                <Form.Item name={'startAngle'} label={t('Start Angle')}>
-                    <Slider min={-180} max={360} step={1} />
+                <Form.Item name={'arcLabelsRadiusOffset'} label={t('Arc label radius offset')}>
+                    <Slider min={0} max={2} step={0.1} />
                 </Form.Item>
-                <Form.Item name={'endAngle'} label={t('End Angle')}>
-                    <Slider min={-180} max={360} step={1} />
+                <Form.Item name={'arcLabelSkipAngle'} label={t('End Angle')}>
+                    <Slider min={0} max={45} step={1} />
                 </Form.Item>
                 <Form.Item name={'padAngle'} label={t('Pad Angle')}>
                     <Slider min={0} max={45} step={1} />
@@ -39,6 +39,15 @@ export default function GeneralConfig() {
                 </Form.Item>
                 <Form.Item name={'margin'} label={t('Margin')}>
                     <MarginInput />
+                </Form.Item>
+                <Form.Item name={'cornerRadius'} label={t('Corner Radius')}>
+                    <Slider />
+                </Form.Item>
+                <Form.Item name={'activeOuterRadiusOffset'} label={t('Active outer radius offset')}>
+                    <Slider />
+                </Form.Item>
+                <Form.Item name={'activeInnerRadiusOffset'} label={t('Active inner radius offset')}>
+                    <Slider />
                 </Form.Item>
             </Form>
         </ConfigPage>

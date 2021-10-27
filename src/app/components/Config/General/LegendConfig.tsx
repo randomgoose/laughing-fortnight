@@ -19,6 +19,8 @@ import {FcAbout} from 'react-icons/fc';
 import {StyledCollapsePanel} from '../../StyledComponents/StyledComponents';
 import {baseLegend} from '../../../data/baseLegend';
 import {useTranslation} from 'react-i18next';
+import {useRecoilState} from 'recoil';
+import {pieStateFamily} from '../../../atoms/pieStateFamily';
 
 export default () => {
     const dispatch = useDispatch();
@@ -27,6 +29,7 @@ export default () => {
     useThrottle(line.legends, {wait: 500});
     useThrottle(bar.legends, {wait: 500});
     const {t} = useTranslation();
+    const [pie, setPie] = useRecoilState(pieStateFamily('pie'));
 
     const addLegend = React.useCallback(() => {
         switch (chartType) {
@@ -38,8 +41,10 @@ export default () => {
                     barSlice.actions.setPartialState({legends: [...bar.legends, {...baseLegend[0], dataFrom: 'keys'}]})
                 );
                 break;
+            case 'pie':
+                setPie({...pie, legends: pie.legends ? [...pie.legends, {...baseLegend[0]}] : [{...baseLegend[0]}]});
         }
-    }, [line.legends, chartType, bar.legends]);
+    }, [line.legends, chartType, bar.legends, pie.legends]);
 
     const getLegends = React.useCallback(() => {
         switch (chartType) {
@@ -47,8 +52,10 @@ export default () => {
                 return line.legends;
             case 'bar':
                 return bar.legends;
+            case 'pie':
+                return pie.legends ? pie.legends : [];
         }
-    }, [line.legends, bar.legends, chartType]);
+    }, [line.legends, bar.legends, chartType, pie.legends]);
 
     const deleteLegendByIndex = React.useCallback(
         (index: number) => {
@@ -59,9 +66,12 @@ export default () => {
                 case 'bar':
                     dispatch(barSlice.actions.removeLegendByIndex(index));
                     break;
+                case 'pie':
+                    setPie({...pie, legends: pie.legends.filter((_legend, i) => i !== index)});
+                    break;
             }
         },
-        [line.legends, chartType, bar.legends]
+        [line.legends, chartType, bar.legends, pie.legends]
     );
 
     return (
@@ -104,6 +114,20 @@ export default () => {
                                                     newLegend: {...changedValues, dataFrom: 'keys'},
                                                 })
                                             );
+                                        case 'pie':
+                                            setPie((pie) => {
+                                                const legend = {...pie.legends[index]};
+                                                const newLegend = Object.assign(legend, changedValues);
+
+                                                const temp = [...pie.legends];
+                                                temp.splice(index, 1, newLegend);
+
+                                                console.log(temp);
+                                                return {
+                                                    ...pie,
+                                                    legends: temp,
+                                                };
+                                            });
                                             break;
                                     }
                                 }}
