@@ -14,12 +14,15 @@ import {AimOutlined, ArrowsAltOutlined, ShrinkOutlined} from '@ant-design/icons'
 import {setHideInterface, setPartialState} from '../features/app/appSlice';
 import DimensionIndicator from './DimensionIndicator';
 import {useTranslation} from 'react-i18next';
+import {useRecoilState} from 'recoil';
+import {pieStateFamily} from '../atoms/pieStateFamily';
 
 export default function Canvas() {
     const {chartType, hideInterface} = useSelector((state: RootState) => state.app);
     const {line, bar} = useSelector((state: RootState) => state);
     const dispatch = useDispatch();
     const {t} = useTranslation();
+    const [pie, setPie] = useRecoilState(pieStateFamily('pie'));
 
     const [{zoom, scale}, set] = useSpring(() => ({
         scale: 1,
@@ -81,6 +84,7 @@ export default function Canvas() {
                         message.info(t(`Rendering ${e.target.value} component`));
                         if (chartType === 'line') dispatch(setLine({render: e.target.value}));
                         if (chartType === 'bar') dispatch(setBar({render: e.target.value}));
+                        if (chartType === 'pie') setPie({...pie, render: e.target.value});
                     }}
                     options={[
                         {

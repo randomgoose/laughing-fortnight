@@ -8,6 +8,7 @@ export interface PieState extends PieSvgProps<DefaultRawDatum> {
     x: number;
     y: number;
     scale: number;
+    render: 'svg' | 'canvas';
 }
 
 export const pieStateFamily = atomFamily<PieState, any>({
@@ -15,11 +16,6 @@ export const pieStateFamily = atomFamily<PieState, any>({
     default: {
         // Base
         data: data,
-        scale: 1,
-        width: 400,
-        height: 300,
-        x: 400,
-        y: 100,
         innerRadius: 0,
         startAngle: 360,
         endAngle: 0,
@@ -53,5 +49,12 @@ export const pieStateFamily = atomFamily<PieState, any>({
         activeInnerRadiusOffset: 0,
         // Legends
         legends: [...baseLegend],
+        // Dimension
+        scale: 1,
+        width: 400,
+        height: 300,
+        x: 400,
+        y: 100,
+        render: 'svg',
     },
 });
