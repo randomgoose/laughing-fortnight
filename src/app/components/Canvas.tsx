@@ -14,15 +14,15 @@ import {AimOutlined, ArrowsAltOutlined, ShrinkOutlined} from '@ant-design/icons'
 import {setHideInterface, setPartialState} from '../features/app/appSlice';
 import DimensionIndicator from './DimensionIndicator';
 import {useTranslation} from 'react-i18next';
-import {useRecoilState} from 'recoil';
-import {pieStateFamily} from '../atoms/pieStateFamily';
+import {useAtom} from 'jotai';
+import {pieAtomFamily} from '../atoms/pieAtomFamily';
 
 export default function Canvas() {
     const {chartType, hideInterface} = useSelector((state: RootState) => state.app);
     const {line, bar} = useSelector((state: RootState) => state);
     const dispatch = useDispatch();
     const {t} = useTranslation();
-    const [pie, setPie] = useRecoilState(pieStateFamily('pie'));
+    const [pie, setPie] = useAtom(pieAtomFamily({id: 'pie'}));
 
     const [{zoom, scale}, set] = useSpring(() => ({
         scale: 1,

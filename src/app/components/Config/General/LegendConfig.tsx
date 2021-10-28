@@ -19,8 +19,8 @@ import {FcAbout} from 'react-icons/fc';
 import {StyledCollapsePanel} from '../../StyledComponents/StyledComponents';
 import {baseLegend} from '../../../data/baseLegend';
 import {useTranslation} from 'react-i18next';
-import {useRecoilState} from 'recoil';
-import {pieStateFamily} from '../../../atoms/pieStateFamily';
+import {pieAtomFamily} from '../../../atoms/pieAtomFamily';
+import {useAtom} from 'jotai';
 
 export default () => {
     const dispatch = useDispatch();
@@ -29,7 +29,7 @@ export default () => {
     useThrottle(line.legends, {wait: 500});
     useThrottle(bar.legends, {wait: 500});
     const {t} = useTranslation();
-    const [pie, setPie] = useRecoilState(pieStateFamily('pie'));
+    const [pie, setPie] = useAtom(pieAtomFamily({id: 'pie'}));
 
     const addLegend = React.useCallback(() => {
         switch (chartType) {

@@ -3,23 +3,19 @@ import {Form, Slider, Switch} from 'antd';
 import {useTranslation} from 'react-i18next';
 import {FcSettings} from 'react-icons/fc';
 import ConfigPage from '../ConfigPage';
-import {useRecoilState} from 'recoil';
-import {pieStateFamily, PieState} from '../../../atoms/pieStateFamily';
+import {useAtom} from 'jotai';
+import {pieAtomFamily} from '../../../atoms/pieAtomFamily';
 import MarginInput from '../../CustomInput/MarginInput';
 
 export default function GeneralConfig() {
     const {t} = useTranslation();
-    const [pie, setPie] = useRecoilState(pieStateFamily('pie'));
-
-    const initialValues: PieState = {
-        ...pie,
-    };
+    const [pie, setPie] = useAtom(pieAtomFamily({id: 'pie'}));
 
     return (
         <ConfigPage title={t('General')} icon={<FcSettings />}>
             <Form
                 layout={'vertical'}
-                initialValues={initialValues}
+                initialValues={{...pie}}
                 onValuesChange={(changedValues) => setPie({...pie, ...changedValues})}
             >
                 <Form.Item name={'innerRadius'} label={t('Inner Radius')}>

@@ -103,7 +103,7 @@ export default function Gallery() {
                             <DataSource />
                         ) : dataSource === 'mock' ? (
                             <div className={'h-60'}>
-                                <DataMock />
+                                {chartType !== 'pie' ? <DataMock /> : null}
                                 <DataTable />
                             </div>
                         ) : dataSource === 'file' ? (
