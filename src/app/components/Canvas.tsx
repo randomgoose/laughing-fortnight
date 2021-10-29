@@ -50,6 +50,27 @@ export default function Canvas() {
             break;
     }
 
+    const getWidth = () => {
+        switch (chartType) {
+            case 'line':
+                return line.width;
+            case 'bar':
+                return bar.width;
+            case 'pie':
+                return pie.width;
+        }
+    };
+    const getHeight = () => {
+        switch (chartType) {
+            case 'line':
+                return line.height;
+            case 'bar':
+                return bar.height;
+            case 'pie':
+                return pie.height;
+        }
+    };
+
     const bind = usePinch(
         ({offset: [d]}) => {
             set({zoom: d / 1600});
@@ -57,12 +78,17 @@ export default function Canvas() {
         {domTarget, eventOptions: {passive: false}}
     );
 
+    // const menu = (
+    //     <Menu>
+    //         <Menu.Item key="2">2nd menu item</Menu.Item>
+    //         <Menu.Item key="3">3rd menu item</Menu.Item>
+    //     </Menu>
+    // )
+
     return (
+        // <Dropdown overlay={menu} trigger={['contextMenu']}>
         <div {...bind()} className={'canvas'} ref={domTarget}>
-            <DimensionIndicator
-                width={chartType === 'line' ? line.width : chartType === 'bar' ? bar.width : 0}
-                height={chartType === 'line' ? line.height : chartType === 'bar' ? bar.height : 0}
-            />
+            <DimensionIndicator width={getWidth()} height={getHeight()} />
             <animated.div
                 ref={ref}
                 className={'w-full h-full absolute'}
@@ -112,5 +138,6 @@ export default function Canvas() {
                 ></Button>
             </Space>
         </div>
+        // </Dropdown>
     );
 }

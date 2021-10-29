@@ -29,7 +29,7 @@ export const pieAtomFamily = atomFamily(
             margin: {top: 40, right: 80, bottom: 80, left: 80},
             // Style
             // colors: { schema: 'nivo' },
-            borderColor: {from: 'color', modifiers: [['darker', 1]]},
+            borderColor: {from: 'color'},
             borderWidth: 0,
             // Arc Labels
             enableArcLabels: true,
