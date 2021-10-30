@@ -19,9 +19,9 @@ export default function DataTable() {
                 case 'line':
                     return <LineDataTable id={activeChart.id} />;
                 case 'bar':
-                    return <BarDataTable />;
+                    return <BarDataTable id={activeChart.id} />;
                 case 'pie':
-                    return <PieDataTable />;
+                    return <PieDataTable id={activeChart.id} />;
             }
         } else {
             return <Empty description={t('Select a chart to view its data')} />;

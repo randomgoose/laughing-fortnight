@@ -4,16 +4,14 @@ import {useImmerAtom} from 'jotai/immer';
 import {useTranslation} from 'react-i18next';
 import EditableDiv from '../../CustomInput/EditableDiv';
 import {pieAtomFamily} from '../../../atoms/pieAtomFamily';
-import {useAtom} from 'jotai';
-import {appAtom} from '../../../atoms/appAtom';
+import {Param} from '../../../atoms/appAtom';
 import {usePie} from '../../../hooks/usePie';
 import {DeleteOutlined} from '@ant-design/icons';
 
-export default function PieDataTable() {
-    const [{activeKey}] = useAtom(appAtom);
-    const [pie, setPie] = useImmerAtom(pieAtomFamily({id: activeKey}));
+export default function PieDataTable({id}: Param) {
+    const [pie, setPie] = useImmerAtom(pieAtomFamily({id}));
     const {t} = useTranslation();
-    const {addArc, removeArcById, changeArcValueById} = usePie(activeKey);
+    const {addArc, removeArcById, changeArcValueById} = usePie(id);
 
     const columns = [
         {dataIndex: 'id', title: t('ID')},
@@ -63,6 +61,7 @@ export default function PieDataTable() {
 
     return (
         <Table
+            rowKey={'id'}
             dataSource={pie.data}
             columns={columns}
             scroll={{y: 160}}

@@ -2,8 +2,6 @@ import * as React from 'react';
 import {DefaultRawDatum, ResponsivePie} from '@nivo/pie';
 import StyledRnd from '../StyledComponents/StyledRnd';
 import {pieAtomFamily} from '../../atoms/pieAtomFamily';
-import {RootState} from '../../redux/store';
-import {useSelector} from 'react-redux';
 import {Menu, Dropdown} from 'antd';
 import {ComputedDatum} from '@nivo/bar';
 import {useTranslation} from 'react-i18next';
@@ -17,8 +15,6 @@ export default function VisPieChart({id}: {id: string}) {
     const [activeArc, setActiveArc] =
         React.useState<Omit<ComputedDatum<DefaultRawDatum>, 'index' | 'indexValue'>>(null);
     const {t} = useTranslation();
-
-    const {scale} = useSelector((state: RootState) => state.app);
     const {addArc, removeArcById} = usePie(id);
 
     function onDragStop(_e, d) {
@@ -57,7 +53,7 @@ export default function VisPieChart({id}: {id: string}) {
             onMouseDown={() => {
                 setApp((app) => ({...app, activeKey: id}));
             }}
-            scale={scale}
+            scale={app.scale}
             width={pie.width}
             height={pie.height}
             x={pie.x}
