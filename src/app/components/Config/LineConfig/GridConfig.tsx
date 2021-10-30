@@ -3,13 +3,14 @@ import {Form, Space, Switch, Typography} from 'antd';
 import * as React from 'react';
 import {useTranslation} from 'react-i18next';
 import {FcGrid} from 'react-icons/fc';
-import {useDispatch, useSelector} from 'react-redux';
-import {setPartialState} from '../../../features/chart/lineChartSlice';
-import {RootState} from '../../../redux/store';
+import {Param} from '../../../atoms/appAtom';
+import {useAtom} from 'jotai';
+import {lineAtomFamily} from '../../../atoms/lineAtomFamily';
+import {useLine} from '../../../hooks/useLine';
 
-export default function GridConfig() {
-    const dispatch = useDispatch();
-    const {showGridX, showGridY} = useSelector((state: RootState) => state.line);
+export default function GridConfig({id}: Param) {
+    const [{enableGridX, enableGridY}] = useAtom(lineAtomFamily({id}));
+    const {setPartialState} = useLine(id);
     const {t} = useTranslation();
     return (
         <>
@@ -21,15 +22,15 @@ export default function GridConfig() {
             </Typography.Title>
             <Form
                 initialValues={{
-                    showGridX,
-                    showGridY,
+                    enableGridX,
+                    enableGridY,
                 }}
                 onValuesChange={(changedValues) => {
-                    dispatch(setPartialState(changedValues));
+                    setPartialState(changedValues);
                 }}
             >
                 <Form.Item
-                    name={'showGridX'}
+                    name={'enableGridX'}
                     label={
                         <Space align={'center'}>
                             <MenuOutlined rotate={90} />
@@ -37,10 +38,10 @@ export default function GridConfig() {
                         </Space>
                     }
                 >
-                    <Switch size={'small'} checked={showGridX}></Switch>
+                    <Switch size={'small'} checked={enableGridX}></Switch>
                 </Form.Item>
                 <Form.Item
-                    name={'showGridY'}
+                    name={'enableGridY'}
                     label={
                         <Space align={'center'}>
                             <MenuOutlined />
@@ -48,7 +49,7 @@ export default function GridConfig() {
                         </Space>
                     }
                 >
-                    <Switch size={'small'} checked={showGridY}></Switch>
+                    <Switch size={'small'} checked={enableGridY}></Switch>
                 </Form.Item>
             </Form>
         </>

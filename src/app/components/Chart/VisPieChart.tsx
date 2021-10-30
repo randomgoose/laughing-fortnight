@@ -9,9 +9,11 @@ import {ComputedDatum} from '@nivo/bar';
 import {useTranslation} from 'react-i18next';
 import {useImmerAtom} from 'jotai/immer';
 import {usePie} from '../../hooks/usePie';
+import {appAtom} from '../../atoms/appAtom';
 
 export default function VisPieChart({id}: {id: string}) {
     const [pie, setPie] = useImmerAtom(pieAtomFamily({id}));
+    const [app, setApp] = useImmerAtom(appAtom);
     const [activeArc, setActiveArc] =
         React.useState<Omit<ComputedDatum<DefaultRawDatum>, 'index' | 'indexValue'>>(null);
     const {t} = useTranslation();
@@ -52,6 +54,9 @@ export default function VisPieChart({id}: {id: string}) {
 
     return (
         <StyledRnd
+            onMouseDown={() => {
+                setApp((app) => ({...app, activeKey: id}));
+            }}
             scale={scale}
             width={pie.width}
             height={pie.height}
@@ -59,6 +64,8 @@ export default function VisPieChart({id}: {id: string}) {
             y={pie.y}
             onDragStop={onDragStop}
             onResize={onResize}
+            style={{background: id === app.activeKey ? 'rgba(123, 97, 255, .05)' : ''}}
+            showHandles={id === app.activeKey}
         >
             <Dropdown overlay={menu} trigger={['click']}>
                 <ResponsivePie

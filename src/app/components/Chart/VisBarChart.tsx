@@ -34,7 +34,6 @@ const VisBarChart = () => {
         colors,
         axisLeft,
         axisBottom,
-        // activeIndex,
     } = useSelector((state: RootState) => state.bar);
 
     const {scale} = useSelector((state: RootState) => state.app);
@@ -45,12 +44,7 @@ const VisBarChart = () => {
         if (data.length > 10) {
             message.info(t('Switched to canvas rendering for better performance.'));
         }
-        // dispatch(setPartialState({activeIndex: -1}));
     }, [data]);
-
-    // React.useEffect(() => {
-    //     console.log(activeIndex);
-    // }, [activeIndex]);
 
     function onDragStop(_e, d) {
         dispatch(setPartialState({x: d.x, y: d.y}));

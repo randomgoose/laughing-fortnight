@@ -3,10 +3,7 @@ import * as React from 'react';
 import {FcPuzzle} from 'react-icons/fc';
 import {useSelector} from 'react-redux';
 import {RootState} from '../redux/store';
-import DataMock from './Data/DataMock/DataMock';
-import DataSource from './Data/DataSource';
 import DataTable from './Data/DataTable';
-import DataUpload from './Data/DataUpload';
 import {Rnd} from 'react-rnd';
 import {CameraFilled} from '@ant-design/icons';
 import styled from 'styled-components';
@@ -36,7 +33,7 @@ const Shutter = styled.div`
 `;
 
 export default function Gallery() {
-    const {dataSource, chartType, snapshots} = useSelector((state: RootState) => state.app);
+    const {chartType, snapshots} = useSelector((state: RootState) => state.app);
     const {bar, line} = useSelector((state: RootState) => state);
     const [height, setHeight] = React.useState('320px');
     const [width, setWidth] = React.useState('100%');
@@ -99,16 +96,7 @@ export default function Gallery() {
             <div className={'Gallery'} style={{padding: '0 12px', width: '100%', height: '100%', background: 'white'}}>
                 <Tabs defaultActiveKey={'data'} style={{height: '100%'}}>
                     <Tabs.TabPane key={'data'} tab={t('Data')}>
-                        {!dataSource ? (
-                            <DataSource />
-                        ) : dataSource === 'mock' ? (
-                            <div className={'h-60'}>
-                                {chartType !== 'pie' ? <DataMock /> : null}
-                                <DataTable />
-                            </div>
-                        ) : dataSource === 'file' ? (
-                            <DataUpload />
-                        ) : null}
+                        <DataTable />
                     </Tabs.TabPane>
                     <Tabs.TabPane className={'h-full'} key={'gallery'} tab={t('Samples')}>
                         <div className={'Gallery__title flex items-center mb-2'}>

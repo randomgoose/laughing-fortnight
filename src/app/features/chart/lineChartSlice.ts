@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {data} from '../../data/baseData';
+import {data} from '../../data/baseLineData';
 import {Serie, LineProps, LineSvgProps} from '@nivo/line';
 import {OrdinalColorScaleConfig} from '@nivo/colors';
 import {ColorSchemeId} from '@nivo/colors';

@@ -1,19 +1,13 @@
-//@ts-nocheck
-import {PlusOutlined} from '@ant-design/icons';
-import {Table, Tabs, Button} from 'antd';
+import {EyeInvisibleOutlined, EyeOutlined} from '@ant-design/icons';
+import {Button, Table} from 'antd';
 import * as React from 'react';
-import {useTranslation} from 'react-i18next';
-import {useDispatch, useSelector} from 'react-redux';
-import {setSerieId, setData, addValue} from '../../../features/chart/lineChartSlice';
-import {RootState} from '../../../redux/store';
+import {useLine} from '../../../hooks/useLine';
 import EditableDiv from '../../CustomInput/EditableDiv';
 
-export default function LineDataTable() {
-    const {data} = useSelector((state: RootState) => state.line);
-    const dispatch = useDispatch();
-    const {t} = useTranslation();
+export default function LineDataTable({id}: {id: string}) {
+    const {line, setSerieValue, setSerieId, setPartialState} = useLine(id);
 
-    const newData = data
+    const newData = line.data
         .map((datum) =>
             datum.data.map((d) => ({
                 [datum.id]: d.y,
@@ -33,32 +27,38 @@ export default function LineDataTable() {
             size={'small'}
             scroll={{y: 120}}
             dataSource={newData}
+            rowKey={'x'}
             columns={[
                 {
                     dataIndex: 'x',
                     title: 'x',
                 },
-                ...data.map((datum, index) => ({
+                ...line.data.map((datum, index) => ({
                     dataIndex: datum.id,
                     title: (
-                        <EditableDiv
-                            value={datum.id}
-                            onFinishEditing={(value: string) => dispatch(setSerieId({id: datum.id, newId: value}))}
-                        />
+                        <div className={'flex items-center gap-2'}>
+                            <EditableDiv
+                                value={datum.id}
+                                onFinishEditing={(value: string) => {
+                                    setSerieId(datum.id as string, value);
+                                }}
+                            />
+                            <Button
+                                icon={line.lines.includes(datum.id) ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+                                onClick={() => {
+                                    line.lines.includes(datum.id)
+                                        ? setPartialState({lines: line.lines.filter((id) => id !== datum.id)})
+                                        : setPartialState({lines: [...line.lines, datum.id]});
+                                }}
+                            />
+                        </div>
                     ),
                     render: (value, record) => (
                         <EditableDiv
                             value={parseFloat(value)}
                             key={value}
                             onFinishEditing={(value: number) => {
-                                dispatch(
-                                    setData({
-                                        serieIndex: index,
-                                        datumIndex: newData.indexOf(record),
-                                        key: 'y',
-                                        value,
-                                    })
-                                );
+                                setSerieValue(index, newData.indexOf(record), 'y', value);
                             }}
                         />
                     ),

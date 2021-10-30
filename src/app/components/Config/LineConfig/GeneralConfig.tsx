@@ -1,14 +1,15 @@
 import * as React from 'react';
 import {Space, Slider, Select, Form, Switch, Typography} from 'antd';
 import MarginInput from '../../CustomInput/MarginInput';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '../../../redux/store';
-import {ChartState, setPartialState} from '../../../features/chart/lineChartSlice';
 import {colorSchemes} from '@nivo/colors';
 import {AreaChartOutlined, ColumnWidthOutlined, HighlightOutlined} from '@ant-design/icons';
 import {FcSettings} from 'react-icons/fc';
 import _ from 'lodash';
 import {useTranslation} from 'react-i18next';
+import {useLine} from '../../../hooks/useLine';
+import {useAtom} from 'jotai';
+import {appAtom} from '../../../atoms/appAtom';
+import {LineState} from '../../../atoms/lineAtomFamily';
 
 const colorSchemeList = Object.keys(colorSchemes);
 
@@ -34,22 +35,16 @@ const blendModeList = [
 ];
 
 export default function GeneralConfig() {
-    const dispatch = useDispatch();
-    const {scale, colors, enableArea, margin, areaBaselineValue, areaOpacity, areaBlendMode, data} = useSelector(
-        (state: RootState) => state.line
-    );
+    const [app] = useAtom(appAtom);
+    const {line, setPartialState} = useLine(app.activeKey);
 
     const {t} = useTranslation();
 
     const [form] = Form.useForm();
 
     React.useEffect(() => {
-        form.setFieldsValue({scale, enableArea, margin, areaBaselineValue, areaOpacity, areaBlendMode});
-    }, [scale, enableArea, margin, areaBaselineValue, areaOpacity, areaBlendMode]);
-
-    React.useEffect(() => {
-        console.log(enableArea);
-    }, [enableArea]);
+        form.setFieldsValue({...line});
+    }, [line]);
 
     return (
         <>
@@ -62,28 +57,12 @@ export default function GeneralConfig() {
             <Form
                 form={form}
                 layout={'vertical'}
-                onValuesChange={(changedValues: Partial<ChartState>) => {
-                    if (changedValues.colors) {
-                        dispatch(setPartialState({colors: {scheme: changedValues.colors}}));
-                    } else if (changedValues.xScale) {
-                        dispatch(setPartialState({xScale: {type: changedValues.xScale}}));
-                    } else if (changedValues.yScale) {
-                        dispatch(setPartialState({yScale: {type: changedValues.yScale}}));
-                    } else {
-                        dispatch(setPartialState(changedValues));
-                    }
+                onValuesChange={(changedValues: Partial<LineState>) => {
+                    setPartialState(changedValues);
                 }}
-                initialValues={{
-                    scale: scale,
-                    colors: colors['scheme'],
-                    margin: margin,
-                    enableArea: enableArea,
-                    areaOpacity,
-                    areaBlendMode,
-                    areaBaselineValue,
-                }}
+                initialValues={{...line}}
             >
-                <Form.Item name={'xScale'} label={'xScale'}>
+                <Form.Item name={['xScale', 'type']} label={'xScale'}>
                     <Select
                         options={scaleTypes.map((type) => ({
                             title: type,
@@ -91,7 +70,7 @@ export default function GeneralConfig() {
                         }))}
                     ></Select>
                 </Form.Item>
-                <Form.Item name={'yScale'} label={'yScale'}>
+                <Form.Item name={['yScale', 'type']} label={'yScale'}>
                     <Select
                         options={scaleTypes.map((type) => ({
                             title: type,
@@ -107,7 +86,7 @@ export default function GeneralConfig() {
                             {t('Color')}
                         </Space>
                     }
-                    name={'colors'}
+                    name={['colors', 'scheme']}
                 >
                     <Select style={{width: '100%'}}>
                         {colorSchemeList.map((scheme) => (
@@ -145,7 +124,7 @@ export default function GeneralConfig() {
                         min={0}
                         max={
                             _.maxBy(
-                                data.map((datum) => _.maxBy(datum.data, (d) => d.y)),
+                                line.data.map((datum) => _.maxBy(datum.data, (d) => d.y)),
                                 (d) => d.y
                             ).y
                         }

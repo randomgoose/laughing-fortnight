@@ -5,7 +5,7 @@ import {atomFamily} from 'jotai/utils';
 import {atom} from 'jotai';
 
 export interface PieState extends PieSvgProps<DefaultRawDatum> {
-    key: string;
+    id: string;
     data: DefaultRawDatum[];
     x: number;
     y: number;

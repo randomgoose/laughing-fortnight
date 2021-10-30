@@ -1,7 +1,7 @@
-import {useHover} from 'ahooks';
 import * as React from 'react';
 import {Rnd} from 'react-rnd';
 import {Handle} from './StyledComponents';
+import classNames from 'classnames';
 interface Props {
     children: React.ReactNode;
     width: number;
@@ -12,33 +12,37 @@ interface Props {
     onResize: (e, direction, ref, delta, position) => void;
     onDragStop: (e, d) => void;
     onMouseDown?: () => void;
+    style?: React.CSSProperties;
+    className?: string;
+    showHandles?: boolean;
 }
 
 const handles = ['top', 'topLeft', 'topRight', 'left', 'right', 'bottomLeft', 'bottom', 'bottomRight'];
 
-export default function StyledRnd({children, width, height, x, y, scale, onMouseDown, onResize, onDragStop}: Props) {
-    const [hovering, setHovering] = React.useState(false);
+export default function StyledRnd({
+    children,
+    width,
+    height,
+    x,
+    y,
+    scale,
+    onMouseDown,
+    onResize,
+    onDragStop,
+    className,
+    style,
+    showHandles,
+}: Props) {
     const ref = React.useRef();
-
-    const enableHovering = React.useCallback(() => {
-        setHovering(true);
-    }, []);
-
-    const isHovering = useHover(ref);
-
-    React.useEffect(() => {
-        setHovering(isHovering);
-    }, [isHovering]);
 
     function createHandle(handles: string[]) {
         const handleComponents = {};
         handles.map((handle) => {
             handleComponents[handle] = (
                 <Handle
-                    className={'Handle__' + handle}
+                    className={`Handle__${handle} bg-blue-600`}
                     pos={handle}
-                    hovering={hovering}
-                    onMouseOver={enableHovering}
+                    showHandles={showHandles}
                     scale={scale}
                 />
             );
@@ -50,7 +54,8 @@ export default function StyledRnd({children, width, height, x, y, scale, onMouse
         <div ref={ref}>
             <Rnd
                 scale={scale}
-                className={'canvas'}
+                className={classNames(className, 'canvas')}
+                style={style}
                 onMouseDown={onMouseDown}
                 resizeHandleComponent={createHandle(handles)}
                 size={{

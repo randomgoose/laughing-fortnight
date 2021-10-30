@@ -2,9 +2,8 @@ import {Select, Slider, Form, Typography, Space} from 'antd';
 import * as React from 'react';
 import {useTranslation} from 'react-i18next';
 import {FcLineChart} from 'react-icons/fc';
-import {useDispatch, useSelector} from 'react-redux';
-import {setPartialState} from '../../../features/chart/lineChartSlice';
-import {RootState} from '../../../redux/store';
+import {Param} from '../../../atoms/appAtom';
+import {useLine} from '../../../hooks/useLine';
 
 const curveTypes = [
     'basis',
@@ -19,9 +18,8 @@ const curveTypes = [
     'stepBefore',
 ];
 
-export default function LinesConfig() {
-    const dispatch = useDispatch();
-    const {curve, lineWidth} = useSelector((state: RootState) => state.line);
+export default function LinesConfig({id}: Param) {
+    const {line, setPartialState} = useLine(id);
     const {t} = useTranslation();
     return (
         <>
@@ -33,10 +31,10 @@ export default function LinesConfig() {
             </Typography.Title>
             <Form
                 initialValues={{
-                    curve,
-                    lineWidth,
+                    curve: line.curve,
+                    lineWidth: line.lineWidth,
                 }}
-                onValuesChange={(changedValues) => dispatch(setPartialState(changedValues))}
+                onValuesChange={(changedValues) => setPartialState(changedValues)}
                 layout={'vertical'}
             >
                 <Form.Item name={'curve'} label={t('Curve')}>

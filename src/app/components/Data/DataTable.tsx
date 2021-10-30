@@ -1,18 +1,32 @@
+import {Empty} from 'antd';
+import {useAtom} from 'jotai';
 import * as React from 'react';
-import {useSelector} from 'react-redux';
-import {RootState} from '../../redux/store';
+import {useTranslation} from 'react-i18next';
+import {appAtom} from '../../atoms/appAtom';
 import BarDataTable from './DataTable/BarDataTable';
 import LineDataTable from './DataTable/LineDataTable';
 import PieDataTable from './DataTable/PieDataTable';
 
 export default function DataTable() {
-    const {chartType} = useSelector((state: RootState) => state.app);
+    const [app] = useAtom(appAtom);
+    const {t} = useTranslation();
 
     const createTable = React.useCallback(() => {
-        if (chartType === 'line') return <LineDataTable />;
-        if (chartType === 'bar') return <BarDataTable />;
-        if (chartType === 'pie') return <PieDataTable id={'pie'} />;
-    }, [chartType]);
+        const activeChart = app.charts.find((chart) => chart.id === app.activeKey);
+
+        if (activeChart) {
+            switch (activeChart.type) {
+                case 'line':
+                    return <LineDataTable id={activeChart.id} />;
+                case 'bar':
+                    return <BarDataTable />;
+                case 'pie':
+                    return <PieDataTable />;
+            }
+        } else {
+            return <Empty description={t('Select a chart to view its data')} />;
+        }
+    }, [app]);
 
     return createTable();
 }

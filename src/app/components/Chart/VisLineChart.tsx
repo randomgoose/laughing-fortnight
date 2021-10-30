@@ -1,104 +1,94 @@
 import * as React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '../../redux/store';
-import {LineSvgProps, ResponsiveLine, ResponsiveLineCanvas} from '@nivo/line';
-import {setPartialState} from '../../features/chart/lineChartSlice';
+import {ResponsiveLine, ResponsiveLineCanvas} from '@nivo/line';
 import StyledRnd from '../StyledComponents/StyledRnd';
+import {useImmerAtom} from 'jotai/immer';
+import {lineAtomFamily, LineState} from '../../atoms/lineAtomFamily';
+import {PrimitiveAtom, useAtom} from 'jotai';
+import {appAtom} from '../../atoms/appAtom';
+import DimensionIndicator from '../DimensionIndicator';
 
-export default function VisLineChart() {
-    const {
-        showXAxis,
-        showYAxis,
-        colors,
-        lines,
-        // showYAxis,
-        data,
-        showGridX,
-        showGridY,
-        margin,
-        lineWidth,
-        enablePoints,
-        pointColor,
-        xScale,
-        yScale,
-        // legendAlign,
-        // legendVerticalAlign,
-        // lines,
-        // showCartesianGrid,
-        // activeKey,
-        // scale,
-        axisBottom,
-        curve,
-        enableArea,
-        areaBaselineValue,
-        areaOpacity,
-        areaBlendMode,
-        pointSize,
-        legends,
-        width,
-        height,
-        x,
-        y,
-        render,
-    } = useSelector((state: RootState) => state.line);
-
-    const {scale} = useSelector((state: RootState) => state.app);
-
-    const dispatch = useDispatch();
+export default function VisLineChart({id}: {id: string}) {
+    const [{width, height, x, y, render, activeSerie, scale, showXAxis, showYAxis, data, lines, ...rest}, setLine] =
+        useImmerAtom(lineAtomFamily({id}) as PrimitiveAtom<LineState>);
+    const [app, setApp] = useAtom(appAtom);
 
     function onDragStop(_e, d) {
-        dispatch(setPartialState({x: d.x, y: d.y}));
+        setLine((line) => {
+            line.x = d.x;
+            line.y = d.y;
+        });
     }
 
     function onResize(_e, _direction, ref, _delta, position) {
-        dispatch(
-            setPartialState({
-                width: ref.style.width,
-                height: ref.style.height,
-                x: position.x,
-                y: position.y,
-            })
-        );
+        setLine((line) => {
+            line.width = ref.style.width;
+            line.height = ref.style.height;
+            line.x = position.x;
+            line.y = position.y;
+        });
     }
 
-    const props: LineSvgProps = {
-        margin,
-        data: data.filter((item) => lines.includes(item.id)),
-        enableGridX: showGridX,
-        enableGridY: showGridY,
-        xScale,
-        yScale,
-        yFormat: ' >-.2f',
-        axisBottom: showXAxis ? axisBottom : null,
-        axisLeft: showYAxis
-            ? {
-                  tickSize: 5,
-                  tickPadding: 5,
-                  tickRotation: 0,
-                  legend: 'count',
-                  legendOffset: -40,
-                  legendPosition: 'middle',
-              }
-            : null,
-        colors,
-        enablePoints,
-        pointColor,
-        pointSize,
-        pointBorderColor: {theme: 'background'},
-        pointLabelYOffset: -12,
-        curve,
-        enableArea,
-        areaBaselineValue,
-        areaOpacity,
-        areaBlendMode,
-        useMesh: true,
-        lineWidth,
-        legends,
-    };
+    // const props = {
+    //     margin,
+    //     data: data.filter((item) => lines.includes(item.id)),
+    //     enableGridX: showGridX,
+    //     enableGridY: showGridY,
+    //     xScale,
+    //     yScale,
+    //     yFormat: ' >-.2f',
+    //     axisBottom: showXAxis ? axisBottom : null,
+    //     axisLeft: showYAxis
+    //         ? {
+    //             tickSize: 5,
+    //             tickPadding: 5,
+    //             tickRotation: 0,
+    //             legend: 'count',
+    //             legendOffset: -40,
+    //             legendPosition: 'middle',
+    //         }
+    //         : null,
+    //     colors,
+    //     enablePoints,
+    //     pointColor,
+    //     pointSize,
+    //     pointBorderColor: { theme: 'background' },
+    //     pointLabelYOffset: -12,
+    //     curve,
+    //     enableArea,
+    //     areaBaselineValue,
+    //     areaOpacity,
+    //     areaBlendMode,
+    //     useMesh: true,
+    //     lineWidth,
+    //     legends,
+    // }
 
     return (
-        <StyledRnd scale={scale} width={width} height={height} x={x} y={y} onDragStop={onDragStop} onResize={onResize}>
-            {render === 'svg' ? <ResponsiveLine {...props} /> : <ResponsiveLineCanvas {...props} />}
+        <StyledRnd
+            onMouseDown={() => {
+                setApp((app) => ({...app, activeKey: id}));
+            }}
+            scale={scale}
+            width={width}
+            height={height}
+            x={x}
+            y={y}
+            onDragStop={onDragStop}
+            onResize={onResize}
+            style={{background: id === app.activeKey ? 'rgba(123, 97, 255, .05)' : ''}}
+            showHandles={id === app.activeKey}
+        >
+            {render === 'svg' ? (
+                <ResponsiveLine
+                    {...rest}
+                    axisBottom={showXAxis && rest.axisBottom}
+                    axisLeft={showYAxis && rest.axisLeft}
+                    data={data.filter((datum) => lines.includes(datum.id))}
+                />
+            ) : (
+                <ResponsiveLineCanvas {...rest} data={data.filter((datum) => lines.includes(datum.id))} />
+            )}
+            {id === app.activeKey ? <DimensionIndicator width={width} height={height} /> : null}
         </StyledRnd>
     );
 }

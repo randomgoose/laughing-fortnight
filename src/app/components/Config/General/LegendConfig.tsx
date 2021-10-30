@@ -21,8 +21,10 @@ import {baseLegend} from '../../../data/baseLegend';
 import {useTranslation} from 'react-i18next';
 import {pieAtomFamily} from '../../../atoms/pieAtomFamily';
 import {useAtom} from 'jotai';
+import {Param} from '../../../atoms/appAtom';
 
-export default () => {
+export default ({id}: Param) => {
+    console.log(id);
     const dispatch = useDispatch();
     const {line, bar} = useSelector((state: RootState) => state);
     const {chartType} = useSelector((state: RootState) => state.app);

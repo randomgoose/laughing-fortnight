@@ -24,10 +24,10 @@ export default function Config() {
                 <GridConfig />
             </StyledTabPane>
             <StyledTabPane key={'legend'} tab={<FcAbout />}>
-                <LegendConfig />
+                <LegendConfig id={'s'} />
             </StyledTabPane>
         </Tabs>
     );
 
-    return <div className={'Config h-full w-48 flex-shrink-0'}>{activeIndex >= 0 ? <BarConfig /> : config}</div>;
+    return activeIndex >= 0 ? <BarConfig /> : config;
 }

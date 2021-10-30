@@ -6,14 +6,24 @@ import ConfigPage from '../ConfigPage';
 import {useAtom} from 'jotai';
 import {pieAtomFamily} from '../../../atoms/pieAtomFamily';
 import MarginInput from '../../CustomInput/MarginInput';
+import {appAtom} from '../../../atoms/appAtom';
+import {useForm} from 'antd/lib/form/Form';
 
 export default function GeneralConfig() {
     const {t} = useTranslation();
-    const [pie, setPie] = useAtom(pieAtomFamily({id: 'pie'}));
+    const [app] = useAtom(appAtom);
+    const [pie, setPie] = useAtom(pieAtomFamily({id: app.activeKey}));
+
+    const [form] = useForm();
+
+    React.useEffect(() => {
+        form.setFieldsValue({...pie});
+    }, [pie]);
 
     return (
         <ConfigPage title={t('General')} icon={<FcSettings />}>
             <Form
+                form={form}
                 layout={'vertical'}
                 initialValues={{...pie}}
                 onValuesChange={(changedValues) => setPie({...pie, ...changedValues})}

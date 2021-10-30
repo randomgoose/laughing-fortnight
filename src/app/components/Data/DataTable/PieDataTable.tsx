@@ -4,26 +4,23 @@ import {useImmerAtom} from 'jotai/immer';
 import {useTranslation} from 'react-i18next';
 import EditableDiv from '../../CustomInput/EditableDiv';
 import {pieAtomFamily} from '../../../atoms/pieAtomFamily';
-import cryptoRandomString from 'crypto-random-string';
-import {generateRandomHexColor} from '../../../utils/generateRandomHexColor';
+import {useAtom} from 'jotai';
+import {appAtom} from '../../../atoms/appAtom';
+import {usePie} from '../../../hooks/usePie';
+import {DeleteOutlined} from '@ant-design/icons';
 
-export default function PieDataTable({id}: {id: string}) {
-    const [pie, setPie] = useImmerAtom(pieAtomFamily({id}));
+export default function PieDataTable() {
+    const [{activeKey}] = useAtom(appAtom);
+    const [pie, setPie] = useImmerAtom(pieAtomFamily({id: activeKey}));
     const {t} = useTranslation();
-
-    const addRow = () => {
-        const name = cryptoRandomString({length: 4});
-        setPie((pie) => {
-            pie.data.push({value: 100, label: name, id: name, color: generateRandomHexColor()});
-        });
-    };
+    const {addArc, removeArcById, changeArcValueById} = usePie(activeKey);
 
     const columns = [
         {dataIndex: 'id', title: t('ID')},
         {
             dataIndex: 'label',
             title: t('Label'),
-            render: (value, record) => (
+            render: (value: string, record) => (
                 <EditableDiv
                     value={value}
                     onFinishEditing={(value) => {
@@ -37,14 +34,28 @@ export default function PieDataTable({id}: {id: string}) {
         {
             dataIndex: 'value',
             title: t('Value'),
-            render: (value, record) => (
+            render: (value: number, record) => (
                 <EditableDiv
                     value={value}
                     onFinishEditing={(value) => {
-                        setPie((pie) => {
-                            pie.data.find((i) => i.id === record.id).value = value as number;
-                        });
+                        changeArcValueById(record.id, value as number);
                     }}
+                />
+            ),
+        },
+        {
+            dataIndex: 'id',
+            title: t('Action'),
+            render: (value: string) => (
+                <Button
+                    type={'ghost'}
+                    icon={
+                        <DeleteOutlined
+                            onClick={() => {
+                                removeArcById(value);
+                            }}
+                        />
+                    }
                 />
             ),
         },
@@ -55,7 +66,7 @@ export default function PieDataTable({id}: {id: string}) {
             dataSource={pie.data}
             columns={columns}
             scroll={{y: 160}}
-            footer={() => <Button onClick={addRow}>{t('Add Row')}</Button>}
+            footer={() => <Button onClick={addArc}>{t('Add Row')}</Button>}
         />
     );
 }

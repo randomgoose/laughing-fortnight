@@ -31,11 +31,7 @@ export const StyledCollapsePanel = styled(Collapse.Panel)`
 // `;
 
 export const Handle = styled.div`
-    width: ${(props) => `${8 / props.scale}px`};
-    height: ${(props) => `${8 / props.scale}px`};
-    border-radius: 10000px;
-    background: lightgray;
     position: absolute;
-    opacity: ${(props) => (props.hovering ? 1 : 0)};
+    opacity: ${(props) => (props.showHandles ? 1 : 0)};
     transition: opacity 0.2s;
 `;

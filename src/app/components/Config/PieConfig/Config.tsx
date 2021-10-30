@@ -8,7 +8,7 @@ import LegendConfig from '../General/LegendConfig';
 
 export default function PieConfig() {
     const config = (
-        <Tabs tabPosition={'left'} type={'card'} className={'h-full'}>
+        <Tabs tabPosition={'left'} type={'card'} className={'h-full w-full'}>
             <StyledTabPane key={'general'} tab={<FcSettings />}>
                 <GeneralConfig />
             </StyledTabPane>
@@ -16,10 +16,10 @@ export default function PieConfig() {
                 <ArcConfig />
             </StyledTabPane>
             <StyledTabPane key={'legend'} tab={<FcAbout />}>
-                <LegendConfig />
+                <LegendConfig id={'a'} />
             </StyledTabPane>
         </Tabs>
     );
 
-    return <div className={'Config h-full w-48 flex-shrink-0'}>{config}</div>;
+    return config;
 }
