@@ -1,7 +1,12 @@
+//@ts-nocheck
 import * as React from 'react';
 import {Rnd} from 'react-rnd';
 import {Handle} from './StyledComponents';
 import classNames from 'classnames';
+import {useClickAway} from 'ahooks';
+import {useAtom} from 'jotai';
+import {appAtom} from '../../atoms/appAtom';
+
 interface Props {
     children: React.ReactNode;
     width: number;
@@ -34,6 +39,11 @@ export default function StyledRnd({
     showHandles,
 }: Props) {
     const ref = React.useRef();
+    const [, setApp] = useAtom(appAtom);
+
+    useClickAway(() => {
+        // if (showHandles) setApp(app => ({ ...app, activeKey: '' }))
+    }, ref);
 
     function createHandle(handles: string[]) {
         const handleComponents = {};

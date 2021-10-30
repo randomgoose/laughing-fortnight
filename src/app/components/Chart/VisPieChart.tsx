@@ -71,8 +71,9 @@ export default function VisPieChart({id}: {id: string}) {
                 <ResponsivePie
                     {...pie}
                     onClick={(node) => {
-                        setActiveArc(node);
+                        id === app.activeKey && setActiveArc(node);
                     }}
+                    isInteractive={id === app.activeKey}
                 />
             </Dropdown>
 

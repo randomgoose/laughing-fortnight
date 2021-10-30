@@ -4,18 +4,19 @@ import * as React from 'react';
 import {SketchPicker} from 'react-color';
 import {useTranslation} from 'react-i18next';
 import {FcOrgUnit} from 'react-icons/fc';
-import {useDispatch, useSelector} from 'react-redux';
-import {setPartialState} from '../../../features/chart/lineChartSlice';
-import {RootState} from '../../../redux/store';
+import {Param} from '../../../atoms/appAtom';
+import {useLine} from '../../../hooks/useLine';
 import Label from '../../Typography/Label';
 
 const regHex = /^#?([a-f0-9]{6}|[a-f0-9]{3})$/;
 
-export default function PointsConfig() {
-    const dispatch = useDispatch();
-    const {pointSize, enablePoints, pointColor} = useSelector((state: RootState) => state.line);
+export default function PointsConfig({id}: Param) {
+    const {line, setPartialState} = useLine(id);
+    const {pointSize, enablePoints, pointColor} = line;
+
     const [showColorPicker, setShowColorPicker] = React.useState(true);
     const ref = React.useRef<HTMLDivElement>(null);
+
     const {t} = useTranslation();
 
     useClickAway(() => {
@@ -36,11 +37,11 @@ export default function PointsConfig() {
                 onValuesChange={(changedValues) => {
                     if (Object.keys(changedValues).includes('pointColor')) {
                         if (regHex.test(changedValues.pointColor)) {
-                            dispatch(setPartialState(changedValues));
+                            setPartialState(changedValues);
                         } else {
-                            dispatch(setPartialState({pointColor: JSON.parse(changedValues.pointColor)}));
+                            setPartialState({pointColor: JSON.parse(changedValues.pointColor)});
                         }
-                    } else dispatch(setPartialState(changedValues));
+                    } else setPartialState(changedValues);
                 }}
             >
                 <Form.Item
@@ -89,7 +90,7 @@ export default function PointsConfig() {
                             }}
                             color={pointColor}
                             onChange={(color) => {
-                                dispatch(setPartialState({pointColor: color.hex}));
+                                setPartialState({pointColor: color.hex});
                             }}
                         />
                     </>

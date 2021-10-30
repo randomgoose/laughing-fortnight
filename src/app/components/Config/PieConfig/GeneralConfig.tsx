@@ -6,13 +6,12 @@ import ConfigPage from '../ConfigPage';
 import {useAtom} from 'jotai';
 import {pieAtomFamily} from '../../../atoms/pieAtomFamily';
 import MarginInput from '../../CustomInput/MarginInput';
-import {appAtom} from '../../../atoms/appAtom';
+import {Param} from '../../../atoms/appAtom';
 import {useForm} from 'antd/lib/form/Form';
 
-export default function GeneralConfig() {
+export default function GeneralConfig({id}: Param) {
     const {t} = useTranslation();
-    const [app] = useAtom(appAtom);
-    const [pie, setPie] = useAtom(pieAtomFamily({id: app.activeKey}));
+    const [pie, setPie] = useAtom(pieAtomFamily({id}));
 
     const [form] = useForm();
 

@@ -16,8 +16,7 @@ import {appAtom} from '../../../atoms/appAtom';
 
 export default function LineConfig() {
     const {activeSerie} = useSelector((state: RootState) => state.line);
-    const [app] = useAtom(appAtom);
-    const {id} = app.charts.find((chart) => chart.id === app.activeKey);
+    const [{activeKey}] = useAtom(appAtom);
 
     const config = (
         <>
@@ -26,19 +25,19 @@ export default function LineConfig() {
                     <GeneralConfig />
                 </StyledTabPane>
                 <StyledTabPane key={'axes'} tab={<FcRuler />}>
-                    <AxisConfig id={id} />
+                    <AxisConfig id={activeKey} />
                 </StyledTabPane>
                 <StyledTabPane key={'grid'} tab={<FcGrid />}>
-                    <GridConfig id={id} />
+                    <GridConfig id={activeKey} />
                 </StyledTabPane>
                 <StyledTabPane key={'legend'} tab={<FcAbout />}>
-                    <LegendConfig id={id} />
+                    <LegendConfig id={activeKey} />
                 </StyledTabPane>
                 <StyledTabPane key={'lines'} tab={<FcLineChart />}>
-                    <LinesConfig id={id} />
+                    <LinesConfig id={activeKey} />
                 </StyledTabPane>
                 <StyledTabPane key={'points'} tab={<FcOrgUnit />}>
-                    <PointsConfig />
+                    <PointsConfig id={activeKey} />
                 </StyledTabPane>
                 <StyledTabPane key={'code'} tab={<FcViewDetails />}></StyledTabPane>
             </Tabs>

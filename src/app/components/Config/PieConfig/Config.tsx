@@ -5,18 +5,21 @@ import {StyledTabPane} from '../../StyledComponents/StyledComponents';
 import GeneralConfig from './GeneralConfig';
 import ArcConfig from './ArcConfig';
 import LegendConfig from '../General/LegendConfig';
+import {appAtom} from '../../../atoms/appAtom';
+import {useAtom} from 'jotai';
 
 export default function PieConfig() {
+    const [{activeKey}] = useAtom(appAtom);
     const config = (
         <Tabs tabPosition={'left'} type={'card'} className={'h-full w-full'}>
             <StyledTabPane key={'general'} tab={<FcSettings />}>
-                <GeneralConfig />
+                <GeneralConfig id={activeKey} />
             </StyledTabPane>
             <StyledTabPane key={'arc'} tab={<FcPieChart />}>
-                <ArcConfig />
+                <ArcConfig id={activeKey} />
             </StyledTabPane>
             <StyledTabPane key={'legend'} tab={<FcAbout />}>
-                <LegendConfig id={'a'} />
+                <LegendConfig id={activeKey} />
             </StyledTabPane>
         </Tabs>
     );

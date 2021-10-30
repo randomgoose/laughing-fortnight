@@ -1,7 +1,7 @@
 import {baseLegend} from '../data/baseLegend';
 import {data} from '../data/baseLineData';
 import {atomFamily} from 'jotai/utils';
-import {Atom, atom} from 'jotai';
+import {atom} from 'jotai';
 import _ from 'lodash';
 import {LineSvgProps} from '@nivo/line';
 
@@ -22,7 +22,7 @@ export interface LineState extends LineSvgProps {
 
 type Param = {id: string};
 
-export const lineAtomFamily = atomFamily<Param, Atom<LineState>>(
+export const lineAtomFamily = atomFamily(
     (param: Param) =>
         atom({
             key: param.id,

@@ -1,9 +1,5 @@
 import * as React from 'react';
 import {Radio, Form, Slider, Collapse, Button, Space, Typography} from 'antd';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '../../../redux/store';
-import {chartSlice as lineSlice} from '../../../features/chart/lineChartSlice';
-import {chartSlice as barSlice} from '../../../features/chart/barChartSlice';
 import {
     AlignCenterOutlined,
     AlignLeftOutlined,
@@ -13,43 +9,44 @@ import {
     DeleteOutlined,
     PlusOutlined,
 } from '@ant-design/icons';
-import {useThrottle} from 'ahooks';
 import Anchor from '../../CustomInput/Anchor';
 import {FcAbout} from 'react-icons/fc';
 import {StyledCollapsePanel} from '../../StyledComponents/StyledComponents';
 import {baseLegend} from '../../../data/baseLegend';
 import {useTranslation} from 'react-i18next';
-import {pieAtomFamily} from '../../../atoms/pieAtomFamily';
 import {useAtom} from 'jotai';
-import {Param} from '../../../atoms/appAtom';
+import {appAtom, Param} from '../../../atoms/appAtom';
+import {lineAtomFamily} from '../../../atoms/lineAtomFamily';
+import {barAtomFamily} from '../../../atoms/barAtomFamily';
+import {pieAtomFamily} from '../../../atoms/pieAtomFamily';
+import {useImmerAtom} from 'jotai/immer';
 
 export default ({id}: Param) => {
-    console.log(id);
-    const dispatch = useDispatch();
-    const {line, bar} = useSelector((state: RootState) => state);
-    const {chartType} = useSelector((state: RootState) => state.app);
-    useThrottle(line.legends, {wait: 500});
-    useThrottle(bar.legends, {wait: 500});
+    const [app] = useAtom(appAtom);
+    const activeChart = app.charts.find((chart) => chart.id === app.activeKey);
+
     const {t} = useTranslation();
-    const [pie, setPie] = useAtom(pieAtomFamily({id: 'pie'}));
+    const [pie, setPie] = useImmerAtom(pieAtomFamily({id}));
+    const [line, setLine] = useImmerAtom(lineAtomFamily({id}));
+    const [bar, setBar] = useImmerAtom(barAtomFamily({id}));
 
     const addLegend = React.useCallback(() => {
-        switch (chartType) {
+        switch (activeChart.type) {
             case 'line':
-                dispatch(lineSlice.actions.setPartialState({legends: [...line.legends, {...baseLegend[0]}]}));
+                setLine((draftState) => {
+                    draftState.legends.push(baseLegend[0]);
+                });
                 break;
             case 'bar':
-                dispatch(
-                    barSlice.actions.setPartialState({legends: [...bar.legends, {...baseLegend[0], dataFrom: 'keys'}]})
-                );
+                setBar((draftState) => draftState.legends.push({...baseLegend[0], dataFrom: 'keys'}));
                 break;
             case 'pie':
-                setPie({...pie, legends: pie.legends ? [...pie.legends, {...baseLegend[0]}] : [{...baseLegend[0]}]});
+                setPie((draftState) => draftState.legends.push(baseLegend[0]));
         }
-    }, [line.legends, chartType, bar.legends, pie.legends]);
+    }, [line.legends, activeChart.type, bar.legends, pie.legends]);
 
     const getLegends = React.useCallback(() => {
-        switch (chartType) {
+        switch (activeChart.type) {
             case 'line':
                 return line.legends;
             case 'bar':
@@ -57,23 +54,29 @@ export default ({id}: Param) => {
             case 'pie':
                 return pie.legends ? pie.legends : [];
         }
-    }, [line.legends, bar.legends, chartType, pie.legends]);
+    }, [line.legends, bar.legends, activeChart.type, pie.legends]);
 
     const deleteLegendByIndex = React.useCallback(
         (index: number) => {
-            switch (chartType) {
+            switch (activeChart.type) {
                 case 'line':
-                    dispatch(lineSlice.actions.removeLegendByIndex(index));
+                    setLine((draftState) => {
+                        draftState.legends = draftState.legends.filter((_legene, i) => i !== index);
+                    });
                     break;
                 case 'bar':
-                    dispatch(barSlice.actions.removeLegendByIndex(index));
+                    setBar((draftState) => {
+                        draftState.legends = draftState.legends.filter((_legene, i) => i !== index);
+                    });
                     break;
                 case 'pie':
-                    setPie({...pie, legends: pie.legends.filter((_legend, i) => i !== index)});
+                    setPie((draftState) => {
+                        draftState.legends = draftState.legends.filter((_legene, i) => i !== index);
+                    });
                     break;
             }
         },
-        [line.legends, chartType, bar.legends, pie.legends]
+        [line.legends, activeChart.type, bar.legends, pie.legends]
     );
 
     return (
@@ -103,19 +106,19 @@ export default ({id}: Param) => {
                         >
                             <Form
                                 onValuesChange={(changedValues) => {
-                                    switch (chartType) {
+                                    switch (activeChart.type) {
                                         case 'line':
-                                            dispatch(
-                                                lineSlice.actions.setLegend({index: index, newLegend: changedValues})
-                                            );
+                                            setLine((draftState) => {
+                                                Object.assign(draftState.legends[index], changedValues);
+                                            });
                                             break;
                                         case 'bar':
-                                            dispatch(
-                                                barSlice.actions.setLegend({
-                                                    index: index,
-                                                    newLegend: {...changedValues, dataFrom: 'keys'},
-                                                })
-                                            );
+                                            setLine((draftState) => {
+                                                Object.assign(draftState.legends[index], {
+                                                    ...changedValues,
+                                                    dataFrom: 'keys',
+                                                });
+                                            });
                                         case 'pie':
                                             setPie((pie) => {
                                                 const legend = {...pie.legends[index]};

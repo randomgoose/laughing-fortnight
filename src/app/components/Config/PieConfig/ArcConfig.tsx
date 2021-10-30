@@ -6,10 +6,11 @@ import ConfigPage from '../ConfigPage';
 import {useAtom} from 'jotai';
 import {pieAtomFamily} from '../../../atoms/pieAtomFamily';
 import MarginInput from '../../CustomInput/MarginInput';
+import {Param} from '../../../atoms/appAtom';
 
-export default function ArcConfig() {
+export default function ArcConfig({id}: Param) {
     const {t} = useTranslation();
-    const [pie, setPie] = useAtom(pieAtomFamily({id: 'pie'}));
+    const [pie, setPie] = useAtom(pieAtomFamily({id}));
 
     return (
         <ConfigPage title={t('Arc')} icon={<FcPieChart />}>
