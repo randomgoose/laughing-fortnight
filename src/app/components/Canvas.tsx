@@ -76,10 +76,11 @@ export default function Canvas() {
                 ) : (
                     <div
                         className={
-                            'absolute left-1/2 top-1/3 transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-2'
+                            'absolute left-1/2 top-1/3 transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-2 items-center'
                         }
                     >
                         <ChartTypeList
+                            tooltipPlacement={'top'}
                             className={
                                 'border border-dashed border-purple-600 p-6 rounded-lg flex flex-row justify-center'
                             }

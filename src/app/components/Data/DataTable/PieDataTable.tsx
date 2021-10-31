@@ -7,6 +7,7 @@ import {pieAtomFamily} from '../../../atoms/pieAtomFamily';
 import {Param} from '../../../atoms/appAtom';
 import {usePie} from '../../../hooks/usePie';
 import {DeleteOutlined} from '@ant-design/icons';
+import DataMock from '../DataMock/DataMock';
 
 export default function PieDataTable({id}: Param) {
     const [pie, setPie] = useImmerAtom(pieAtomFamily({id}));
@@ -60,12 +61,15 @@ export default function PieDataTable({id}: Param) {
     ];
 
     return (
-        <Table
-            rowKey={'id'}
-            dataSource={pie.data}
-            columns={columns}
-            scroll={{y: 160}}
-            footer={() => <Button onClick={addArc}>{t('Add Row')}</Button>}
-        />
+        <>
+            <DataMock />
+            <Table
+                rowKey={'id'}
+                dataSource={pie.data}
+                columns={columns}
+                scroll={{y: 160}}
+                footer={() => <Button onClick={addArc}>{t('Add Row')}</Button>}
+            />
+        </>
     );
 }

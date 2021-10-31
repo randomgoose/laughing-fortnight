@@ -15,7 +15,8 @@ import {useLine} from '../../../hooks/useLine';
 import {useBar} from '../../../hooks/useBar';
 
 export default function DataMock() {
-    const {getCurrentChart} = useApp();
+    const {getCurrentChart, app} = useApp();
+    const {decimalDigit} = app;
     const {type, id} = getCurrentChart();
     const {setNewData} = useLine(id);
     const {setPartialState} = useBar(id);
@@ -27,13 +28,13 @@ export default function DataMock() {
         length: 12,
         count: 1,
         trend: 'rise',
-        decimalDigit: 2,
+        decimalDigit,
     });
     const {t} = useTranslation();
 
     React.useEffect(() => {
-        setNumberSequenceAttr({...numberSequenceAttr, decimalDigit: 2});
-    }, [2]);
+        setNumberSequenceAttr({...numberSequenceAttr, decimalDigit: decimalDigit});
+    }, [decimalDigit]);
 
     const [tempData, setTempData] = useImmer<Serie[]>([]);
 
@@ -92,7 +93,8 @@ export default function DataMock() {
                 <Space size={4}>
                     <Button
                         onClick={() => {
-                            const {count, length, min, max} = numberSequenceAttr;
+                            const {count, length, min, max, decimalDigit} = numberSequenceAttr;
+                            console.log('decimalDigit', decimalDigit);
                             let temp = [];
                             switch (type) {
                                 case 'line':
@@ -110,7 +112,7 @@ export default function DataMock() {
                                             length: count,
                                             min: min,
                                             max: max,
-                                            decimalDigit: 2,
+                                            decimalDigit,
                                         }),
                                     ];
                                     setPartialState({keys: attrs, indexBy: 'id'});

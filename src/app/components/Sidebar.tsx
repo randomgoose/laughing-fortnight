@@ -7,7 +7,7 @@ import Settings from './Settings';
 export default function SideBar() {
     return (
         <div className={'Sidebar App__sidebar flex flex-col justify-between border-r p-2'}>
-            <ChartTypeList className={'flex-col'} />
+            <ChartTypeList className={'flex-col'} tooltipPlacement={'right'} />
             <Dropdown
                 overlay={
                     <Menu className={'p-4 rounded-lg border border-1 border-gray-200'}>

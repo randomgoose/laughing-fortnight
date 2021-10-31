@@ -2,10 +2,12 @@ import * as React from 'react';
 import {Tabs} from 'antd';
 import LegendConfig from '../General/LegendConfig';
 import {StyledTabPane} from '../../StyledComponents/StyledComponents';
-import {FcAbout, FcGrid, FcLineChart, FcOrgUnit, FcRuler, FcSettings, FcViewDetails} from 'react-icons/fc';
+import {FcAbout, FcGrid, FcRuler, FcSettings} from 'react-icons/fc';
 import {useAtom} from 'jotai';
 import {appAtom} from '../../../atoms/appAtom';
 import GeneralConfig from './GeneralConfig';
+import AxisConfig from './AxisConfig';
+import GridConfig from './GridConfig';
 
 export default function LineConfig() {
     const [{activeKey}] = useAtom(appAtom);
@@ -17,21 +19,14 @@ export default function LineConfig() {
                     <GeneralConfig id={activeKey} />
                 </StyledTabPane>
                 <StyledTabPane key={'axes'} tab={<FcRuler />}>
-                    {/* <AxisConfig id={activeKey} /> */}
+                    <AxisConfig id={activeKey} />
                 </StyledTabPane>
                 <StyledTabPane key={'grid'} tab={<FcGrid />}>
-                    {/* <GridConfig id={activeKey} /> */}
+                    <GridConfig id={activeKey} />
                 </StyledTabPane>
                 <StyledTabPane key={'legend'} tab={<FcAbout />}>
                     <LegendConfig id={activeKey} />
                 </StyledTabPane>
-                <StyledTabPane key={'lines'} tab={<FcLineChart />}>
-                    {/* <LinesConfig id={activeKey} /> */}
-                </StyledTabPane>
-                <StyledTabPane key={'points'} tab={<FcOrgUnit />}>
-                    {/* <PointsConfig id={activeKey} /> */}
-                </StyledTabPane>
-                <StyledTabPane key={'code'} tab={<FcViewDetails />}></StyledTabPane>
             </Tabs>
         </>
     );

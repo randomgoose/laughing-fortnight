@@ -6,6 +6,7 @@ import {appAtom} from '../../atoms/appAtom';
 import BarDataTable from './DataTable/BarDataTable';
 import LineDataTable from './DataTable/LineDataTable';
 import PieDataTable from './DataTable/PieDataTable';
+import ScatterDataTable from './DataTable/ScatterDataTable';
 
 export default function DataTable() {
     const [app] = useAtom(appAtom);
@@ -22,6 +23,8 @@ export default function DataTable() {
                     return <BarDataTable id={activeChart.id} />;
                 case 'pie':
                     return <PieDataTable id={activeChart.id} />;
+                case 'scatter':
+                    return <ScatterDataTable id={activeChart.id} />;
                 default:
                     return null;
             }

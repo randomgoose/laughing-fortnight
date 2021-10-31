@@ -9,6 +9,8 @@ export interface ScatterState extends ScatterPlotSvgProps<ScatterPlotDatum> {
     data: ScatterPlotRawSerie<ScatterPlotDatum>[];
     x: number;
     y: number;
+    enableXAxis: boolean;
+    enableYAxis: boolean;
     scale: number;
     render: 'svg' | 'canvas';
 }
@@ -33,6 +35,8 @@ export const scatterAtomFamily = atomFamily(
             colors: {scheme: 'nivo'},
             blendMode: 'multiply',
             // Grid && Axes
+            enableXAxis: true,
+            enableYAxis: true,
             enableGridX: true,
             enableGridY: true,
             axisBottom: {

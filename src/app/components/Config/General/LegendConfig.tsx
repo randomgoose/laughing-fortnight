@@ -20,6 +20,7 @@ import {lineAtomFamily, LineState} from '../../../atoms/lineAtomFamily';
 import {barAtomFamily} from '../../../atoms/barAtomFamily';
 import {pieAtomFamily} from '../../../atoms/pieAtomFamily';
 import {useImmerAtom} from 'jotai/immer';
+import {scatterAtomFamily} from '../../../atoms/scatterAtomFamily';
 
 export default ({id}: Param) => {
     const [app] = useAtom(appAtom);
@@ -29,7 +30,7 @@ export default ({id}: Param) => {
     const [pie, setPie] = useImmerAtom(pieAtomFamily({id}));
     const [line, setLine] = useImmerAtom(lineAtomFamily({id}) as PrimitiveAtom<LineState>);
     const [bar, setBar] = useImmerAtom(barAtomFamily({id}));
-    // const [scatter, ]
+    const [scatter, setScatter] = useImmerAtom(scatterAtomFamily({id}));
 
     const addLegend = React.useCallback(() => {
         switch (activeChart.type) {
@@ -49,8 +50,11 @@ export default ({id}: Param) => {
                 });
                 break;
             case 'scatter':
+                setScatter((draftState) => {
+                    draftState.legends.push(baseLegend[0]);
+                });
         }
-    }, [line.legends, activeChart.type, bar.legends, pie.legends]);
+    }, [line.legends, activeChart.type, bar.legends, pie.legends, scatter.legends]);
 
     const getLegends = React.useCallback(() => {
         switch (activeChart.type) {
@@ -60,8 +64,10 @@ export default ({id}: Param) => {
                 return bar.legends;
             case 'pie':
                 return pie.legends ? pie.legends : [];
+            case 'scatter':
+                return scatter.legends;
         }
-    }, [line.legends, bar.legends, activeChart.type, pie.legends]);
+    }, [line.legends, bar.legends, activeChart.type, pie.legends, scatter.legends]);
 
     const deleteLegendByIndex = React.useCallback(
         (index: number) => {
@@ -80,10 +86,14 @@ export default ({id}: Param) => {
                     setPie((draftState) => {
                         draftState.legends = draftState.legends.filter((_legene, i) => i !== index);
                     });
+                case 'scatter':
+                    setScatter((draftState) => {
+                        draftState.legends = draftState.legends.filter((_legene, i) => i !== index);
+                    });
                     break;
             }
         },
-        [line.legends, activeChart.type, bar.legends, pie.legends]
+        [line.legends, activeChart.type, bar.legends, pie.legends, scatter.legends]
     );
 
     return (
@@ -141,6 +151,10 @@ export default ({id}: Param) => {
                                                 };
                                             });
                                             break;
+                                        case 'scatter':
+                                            setScatter((draftState) => {
+                                                Object.assign(draftState.legends[index], changedValues);
+                                            });
                                     }
                                 }}
                                 initialValues={legend}

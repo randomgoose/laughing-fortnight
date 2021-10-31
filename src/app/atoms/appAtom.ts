@@ -17,6 +17,7 @@ export interface AppState {
     rndEnabled: boolean;
     hideInterface: boolean;
     scale: number;
+    decimalDigit: number;
 }
 
 export const appAtom = atom<AppState>({
@@ -28,4 +29,5 @@ export const appAtom = atom<AppState>({
     rndEnabled: false,
     hideInterface: false,
     scale: 1,
+    decimalDigit: 2,
 });

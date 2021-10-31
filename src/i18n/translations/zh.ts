@@ -76,4 +76,7 @@ export const zh_translation = {
     'Legend Align': '图例对齐方式',
     'Legend Vertical Align': '图例对齐方式（垂直）',
     'Add column': '添加列',
+    Scatter: '散点图',
+    scatter: '散点图',
+    'Click an icon to insert a chart': '点击上方图标插入数据图',
 };

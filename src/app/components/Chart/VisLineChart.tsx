@@ -8,7 +8,8 @@ import {appAtom} from '../../atoms/appAtom';
 import DimensionIndicator from '../DimensionIndicator';
 
 export default function VisLineChart({id}: {id: string}) {
-    const [{width, height, x, y, render, activeSerie, scale, showXAxis, showYAxis, data, lines, ...rest}, setLine] =
+    const [{scale}] = useAtom(appAtom);
+    const [{width, height, x, y, render, activeSerie, showXAxis, showYAxis, data, lines, ...rest}, setLine] =
         useImmerAtom(lineAtomFamily({id}) as PrimitiveAtom<LineState>);
     const [app, setApp] = useAtom(appAtom);
 

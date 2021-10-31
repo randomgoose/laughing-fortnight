@@ -96,7 +96,7 @@ export default ({id}: Param) => {
                         }}
                     >
                         <Form.Item name={'legend'} label={t('Legend')}>
-                            <Input></Input>
+                            <Input />
                         </Form.Item>
                         <Form.Item name={'legendPosition'} label={t('Legend Position')}>
                             <Radio.Group

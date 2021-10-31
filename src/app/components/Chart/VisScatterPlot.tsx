@@ -9,7 +9,7 @@ import StyledRnd from '../StyledComponents/StyledRnd';
 
 export default function VisScatterPlot({id}: Param) {
     const [{activeKey, scale}, setApp] = useAtom(appAtom);
-    const [{width, height, x, y, ...rest}, setScatter] = useImmerAtom(
+    const [{width, height, x, y, enableXAxis, enableYAxis, ...rest}, setScatter] = useImmerAtom(
         scatterAtomFamily({id}) as PrimitiveAtom<ScatterState>
     );
 
@@ -44,7 +44,12 @@ export default function VisScatterPlot({id}: Param) {
             style={{background: id === activeKey ? 'rgba(123, 97, 255, .05)' : ''}}
             showHandles={id === activeKey}
         >
-            <ResponsiveScatterPlot {...rest} />
+            <ResponsiveScatterPlot
+                {...rest}
+                axisBottom={enableXAxis && rest.axisBottom}
+                axisLeft={enableYAxis && rest.axisLeft}
+                isInteractive={id === activeKey}
+            />
             {id === activeKey ? <DimensionIndicator width={width} height={height} /> : null}
         </StyledRnd>
     );

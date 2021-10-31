@@ -5,13 +5,13 @@ import {FcRuler} from 'react-icons/fc';
 import {StyledCollapsePanel} from '../../StyledComponents/StyledComponents';
 import {useTranslation} from 'react-i18next';
 import {Param} from '../../../atoms/appAtom';
-import {useBar} from '../../../hooks/useBar';
+import {useScatter} from '../../../hooks/useScatter';
 
 export default ({id}: Param) => {
-    const {bar, setPartialState} = useBar(id);
-    const {showXAxis, showYAxis, axisBottom, axisLeft} = bar;
+    const {scatter, setPartialState} = useScatter(id);
+    const {enableXAxis, enableYAxis, axisBottom, axisLeft} = scatter;
 
-    React.useEffect(() => {}, [showXAxis, showYAxis]);
+    React.useEffect(() => {}, [enableXAxis, enableYAxis]);
     const {t} = useTranslation();
 
     return (
@@ -22,16 +22,20 @@ export default ({id}: Param) => {
                     {t('Axis')}
                 </Space>
             </Typography.Title>
-            <Collapse key={'x-axis'} ghost activeKey={[showXAxis ? 'showXAxis' : '', showYAxis ? 'showYAxis' : '']}>
+            <Collapse
+                key={'x-axis'}
+                ghost
+                activeKey={[enableXAxis ? 'enableXAxis' : '', enableYAxis ? 'enableYAxis' : '']}
+            >
                 <StyledCollapsePanel
-                    collapsible={showXAxis ? 'header' : 'disabled'}
-                    key={'showXAxis'}
+                    collapsible={enableXAxis ? 'header' : 'disabled'}
+                    key={'enableXAxis'}
                     header={t('Display xAxis')}
                     extra={
                         <Switch
                             size={'small'}
-                            checked={showXAxis}
-                            onChange={(checked) => setPartialState({showXAxis: checked})}
+                            checked={enableXAxis}
+                            onChange={(checked) => setPartialState({enableXAxis: checked})}
                         ></Switch>
                     }
                 >
@@ -73,14 +77,14 @@ export default ({id}: Param) => {
                     </Form>
                 </StyledCollapsePanel>
                 <StyledCollapsePanel
-                    collapsible={showYAxis ? 'header' : 'disabled'}
-                    key={'showYAxis'}
+                    collapsible={enableYAxis ? 'header' : 'disabled'}
+                    key={'enableYAxis'}
                     header={t('Display yAxis')}
                     extra={
                         <Switch
                             size={'small'}
-                            checked={showYAxis}
-                            onChange={(checked) => setPartialState({showYAxis: checked})}
+                            checked={enableYAxis}
+                            onChange={(checked) => setPartialState({enableYAxis: checked})}
                         ></Switch>
                     }
                 >
