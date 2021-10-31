@@ -38,11 +38,16 @@ export function useBar(id: string) {
         });
     }
 
+    function setPartialState(state: Partial<BarState>) {
+        setBar((draftState) => Object.assign(draftState, state));
+    }
+
     return {
         bar,
         setData,
         setKey,
         removeKey,
         addKey,
+        setPartialState,
     };
 }

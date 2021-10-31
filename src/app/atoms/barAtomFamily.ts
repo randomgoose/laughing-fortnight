@@ -15,7 +15,6 @@ export interface BarState extends BarSvgProps<BarDatum> {
     height: number;
     x: number;
     y: number;
-    scale: number;
     render: 'svg' | 'canvas';
     activeBar: string;
     activeIndex: number;
@@ -29,50 +28,47 @@ type Param = {id: string};
 export const barAtomFamily = atomFamily(
     (param: Param) =>
         atom({
+            // Base
             key: param.id,
             height: 300,
             width: 400,
             data: data,
+            indexBy: 'id',
+            keys: ['hot dog', 'burger', 'sandwich', 'kebab', 'fries', 'donut'],
+            x: 400,
+            y: 100,
             groupMode: 'grouped',
             layout: 'vertical',
+            valueScale: {type: 'linear'},
+            indexScale: {type: 'band', round: true},
             reverse: false,
-            margin: {top: 50, right: 130, bottom: 50, left: 60},
+            maxValue: 'auto',
+            minValue: 'auto',
             padding: 0.3,
+            innerPadding: 0.1,
+            margin: {top: 50, right: 130, bottom: 50, left: 60},
+            // Style
+            colors: {scheme: 'nivo'},
+            colorBy: 'id',
+            borderRadius: 0,
+            borderWidth: 0,
+            borderColor: {from: 'color'},
+            // Labels
+            enableLabel: true,
+            label: 'formattedValue',
+            labelSkipWidth: 4,
+            labelSkipHeight: 0,
+            labelTextColor: {from: 'theme', theme: 'labels.text.fill'},
+            // Grid & Axes
             showXAxis: true,
             showYAxis: true,
             enableGridX: true,
             enableGridY: true,
-            keys: ['hot dog', 'burger', 'sandwich', 'kebab', 'fries', 'donut'],
-            x: 400,
-            y: 100,
-            scale: 1,
-            indexBy: 'country',
-            innerPadding: 0.1,
-            maxValue: 'auto',
-            minValue: 'auto',
-            borderColor: {from: 'color'},
-            borderRadius: 0,
-            borderWidth: 0,
-            label: 'formattedValue',
-            enableLabel: true,
-            valueScale: {type: 'linear'},
-            indexScale: {type: 'band', round: true},
-            labelSkipWidth: 4,
-            labelSkipHeight: 0,
-            isInteractive: true,
-            labelTextColor: {from: 'theme', theme: 'labels.text.fill'},
-            colorBy: 'id',
-            colors: {scheme: 'nivo'},
-            render: 'svg',
-            legends: baseLegend.map((legend) => ({...legend, dataFrom: 'keys'})),
-            activeBar: '',
-            activeIndex: -1,
-            activeDatum: null,
             axisBottom: {
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: 'country',
+                legend: 'id',
                 legendPosition: 'middle',
                 legendOffset: 32,
             },
@@ -84,6 +80,15 @@ export const barAtomFamily = atomFamily(
                 legendPosition: 'middle',
                 legendOffset: -40,
             },
+            // Interactivity
+            isInteractive: true,
+            // Legends
+            legends: baseLegend.map((legend) => ({...legend, dataFrom: 'keys'})),
+            // Others
+            render: 'svg',
+            activeBar: '',
+            activeIndex: -1,
+            activeDatum: null,
         }),
     (a: Param, b: Param) => a.id === b.id
 );

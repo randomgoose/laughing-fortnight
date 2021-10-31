@@ -3,11 +3,11 @@ import cryptoRandomString from 'crypto-random-string';
 import {useAtom} from 'jotai';
 import * as React from 'react';
 import {useTranslation} from 'react-i18next';
-import {FcBarChart, FcLineChart, FcPieChart} from 'react-icons/fc';
-import {appAtom} from '../atoms/appAtom';
+import {FcBarChart, FcLineChart, FcPieChart, FcScatterPlot} from 'react-icons/fc';
+import {appAtom, ChartType as Type} from '../atoms/appAtom';
 import classnames from 'classnames';
 
-export function ChartType({type, children}: {type?: 'line' | 'bar' | 'pie'; children?: React.ReactNode}) {
+export function ChartType({type, children}: {type?: Type; children?: React.ReactNode}) {
     const {t} = useTranslation();
     const [, setApp] = useAtom(appAtom);
 
@@ -41,6 +41,9 @@ export function ChartTypeList({className}: {className?: string}) {
             </ChartType>
             <ChartType type={'pie'}>
                 <FcPieChart size={16} />
+            </ChartType>
+            <ChartType type={'scatter'}>
+                <FcScatterPlot size={16} />
             </ChartType>
         </div>
     );

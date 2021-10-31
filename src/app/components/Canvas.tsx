@@ -11,6 +11,7 @@ import {useAtom} from 'jotai';
 import {appAtom, Chart} from '../atoms/appAtom';
 import {ChartTypeList} from './ChartTypeList';
 import {useTranslation} from 'react-i18next';
+import VisScatterPlot from './Chart/VisScatterPlot';
 
 export default function Canvas() {
     const [app, setApp] = useAtom(appAtom);
@@ -33,15 +34,19 @@ export default function Canvas() {
                 return <VisBarChart id={chart.id} key={chart.id} />;
             case 'line':
                 return <VisLineChart id={chart.id} key={chart.id} />;
+            case 'scatter':
+                return <VisScatterPlot id={chart.id} key={chart.id} />;
         }
     }
 
     const bind = usePinch(
         ({offset: [d]}) => {
             set({zoom: d / 1600});
+            setApp({...app, scale: 1 + d / 1600});
         },
         {domTarget, eventOptions: {passive: false}}
     );
+
     return (
         <div
             {...bind()}
@@ -61,7 +66,6 @@ export default function Canvas() {
                 style={{
                     scale: to([scale, zoom], (s, z) => {
                         if (s + z >= 0) {
-                            // setApp({ ...app, scale: s + z })
                             return s + z;
                         }
                     }),
@@ -117,7 +121,7 @@ export default function Canvas() {
                     icon={<AimOutlined />}
                     onClick={() => {
                         setApp({...app, scale: 1});
-                        set({scale: 1, zoom: 0});
+                        set({zoom: 0, scale: 1});
                     }}
                 ></Button>
             </Space>

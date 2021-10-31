@@ -6,6 +6,7 @@ import LineConfig from './components/Config/LineConfig/Config';
 import Gallery from './components/Gallery';
 import PieConfig from './components/Config/PieConfig/Config';
 import BarConfig from './components/Config/BarConfig/Config';
+import ScatterConfig from './components/Config/ScatterConfig/Config';
 import {ConfigProvider} from 'antd';
 import {useDispatch} from 'react-redux';
 import {addSnapshot, editSnapshotById, removeSnapshotById, setSelectionId, setSnapshots} from './features/app/appSlice';
@@ -64,6 +65,8 @@ function App() {
                 return <LineConfig />;
             case 'bar':
                 return <BarConfig />;
+            case 'scatter':
+                return <ScatterConfig />;
         }
     }
 

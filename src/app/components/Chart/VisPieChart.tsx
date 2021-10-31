@@ -1,3 +1,4 @@
+//@ts-nocheck
 import * as React from 'react';
 import {DefaultRawDatum, ResponsivePie} from '@nivo/pie';
 import StyledRnd from '../StyledComponents/StyledRnd';
@@ -7,9 +8,10 @@ import {ComputedDatum} from '@nivo/bar';
 import {useTranslation} from 'react-i18next';
 import {useImmerAtom} from 'jotai/immer';
 import {usePie} from '../../hooks/usePie';
-import {appAtom} from '../../atoms/appAtom';
+import {appAtom, Param} from '../../atoms/appAtom';
+import PieWidget from '../Widgets/PieWidget';
 
-export default function VisPieChart({id}: {id: string}) {
+export default function VisPieChart({id}: Param) {
     const [pie, setPie] = useImmerAtom(pieAtomFamily({id}));
     const [app, setApp] = useImmerAtom(appAtom);
     const [activeArc, setActiveArc] =
@@ -63,15 +65,17 @@ export default function VisPieChart({id}: {id: string}) {
             style={{background: id === app.activeKey ? 'rgba(123, 97, 255, .05)' : ''}}
             showHandles={id === app.activeKey}
         >
-            <Dropdown overlay={menu} trigger={['click']}>
-                <ResponsivePie
-                    {...pie}
-                    onClick={(node) => {
-                        id === app.activeKey && setActiveArc(node);
-                    }}
-                    isInteractive={id === app.activeKey}
-                />
-            </Dropdown>
+            {/* <Dropdown overlay={menu} trigger={['click']}> */}
+            <ResponsivePie
+                {...pie}
+                onClick={(node, event) => {
+                    console.log(node);
+                    console.log(event);
+                    id === app.activeKey && setActiveArc(node);
+                }}
+                isInteractive={id === app.activeKey}
+            />
+            {/* </Dropdown> */}
 
             {/* <Rnd
                 style={{ zIndex: -1 }}
@@ -102,6 +106,7 @@ export default function VisPieChart({id}: {id: string}) {
                     }
                 }}
             /> */}
+            <PieWidget id={id} visible={app.activeKey === id && activeArc !== null} activeArc={activeArc} />
         </StyledRnd>
     );
 }

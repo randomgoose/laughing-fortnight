@@ -4,13 +4,13 @@ import {AlignCenterOutlined, AlignLeftOutlined, AlignRightOutlined} from '@ant-d
 import {FcRuler} from 'react-icons/fc';
 import {StyledCollapsePanel} from '../../StyledComponents/StyledComponents';
 import {useTranslation} from 'react-i18next';
-import {useAtom} from 'jotai';
+import {PrimitiveAtom, useAtom} from 'jotai';
 import {Param} from '../../../atoms/appAtom';
-import {lineAtomFamily} from '../../../atoms/lineAtomFamily';
+import {lineAtomFamily, LineState} from '../../../atoms/lineAtomFamily';
 import {useLine} from '../../../hooks/useLine';
 
 export default ({id}: Param) => {
-    const [{showXAxis, showYAxis, axisBottom, axisLeft}] = useAtom(lineAtomFamily({id}));
+    const [{showXAxis, showYAxis, axisBottom, axisLeft}] = useAtom(lineAtomFamily({id}) as PrimitiveAtom<LineState>);
     const {setPartialState} = useLine(id);
     const {t} = useTranslation();
     console.log(axisLeft);

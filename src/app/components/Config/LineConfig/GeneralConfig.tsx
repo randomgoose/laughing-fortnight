@@ -7,8 +7,7 @@ import {FcSettings} from 'react-icons/fc';
 import _ from 'lodash';
 import {useTranslation} from 'react-i18next';
 import {useLine} from '../../../hooks/useLine';
-import {useAtom} from 'jotai';
-import {appAtom} from '../../../atoms/appAtom';
+import {Param} from '../../../atoms/appAtom';
 import {LineState} from '../../../atoms/lineAtomFamily';
 
 const colorSchemeList = Object.keys(colorSchemes);
@@ -34,9 +33,8 @@ const blendModeList = [
     'luminosity',
 ];
 
-export default function GeneralConfig() {
-    const [app] = useAtom(appAtom);
-    const {line, setPartialState} = useLine(app.activeKey);
+export default function GeneralConfig({id}: Param) {
+    const {line, setPartialState} = useLine(id);
 
     const {t} = useTranslation();
 

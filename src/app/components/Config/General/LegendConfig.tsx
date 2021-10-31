@@ -14,9 +14,9 @@ import {FcAbout} from 'react-icons/fc';
 import {StyledCollapsePanel} from '../../StyledComponents/StyledComponents';
 import {baseLegend} from '../../../data/baseLegend';
 import {useTranslation} from 'react-i18next';
-import {useAtom} from 'jotai';
+import {PrimitiveAtom, useAtom} from 'jotai';
 import {appAtom, Param} from '../../../atoms/appAtom';
-import {lineAtomFamily} from '../../../atoms/lineAtomFamily';
+import {lineAtomFamily, LineState} from '../../../atoms/lineAtomFamily';
 import {barAtomFamily} from '../../../atoms/barAtomFamily';
 import {pieAtomFamily} from '../../../atoms/pieAtomFamily';
 import {useImmerAtom} from 'jotai/immer';
@@ -27,7 +27,7 @@ export default ({id}: Param) => {
 
     const {t} = useTranslation();
     const [pie, setPie] = useImmerAtom(pieAtomFamily({id}));
-    const [line, setLine] = useImmerAtom(lineAtomFamily({id}));
+    const [line, setLine] = useImmerAtom(lineAtomFamily({id}) as PrimitiveAtom<LineState>);
     const [bar, setBar] = useImmerAtom(barAtomFamily({id}));
 
     const addLegend = React.useCallback(() => {

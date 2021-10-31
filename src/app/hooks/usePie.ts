@@ -26,6 +26,7 @@ export function usePie(id: string) {
     }
 
     return {
+        pie,
         addArc,
         removeArcById,
         changeArcValueById,

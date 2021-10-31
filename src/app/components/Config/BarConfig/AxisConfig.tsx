@@ -1,17 +1,15 @@
 import * as React from 'react';
 import {Switch, Collapse, Form, Input, Radio, Slider, InputNumber, Typography, Space} from 'antd';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '../../../redux/store';
-import {setAxis} from '../../../features/chart/barChartSlice';
 import {AlignCenterOutlined, AlignLeftOutlined, AlignRightOutlined} from '@ant-design/icons';
 import {FcRuler} from 'react-icons/fc';
 import {StyledCollapsePanel} from '../../StyledComponents/StyledComponents';
-import {setPartialState} from '../../../features/chart/barChartSlice';
 import {useTranslation} from 'react-i18next';
+import {Param} from '../../../atoms/appAtom';
+import {useBar} from '../../../hooks/useBar';
 
-export default () => {
-    const dispatch = useDispatch();
-    const {showXAxis, showYAxis, axisBottom} = useSelector((state: RootState) => state.bar);
+export default ({id}: Param) => {
+    const {bar, setPartialState} = useBar(id);
+    const {showXAxis, showYAxis, axisBottom, axisLeft} = bar;
 
     React.useEffect(() => {}, [showXAxis, showYAxis]);
     const {t} = useTranslation();
@@ -33,7 +31,7 @@ export default () => {
                         <Switch
                             size={'small'}
                             checked={showXAxis}
-                            onChange={(checked) => dispatch(setPartialState({showXAxis: checked}))}
+                            onChange={(checked) => setPartialState({showXAxis: checked})}
                         ></Switch>
                     }
                 >
@@ -41,7 +39,7 @@ export default () => {
                         layout={'vertical'}
                         initialValues={axisBottom}
                         onValuesChange={(changedValue) => {
-                            dispatch(setAxis({which: 'axisBottom', props: changedValue}));
+                            setPartialState({axisBottom: changedValue});
                         }}
                     >
                         <Form.Item name={'legend'} label={t('Title')}>
@@ -82,7 +80,7 @@ export default () => {
                         <Switch
                             size={'small'}
                             checked={showYAxis}
-                            onChange={(checked) => dispatch(setPartialState({showYAxis: checked}))}
+                            onChange={(checked) => setPartialState({showYAxis: checked})}
                         ></Switch>
                     }
                 >
@@ -90,7 +88,7 @@ export default () => {
                         layout={'vertical'}
                         initialValues={axisBottom}
                         onValuesChange={(changedValue) => {
-                            dispatch(setAxis({which: 'axisLeft', props: changedValue}));
+                            setPartialState({axisLeft: Object.assign({...axisLeft}, changedValue)});
                         }}
                     >
                         <Form.Item name={'legend'} label={t('Title')}>

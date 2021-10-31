@@ -6,12 +6,10 @@ import MarginInput from '../../CustomInput/MarginInput';
 import {HighlightOutlined} from '@ant-design/icons';
 import {colorSchemes} from '@nivo/colors';
 import {useTranslation} from 'react-i18next';
-import {useBar} from '../../../hooks/useBar';
+import {useScatter} from '../../../hooks/useScatter';
 import {Param} from '../../../atoms/appAtom';
 
 const colorSchemeList = Object.keys(colorSchemes);
-const valueScaleType = ['linear', 'symlog'];
-const indexScaleType = ['band'];
 
 export default function GeneralConfig({id}: Param) {
     const {bar, setPartialState} = useBar(id);

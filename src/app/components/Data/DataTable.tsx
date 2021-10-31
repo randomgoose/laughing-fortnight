@@ -22,6 +22,8 @@ export default function DataTable() {
                     return <BarDataTable id={activeChart.id} />;
                 case 'pie':
                     return <PieDataTable id={activeChart.id} />;
+                default:
+                    return null;
             }
         } else {
             return <Empty description={t('Select a chart to view its data')} />;

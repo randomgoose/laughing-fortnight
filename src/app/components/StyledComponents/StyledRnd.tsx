@@ -64,7 +64,7 @@ export default function StyledRnd({
         <div ref={ref}>
             <Rnd
                 scale={scale}
-                className={classNames(className, 'canvas')}
+                className={classNames(className, 'canvas relative')}
                 style={style}
                 onMouseDown={onMouseDown}
                 resizeHandleComponent={createHandle(handles)}

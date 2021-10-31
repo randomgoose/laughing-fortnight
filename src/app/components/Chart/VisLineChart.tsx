@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ResponsiveLine, ResponsiveLineCanvas} from '@nivo/line';
+import {ResponsiveLine} from '@nivo/line';
 import StyledRnd from '../StyledComponents/StyledRnd';
 import {useImmerAtom} from 'jotai/immer';
 import {lineAtomFamily, LineState} from '../../atoms/lineAtomFamily';
@@ -28,41 +28,6 @@ export default function VisLineChart({id}: {id: string}) {
         });
     }
 
-    // const props = {
-    //     margin,
-    //     data: data.filter((item) => lines.includes(item.id)),
-    //     enableGridX: showGridX,
-    //     enableGridY: showGridY,
-    //     xScale,
-    //     yScale,
-    //     yFormat: ' >-.2f',
-    //     axisBottom: showXAxis ? axisBottom : null,
-    //     axisLeft: showYAxis
-    //         ? {
-    //             tickSize: 5,
-    //             tickPadding: 5,
-    //             tickRotation: 0,
-    //             legend: 'count',
-    //             legendOffset: -40,
-    //             legendPosition: 'middle',
-    //         }
-    //         : null,
-    //     colors,
-    //     enablePoints,
-    //     pointColor,
-    //     pointSize,
-    //     pointBorderColor: { theme: 'background' },
-    //     pointLabelYOffset: -12,
-    //     curve,
-    //     enableArea,
-    //     areaBaselineValue,
-    //     areaOpacity,
-    //     areaBlendMode,
-    //     useMesh: true,
-    //     lineWidth,
-    //     legends,
-    // }
-
     return (
         <StyledRnd
             onMouseDown={() => {
@@ -78,16 +43,13 @@ export default function VisLineChart({id}: {id: string}) {
             style={{background: id === app.activeKey ? 'rgba(123, 97, 255, .05)' : ''}}
             showHandles={id === app.activeKey}
         >
-            {render === 'svg' ? (
-                <ResponsiveLine
-                    {...rest}
-                    axisBottom={showXAxis && rest.axisBottom}
-                    axisLeft={showYAxis && rest.axisLeft}
-                    data={data.filter((datum) => lines.includes(datum.id))}
-                />
-            ) : (
-                <ResponsiveLineCanvas {...rest} data={data.filter((datum) => lines.includes(datum.id))} />
-            )}
+            <ResponsiveLine
+                {...rest}
+                axisBottom={showXAxis && rest.axisBottom}
+                axisLeft={showYAxis && rest.axisLeft}
+                data={data.filter((datum) => lines.includes(datum.id))}
+            />
+
             {id === app.activeKey ? <DimensionIndicator width={width} height={height} /> : null}
         </StyledRnd>
     );

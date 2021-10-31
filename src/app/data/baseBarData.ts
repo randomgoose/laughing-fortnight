@@ -2,7 +2,7 @@ import {BarDatum} from '@nivo/bar';
 
 export const data: BarDatum[] = [
     {
-        country: 'AD',
+        id: 'AD',
         'hot dog': 137,
         'hot dogColor': 'hsl(15, 70%, 50%)',
         burger: 83,
@@ -17,7 +17,7 @@ export const data: BarDatum[] = [
         donutColor: 'hsl(63, 70%, 50%)',
     },
     {
-        country: 'AE',
+        id: 'AE',
         'hot dog': 181,
         'hot dogColor': 'hsl(51, 70%, 50%)',
         burger: 110,
@@ -32,7 +32,7 @@ export const data: BarDatum[] = [
         donutColor: 'hsl(168, 70%, 50%)',
     },
     {
-        country: 'AF',
+        id: 'AF',
         'hot dog': 57,
         'hot dogColor': 'hsl(28, 70%, 50%)',
         burger: 113,
@@ -47,7 +47,7 @@ export const data: BarDatum[] = [
         donutColor: 'hsl(324, 70%, 50%)',
     },
     {
-        country: 'AG',
+        id: 'AG',
         'hot dog': 127,
         'hot dogColor': 'hsl(50, 70%, 50%)',
         burger: 39,
@@ -62,7 +62,7 @@ export const data: BarDatum[] = [
         donutColor: 'hsl(31, 70%, 50%)',
     },
     {
-        country: 'AI',
+        id: 'AI',
         'hot dog': 169,
         'hot dogColor': 'hsl(241, 70%, 50%)',
         burger: 111,
@@ -77,7 +77,7 @@ export const data: BarDatum[] = [
         donutColor: 'hsl(67, 70%, 50%)',
     },
     {
-        country: 'AL',
+        id: 'AL',
         'hot dog': 80,
         'hot dogColor': 'hsl(44, 70%, 50%)',
         burger: 153,
@@ -92,7 +92,7 @@ export const data: BarDatum[] = [
         donutColor: 'hsl(97, 70%, 50%)',
     },
     {
-        country: 'AM',
+        id: 'AM',
         'hot dog': 21,
         'hot dogColor': 'hsl(207, 70%, 50%)',
         burger: 83,
