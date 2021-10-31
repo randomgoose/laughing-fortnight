@@ -4,6 +4,7 @@ import {useImmerAtom} from 'jotai/immer';
 import * as React from 'react';
 import {appAtom, Param} from '../../atoms/appAtom';
 import {scatterAtomFamily, ScatterState} from '../../atoms/scatterAtomFamily';
+import DimensionIndicator from '../DimensionIndicator';
 import StyledRnd from '../StyledComponents/StyledRnd';
 
 export default function VisScatterPlot({id}: Param) {
@@ -44,6 +45,7 @@ export default function VisScatterPlot({id}: Param) {
             showHandles={id === activeKey}
         >
             <ResponsiveScatterPlot {...rest} />
+            {id === activeKey ? <DimensionIndicator width={width} height={height} /> : null}
         </StyledRnd>
     );
 }

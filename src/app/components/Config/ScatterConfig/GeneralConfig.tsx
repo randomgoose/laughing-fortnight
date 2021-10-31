@@ -1,7 +1,7 @@
 import * as React from 'react';
 import ConfigPage from '../ConfigPage';
 import {FcSettings} from 'react-icons/fc';
-import {Form, Radio, Select, Slider, Space, Switch} from 'antd';
+import {Form, Select, Slider, Space} from 'antd';
 import MarginInput from '../../CustomInput/MarginInput';
 import {HighlightOutlined} from '@ant-design/icons';
 import {colorSchemes} from '@nivo/colors';
@@ -9,11 +9,30 @@ import {useTranslation} from 'react-i18next';
 import {useScatter} from '../../../hooks/useScatter';
 import {Param} from '../../../atoms/appAtom';
 
+const blendModeList = [
+    'normal',
+    'multiply',
+    'screen',
+    'overlay',
+    'darken',
+    'lighten',
+    'color-dodge',
+    'color-burn',
+    'hard-light',
+    'soft-light',
+    'difference',
+    'exclusion',
+    'hue',
+    'saturation',
+    'color',
+    'luminosity',
+];
+
 const colorSchemeList = Object.keys(colorSchemes);
 
 export default function GeneralConfig({id}: Param) {
-    const {bar, setPartialState} = useBar(id);
-    const {groupMode, layout, margin, padding, innerPadding, colors, indexScale, valueScale} = bar;
+    const {scatter, setPartialState} = useScatter(id);
+    const {margin, colors, nodeSize, blendMode} = scatter;
     const {t} = useTranslation();
 
     return (
@@ -21,67 +40,17 @@ export default function GeneralConfig({id}: Param) {
             <Form
                 layout={'vertical'}
                 initialValues={{
-                    groupMode,
-                    layout,
                     margin,
-                    padding,
-                    innerPadding,
                     colors,
-                    indexScale,
-                    valueScale,
+                    nodeSize,
+                    blendMode,
                 }}
                 onValuesChange={(changedValues) => {
                     setPartialState(changedValues);
                 }}
             >
-                <Form.Item name={['indexScale', 'type']} label={'Index Scale'}>
-                    <Select
-                        options={indexScaleType.map((type) => ({
-                            title: type,
-                            value: type,
-                        }))}
-                    ></Select>
-                </Form.Item>
-                <Form.Item name={['valueScale', 'type']} label={'Value Scale'}>
-                    <Select
-                        options={valueScaleType.map((type) => ({
-                            title: type,
-                            value: type,
-                        }))}
-                    ></Select>
-                </Form.Item>
-                <Form.Item name="groupMode" label={t('Group Mode')}>
-                    <Radio.Group
-                        options={[
-                            {
-                                value: 'grouped',
-                                label: t('Grouped'),
-                            },
-                            {value: 'stacked', label: t('Stacked')},
-                        ]}
-                        optionType={'button'}
-                    />
-                </Form.Item>
-                <Form.Item name="layout" label={t('Layout')}>
-                    <Radio.Group
-                        options={[
-                            {
-                                value: 'horizontal',
-                                label: t('Horizontal'),
-                            },
-                            {value: 'vertical', label: t('Vertical')},
-                        ]}
-                        optionType={'button'}
-                    />
-                </Form.Item>
-                <Form.Item name="reverse" valuePropName={'checked'} label={t('Reverse')}>
-                    <Switch />
-                </Form.Item>
-                <Form.Item name="padding" label={t('Padding')}>
-                    <Slider min={0.1} max={0.9} step={0.1} />
-                </Form.Item>
-                <Form.Item name="innerPadding" label={t('Inner Padding')}>
-                    <Slider step={1} max={9} />
+                <Form.Item name="nodeSize" label={t('Node size')}>
+                    <Slider />
                 </Form.Item>
                 <Form.Item name="margin" label={t('Margin')}>
                     <MarginInput />
@@ -95,13 +64,24 @@ export default function GeneralConfig({id}: Param) {
                     }
                     name={['colors', 'scheme']}
                 >
-                    <Select style={{width: '100%'}}>
+                    <Select className={'w-full'}>
                         {colorSchemeList.map((scheme) => (
                             <Select.Option key={scheme} value={scheme}>
                                 {scheme}
                             </Select.Option>
                         ))}
                     </Select>
+                </Form.Item>
+                <Form.Item name={'blendMode'} label={<Space>{t('Blend Mode')}</Space>}>
+                    <Select
+                        placeholder={'Blend mode'}
+                        options={blendModeList.map((mode) => {
+                            return {
+                                value: mode,
+                                label: mode,
+                            };
+                        })}
+                    />
                 </Form.Item>
             </Form>
         </ConfigPage>

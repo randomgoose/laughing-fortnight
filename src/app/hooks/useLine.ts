@@ -1,3 +1,4 @@
+import {Serie} from '@nivo/line';
 import {PrimitiveAtom} from 'jotai';
 import {useImmerAtom} from 'jotai/immer';
 import {lineAtomFamily, LineState} from '../atoms/lineAtomFamily';
@@ -21,10 +22,20 @@ export function useLine(id: string) {
         setLine((drafState) => Object.assign(drafState, state));
     }
 
+    function setNewData(data: Serie[]) {
+        setLine((draftState) => {
+            draftState.data = data;
+            draftState.lines = data
+                .filter((serie) => serie.data.filter((datum) => isNaN(parseFloat(datum.y as string))).length === 0)
+                .map((serie) => serie.id);
+        });
+    }
+
     return {
         line,
         setSerieValue,
         setSerieId,
         setPartialState,
+        setNewData,
     };
 }

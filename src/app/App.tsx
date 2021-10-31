@@ -3,59 +3,71 @@ import './styles/ui.css';
 import SideBar from './components/Sidebar';
 import Canvas from './components/Canvas';
 import LineConfig from './components/Config/LineConfig/Config';
-import Gallery from './components/Gallery';
 import PieConfig from './components/Config/PieConfig/Config';
 import BarConfig from './components/Config/BarConfig/Config';
 import ScatterConfig from './components/Config/ScatterConfig/Config';
-import {ConfigProvider} from 'antd';
-import {useDispatch} from 'react-redux';
-import {addSnapshot, editSnapshotById, removeSnapshotById, setSelectionId, setSnapshots} from './features/app/appSlice';
+import {Button, ConfigProvider} from 'antd';
 import 'tailwindcss/tailwind.css';
 import {PieConfigProvider} from './context/pie-context';
 import {appAtom, ChartType} from './atoms/appAtom';
 import {useAtom} from 'jotai';
 import {Empty} from 'antd';
 import {useTranslation} from 'react-i18next';
+import Gallery from './components/Gallery';
 
 function App() {
-    const [{hideInterface, activeKey, charts}] = useAtom(appAtom);
-    const dispatch = useDispatch();
+    const [{hideInterface, activeKey, charts, selectionId}, setApp] = useAtom(appAtom);
     const {t} = useTranslation();
 
     const activeChart = charts.find((chart) => chart.id === activeKey);
 
-    // function renderChart(render: 'canvas' | 'svg', size: { width: number; height: number }) {
-    //     if (render === 'svg') {
-    //         window.parent.postMessage(
-    //             {
-    //                 pluginMessage: {
-    //                     type: 'render-chart',
-    //                     render: 'svg',
-    //                     data: `<svg xmlns="http://www.w3.org/2000/svg">${document.querySelector('.canvas').querySelector('svg').innerHTML
-    //                         }</svg>`.replace(/transparent/g, '#ffffff'),
-    //                     size,
-    //                 },
-    //             },
-    //             '*'
-    //         )
-    //     } else if (render === 'canvas') {
-    //         document.querySelector('canvas').toBlob((blob) => {
-    //             blob.arrayBuffer().then((buffer) => {
-    //                 window.parent.postMessage(
-    //                     {
-    //                         pluginMessage: {
-    //                             type: 'render-chart',
-    //                             render: 'canvas',
-    //                             data: [...new Uint8Array(buffer)],
-    //                             size,
-    //                         },
-    //                     },
-    //                     '*'
-    //                 )
-    //             })
-    //         })
-    //     }
-    // }
+    function renderChart() {
+        const data = Array.from(document.querySelectorAll('.chart-box')).map((box) => {
+            const [x, y] = box
+                .getAttribute('style')
+                .split(';')
+                .find((attr) => attr.includes('transform'))
+                .replace('transform: translate(', '')
+                .replace(')', '')
+                .split(',')
+                .map((i) => parseFloat(i));
+            return {
+                svg: `<svg xmlns="http://www.w3.org/2000/svg">${box.querySelector('svg').innerHTML}</svg>`.replace(
+                    /transparent/g,
+                    '#ffffff'
+                ),
+                position: {x: x, y: y},
+            };
+        });
+
+        window.parent.postMessage(
+            {
+                pluginMessage: {
+                    type: 'render-chart',
+                    render: 'svg',
+                    data: data,
+                },
+            },
+            '*'
+        );
+        // } else if (render === 'canvas') {
+        //     document.querySelector('canvas').toBlob((blob) => {
+        //         blob.arrayBuffer().then((buffer) => {
+        //             window.parent.postMessage(
+        //                 {
+        //                     pluginMessage: {
+        //                         type: 'render-chart',
+        //                         render: 'canvas',
+        //                         data: [...new Uint8Array(buffer)],
+        //                         size,
+        //                     },
+        //                 },
+        //                 '*'
+        //             )
+        //         })
+        //     })
+        // }
+    }
 
     function renderConfig(type: ChartType) {
         switch (type) {
@@ -81,19 +93,7 @@ function App() {
                         // dispatch(loadState(JSON.parse(data)));
                         break;
                     case 'set-selection':
-                        dispatch(setSelectionId(data));
-                        break;
-                    case 'load-snapshots':
-                        dispatch(setSnapshots(data));
-                        break;
-                    case 'save-snapshot':
-                        dispatch(addSnapshot(data));
-                        break;
-                    case 'delete-snapshot':
-                        dispatch(removeSnapshotById(data.id));
-                        break;
-                    case 'edit-snapshot':
-                        dispatch(editSnapshotById(data));
+                        setApp((app) => ({...app, selectionId: data}));
                         break;
                     default:
                 }
@@ -117,20 +117,21 @@ function App() {
                         </div>
                     )}
 
-                    {/* <Button
+                    <Button
                         className={'fixed bottom-16 left-1/2 transform -translate-x-1/2 text-base overflow-visible'}
                         type={'primary'}
                         size={'large'}
                         onClick={() => {
-                            if (chartType === 'line')
-                                renderChart(line.render, { width: line.width, height: line.height })
-                            if (chartType === 'bar') renderChart(bar.render, { width: bar.width, height: bar.height })
+                            renderChart();
+                            // if (chartType === 'line')
+                            //     renderChart(line.render, { width: line.width, height: line.height })
+                            // if (chartType === 'bar') renderChart(bar.render, { width: bar.width, height: bar.height })
                         }}
                         shape={'round'}
                         disabled={!(selectionId.length > 0)}
                     >
                         {selectionId.length > 0 ? t('Render') : t('Select a Frame')}
-                    </Button> */}
+                    </Button>
                 </div>
             </PieConfigProvider>
         </ConfigProvider>

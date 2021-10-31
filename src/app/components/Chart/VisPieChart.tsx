@@ -1,23 +1,23 @@
-//@ts-nocheck
 import * as React from 'react';
 import {DefaultRawDatum, ResponsivePie} from '@nivo/pie';
 import StyledRnd from '../StyledComponents/StyledRnd';
 import {pieAtomFamily} from '../../atoms/pieAtomFamily';
-import {Menu, Dropdown} from 'antd';
+// import { Menu } from 'antd'
 import {ComputedDatum} from '@nivo/bar';
-import {useTranslation} from 'react-i18next';
+// import { useTranslation } from 'react-i18next'
 import {useImmerAtom} from 'jotai/immer';
-import {usePie} from '../../hooks/usePie';
+// import { usePie } from '../../hooks/usePie'
 import {appAtom, Param} from '../../atoms/appAtom';
 import PieWidget from '../Widgets/PieWidget';
+import DimensionIndicator from '../DimensionIndicator';
 
 export default function VisPieChart({id}: Param) {
     const [pie, setPie] = useImmerAtom(pieAtomFamily({id}));
     const [app, setApp] = useImmerAtom(appAtom);
     const [activeArc, setActiveArc] =
         React.useState<Omit<ComputedDatum<DefaultRawDatum>, 'index' | 'indexValue'>>(null);
-    const {t} = useTranslation();
-    const {addArc, removeArcById} = usePie(id);
+    // const { t } = useTranslation()
+    // const { addArc, removeArcById } = usePie(id)
 
     function onDragStop(_e, d) {
         setPie((pie) => {
@@ -35,20 +35,20 @@ export default function VisPieChart({id}: Param) {
         });
     }
 
-    const menu = (
-        <Menu>
-            <Menu.Item
-                key="1"
-                danger
-                onClick={() => {
-                    removeArcById(activeArc ? (activeArc.id as string) : '');
-                }}
-            >{`${t('Delete')} ${activeArc ? activeArc.id : ''}`}</Menu.Item>
-            <Menu.Item key="2" onClick={addArc}>
-                {t('Add row')}
-            </Menu.Item>
-        </Menu>
-    );
+    // const menu = (
+    //     <Menu>
+    //         <Menu.Item
+    //             key="1"
+    //             danger
+    //             onClick={() => {
+    //                 removeArcById(activeArc ? (activeArc.id as string) : '')
+    //             }}
+    //         >{`${t('Delete')} ${activeArc ? activeArc.id : ''}`}</Menu.Item>
+    //         <Menu.Item key="2" onClick={addArc}>
+    //             {t('Add row')}
+    //         </Menu.Item>
+    //     </Menu>
+    // )
 
     return (
         <StyledRnd
@@ -107,6 +107,7 @@ export default function VisPieChart({id}: Param) {
                 }}
             /> */}
             <PieWidget id={id} visible={app.activeKey === id && activeArc !== null} activeArc={activeArc} />
+            {id === app.activeKey ? <DimensionIndicator width={pie.width} height={pie.height} /> : null}
         </StyledRnd>
     );
 }

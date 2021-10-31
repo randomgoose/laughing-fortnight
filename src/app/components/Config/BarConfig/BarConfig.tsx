@@ -1,3 +1,4 @@
+//@ts-nocheck
 import * as React from 'react';
 import {Form, Input, Space} from 'antd';
 import {useDispatch, useSelector} from 'react-redux';

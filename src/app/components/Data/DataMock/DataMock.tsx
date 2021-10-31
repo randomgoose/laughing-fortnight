@@ -6,47 +6,46 @@ import {useImmer} from 'use-immer';
 import {generateDatumSequence} from '../../../utils/generateNumbers';
 import cryptoRandomString from 'crypto-random-string';
 import {Serie} from '@nivo/line';
-import {useDispatch, useSelector} from 'react-redux';
-import {setNewData} from '../../../features/chart/lineChartSlice';
 import {FallOutlined, RiseOutlined} from '@ant-design/icons';
-import Header from '../../Typography/Header';
-import {setDataSource} from '../../../features/app/appSlice';
-import {RootState} from '../../../redux/store';
-import {setPartialState} from '../../../features/chart/barChartSlice';
 import AdvancedConfig from './AdvancedConfig';
 import {useTranslation} from 'react-i18next';
 import {MockDataProps, mockLineData} from '../../../mock/mock-data';
+import {useApp} from '../../../hooks/useApp';
+import {useLine} from '../../../hooks/useLine';
+import {useBar} from '../../../hooks/useBar';
 
 export default function DataMock() {
-    const dispatch = useDispatch();
-    const {chartType} = useSelector((state: RootState) => state.app);
+    const {getCurrentChart} = useApp();
+    const {type, id} = getCurrentChart();
+    const {setNewData} = useLine(id);
+    const {setPartialState} = useBar(id);
+
     const [showAdvancedSettings, setShowAdvancedSettings] = React.useState(false);
-    const {decimalDigit} = useSelector((state: RootState) => state.dataMock);
     const [numberSequenceAttr, setNumberSequenceAttr] = useImmer<MockDataProps>({
         min: 0,
         max: 1000,
         length: 12,
         count: 1,
         trend: 'rise',
-        decimalDigit: decimalDigit,
+        decimalDigit: 2,
     });
     const {t} = useTranslation();
 
     React.useEffect(() => {
-        setNumberSequenceAttr({...numberSequenceAttr, decimalDigit});
-    }, [decimalDigit]);
+        setNumberSequenceAttr({...numberSequenceAttr, decimalDigit: 2});
+    }, [2]);
 
     const [tempData, setTempData] = useImmer<Serie[]>([]);
 
     React.useEffect(() => {
         console.log(tempData);
         if (tempData.length > 0) {
-            switch (chartType) {
+            switch (type) {
                 case 'line':
-                    dispatch(setNewData(tempData));
+                    setNewData(tempData);
                     break;
                 case 'bar':
-                    dispatch(setPartialState({data: tempData}));
+                    setPartialState({data: tempData});
                     break;
                 default:
                     return;
@@ -57,9 +56,6 @@ export default function DataMock() {
     return (
         <div className={'data-mock'} style={{marginBottom: 8}}>
             <Space direction={'vertical'}>
-                <Header showReturnButton onReturn={() => dispatch(setDataSource(null))}>
-                    {t('Mock Data')}
-                </Header>
                 <Form
                     layout={'inline'}
                     initialValues={numberSequenceAttr}
@@ -98,7 +94,7 @@ export default function DataMock() {
                         onClick={() => {
                             const {count, length, min, max} = numberSequenceAttr;
                             let temp = [];
-                            switch (chartType) {
+                            switch (type) {
                                 case 'line':
                                     const series = mockLineData(numberSequenceAttr);
                                     temp = series;
@@ -114,10 +110,10 @@ export default function DataMock() {
                                             length: count,
                                             min: min,
                                             max: max,
-                                            decimalDigit: decimalDigit,
+                                            decimalDigit: 2,
                                         }),
                                     ];
-                                    dispatch(setPartialState({keys: attrs, indexBy: 'id'}));
+                                    setPartialState({keys: attrs, indexBy: 'id'});
                                     break;
                             }
                             setTempData(temp);

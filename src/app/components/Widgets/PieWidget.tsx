@@ -1,19 +1,9 @@
-import {ComputedDatum, DefaultRawDatum} from '@nivo/pie';
 import {Button} from 'antd';
 import * as React from 'react';
 import EditableDiv from '../CustomInput/EditableDiv';
-import {DeleteOutlined} from '@ant-design/icons';
 import {usePie} from '../../hooks/usePie';
 
-export default function PieWidget({
-    id,
-    visible,
-    activeArc,
-}: {
-    id: string;
-    visible: boolean;
-    activeArc: Omit<ComputedDatum<DefaultRawDatum>, 'index' | 'indexValue'>;
-}) {
+export default function PieWidget({id, visible, activeArc}: {id: string; visible: boolean; activeArc: any}) {
     const {removeArcById} = usePie(id);
     return activeArc ? (
         <div
@@ -23,7 +13,7 @@ export default function PieWidget({
         >
             <div className={'w-4 h-4'} style={{background: activeArc.color}}></div>
             <EditableDiv value={activeArc.value} />
-            <Button icon={<DeleteOutlined />} danger block onClick={() => removeArcById(activeArc.id as string)}>
+            <Button danger block onClick={() => removeArcById(activeArc.id as string)}>
                 删除
             </Button>
         </div>

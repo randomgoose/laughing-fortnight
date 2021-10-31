@@ -17,24 +17,24 @@ export default function LineConfig() {
                     <GeneralConfig id={activeKey} />
                 </StyledTabPane>
                 <StyledTabPane key={'axes'} tab={<FcRuler />}>
-                    <AxisConfig id={activeKey} />
+                    {/* <AxisConfig id={activeKey} /> */}
                 </StyledTabPane>
                 <StyledTabPane key={'grid'} tab={<FcGrid />}>
-                    <GridConfig id={activeKey} />
+                    {/* <GridConfig id={activeKey} /> */}
                 </StyledTabPane>
                 <StyledTabPane key={'legend'} tab={<FcAbout />}>
                     <LegendConfig id={activeKey} />
                 </StyledTabPane>
                 <StyledTabPane key={'lines'} tab={<FcLineChart />}>
-                    <LinesConfig id={activeKey} />
+                    {/* <LinesConfig id={activeKey} /> */}
                 </StyledTabPane>
                 <StyledTabPane key={'points'} tab={<FcOrgUnit />}>
-                    <PointsConfig id={activeKey} />
+                    {/* <PointsConfig id={activeKey} /> */}
                 </StyledTabPane>
                 <StyledTabPane key={'code'} tab={<FcViewDetails />}></StyledTabPane>
             </Tabs>
         </>
     );
 
-    return activeSerie ? <SerieConfig /> : config;
+    return config;
 }

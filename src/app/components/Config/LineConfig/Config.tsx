@@ -1,11 +1,8 @@
 import * as React from 'react';
-import {useSelector} from 'react-redux';
-import {RootState} from '../../../redux/store';
 import {Tabs} from 'antd';
 import GridConfig from './GridConfig';
 import AxisConfig from './AxisConfig';
 import LegendConfig from '../General/LegendConfig';
-import SerieConfig from './SerieConfig';
 import GeneralConfig from './GeneralConfig';
 import LinesConfig from './LinesConfig';
 import PointsConfig from './PointsConfig';
@@ -15,7 +12,7 @@ import {useAtom} from 'jotai';
 import {appAtom} from '../../../atoms/appAtom';
 
 export default function LineConfig() {
-    const {activeSerie} = useSelector((state: RootState) => state.line);
+    // const {activeSerie} = useSelector((state: RootState) => state.line);
     const [{activeKey}] = useAtom(appAtom);
 
     const config = (
@@ -44,5 +41,5 @@ export default function LineConfig() {
         </>
     );
 
-    return activeSerie ? <SerieConfig /> : config;
+    return config;
 }

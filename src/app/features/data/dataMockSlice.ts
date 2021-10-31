@@ -1,26 +1,26 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+// import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-export interface DataMockState {
-    decimalDigit: number;
-}
+// export interface DataMockState {
+//     decimalDigit: number;
+// }
 
-const initialState: DataMockState = {
-    decimalDigit: 2,
-};
+// const initialState: DataMockState = {
+//     decimalDigit: 2,
+// };
 
-export const dataMockSlice = createSlice({
-    name: 'dataMock',
-    initialState,
-    reducers: {
-        setDecimalDigit: (state, action: PayloadAction<number>) => {
-            state.decimalDigit = action.payload;
-        },
-        setPartialState: (state, action: PayloadAction<Partial<DataMockState>>) => {
-            Object.assign(state, action.payload);
-        },
-    },
-});
+// export const dataMockSlice = createSlice({
+//     name: 'dataMock',
+//     initialState,
+//     reducers: {
+//         setDecimalDigit: (state, action: PayloadAction<number>) => {
+//             state.decimalDigit = action.payload;
+//         },
+//         setPartialState: (state, action: PayloadAction<Partial<DataMockState>>) => {
+//             Object.assign(state, action.payload);
+//         },
+//     },
+// });
 
-export const {setDecimalDigit, setPartialState} = dataMockSlice.actions;
+// export const {setDecimalDigit, setPartialState} = dataMockSlice.actions;
 
-export default dataMockSlice.reducer;
+// export default dataMockSlice.reducer;

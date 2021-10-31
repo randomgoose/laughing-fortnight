@@ -6,6 +6,7 @@ import {appAtom, Param} from '../../atoms/appAtom';
 import {PrimitiveAtom, useAtom} from 'jotai';
 import {barAtomFamily, BarState} from '../../atoms/barAtomFamily';
 import {useImmerAtom} from 'jotai/immer';
+import DimensionIndicator from '../DimensionIndicator';
 
 const VisBarChart = ({id}: Param) => {
     const [bar, setBar] = useImmerAtom(barAtomFamily({id}) as PrimitiveAtom<BarState>);
@@ -44,6 +45,7 @@ const VisBarChart = ({id}: Param) => {
             }}
         >
             <ResponsiveBar {...bar} />
+            {id === app.activeKey ? <DimensionIndicator width={bar.width} height={bar.height} /> : null}
         </StyledRnd>
     );
 };

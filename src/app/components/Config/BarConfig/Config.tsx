@@ -6,15 +6,12 @@ import {FcAbout, FcGrid, FcNumericalSorting12, FcRuler, FcSettings} from 'react-
 import AxisConfig from './AxisConfig';
 import GridConfig from './GridConfig';
 import LegendConfig from '../General/LegendConfig';
-import {useSelector} from 'react-redux';
-import {RootState} from '../../../redux/store';
-import BarConfig from './BarConfig';
 import {useAtom} from 'jotai';
 import {appAtom} from '../../../atoms/appAtom';
 import LabelConfig from './LabelConfig';
 
 export default function Config() {
-    const {activeIndex} = useSelector((state: RootState) => state.bar);
+    // const {activeIndex} = useSelector((state: RootState) => state.bar);
     const [{activeKey}] = useAtom(appAtom);
     const config = (
         <Tabs tabPosition={'left'} type={'card'} className={'w-full h-full'}>
@@ -36,5 +33,5 @@ export default function Config() {
         </Tabs>
     );
 
-    return activeIndex >= 0 ? <BarConfig /> : config;
+    return config;
 }

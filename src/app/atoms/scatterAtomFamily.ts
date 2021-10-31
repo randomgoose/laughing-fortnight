@@ -19,8 +19,8 @@ export const scatterAtomFamily = atomFamily(
         atom({
             // Base
             id: param.id,
-            xScale: {type: 'linear', min: 0, max: 'auto'},
-            yScale: {type: 'linear', min: 0, max: 'auto'},
+            xScale: {type: 'linear', min: 'auto', max: 'auto'},
+            yScale: {type: 'linear', min: 'auto', max: 'auto'},
             nodeSize: 9,
             width: 400,
             height: 300,

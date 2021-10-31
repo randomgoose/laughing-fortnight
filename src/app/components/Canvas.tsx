@@ -50,7 +50,7 @@ export default function Canvas() {
     return (
         <div
             {...bind()}
-            className={'canvas'}
+            className={'canvas__wrapper'}
             ref={domTarget}
             tabIndex={1}
             onKeyDown={(e: React.KeyboardEvent) => {

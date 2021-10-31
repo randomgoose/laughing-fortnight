@@ -1,15 +1,13 @@
+//@ts-nocheck
+
 import * as React from 'react';
 import {ArrowLeftOutlined} from '@ant-design/icons';
 import {Space, Button, Form, Input} from 'antd';
-import {useDispatch, useSelector} from 'react-redux';
-import {setActiveSerie} from '../../../features/chart/lineChartSlice';
 import Label from '../../Typography/Label';
 import {useClickAway} from 'ahooks';
-import {RootState} from '../../../redux/store';
 import {SketchPicker} from 'react-color';
 
 export default function () {
-    const dispatch = useDispatch();
     const [displayColorPicker, setDisplayColorPicker] = React.useState(false);
     const ref = React.useRef(null);
     const {activeSerie} = useSelector((state: RootState) => state.line);
