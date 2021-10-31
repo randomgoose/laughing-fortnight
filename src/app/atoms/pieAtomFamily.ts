@@ -54,7 +54,6 @@ export const pieAtomFamily = atomFamily(
             // Legends
             legends: [...baseLegend],
             // Dimension
-            scale: 1,
             width: 400,
             height: 300,
             x: 400,

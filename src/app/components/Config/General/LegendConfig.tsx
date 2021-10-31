@@ -29,6 +29,7 @@ export default ({id}: Param) => {
     const [pie, setPie] = useImmerAtom(pieAtomFamily({id}));
     const [line, setLine] = useImmerAtom(lineAtomFamily({id}) as PrimitiveAtom<LineState>);
     const [bar, setBar] = useImmerAtom(barAtomFamily({id}));
+    // const [scatter, ]
 
     const addLegend = React.useCallback(() => {
         switch (activeChart.type) {
@@ -38,10 +39,16 @@ export default ({id}: Param) => {
                 });
                 break;
             case 'bar':
-                setBar((draftState) => draftState.legends.push({...baseLegend[0], dataFrom: 'keys'}));
+                setBar((draftState) => {
+                    draftState.legends.push({...baseLegend[0], dataFrom: 'keys'});
+                });
                 break;
             case 'pie':
-                setPie((draftState) => draftState.legends.push(baseLegend[0]));
+                setPie((draftState) => {
+                    draftState.legends.push(baseLegend[0]);
+                });
+                break;
+            case 'scatter':
         }
     }, [line.legends, activeChart.type, bar.legends, pie.legends]);
 
@@ -80,7 +87,7 @@ export default ({id}: Param) => {
     );
 
     return (
-        <Space style={{width: '100%'}} direction={'vertical'}>
+        <Space className={'w-full'} direction={'vertical'}>
             <Typography.Title level={5}>
                 <Space size={4}>
                     <FcAbout />
@@ -113,7 +120,7 @@ export default ({id}: Param) => {
                                             });
                                             break;
                                         case 'bar':
-                                            setLine((draftState) => {
+                                            setBar((draftState) => {
                                                 Object.assign(draftState.legends[index], {
                                                     ...changedValues,
                                                     dataFrom: 'keys',

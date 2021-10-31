@@ -2,6 +2,7 @@ import {atomFamily} from 'jotai/utils';
 import {atom} from 'jotai';
 import {ScatterPlotDatum, ScatterPlotRawSerie, ScatterPlotSvgProps} from '@nivo/scatterplot';
 import {baseData} from '../data/baseScatterData';
+import {baseLegend} from '../data/baseLegend';
 
 export interface ScatterState extends ScatterPlotSvgProps<ScatterPlotDatum> {
     id: string;
@@ -34,6 +35,24 @@ export const scatterAtomFamily = atomFamily(
             // Grid && Axes
             enableGridX: true,
             enableGridY: true,
+            axisBottom: {
+                tickSize: 5,
+                tickPadding: 5,
+                tickRotation: 0,
+                legend: 'weight',
+                legendPosition: 'middle',
+                legendOffset: 46,
+            },
+            axisLeft: {
+                tickSize: 5,
+                tickPadding: 5,
+                tickRotation: 0,
+                legend: 'size',
+                legendPosition: 'middle',
+                legendOffset: -60,
+            },
+            useMesh: true,
+            legends: [...baseLegend],
         } as ScatterState),
     (a: Param, b: Param) => a.id === b.id
 );
