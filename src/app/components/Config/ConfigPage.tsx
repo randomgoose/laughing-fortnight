@@ -11,7 +11,7 @@ interface ConfigPageProps {
 
 export default function ConfigPage({children, title, icon, style}: ConfigPageProps) {
     return (
-        <div className={'ConfigPage'} style={style}>
+        <div className={'ConfigPage w-full h-full'} style={style}>
             <Typography.Title level={5}>
                 {title && (
                     <Space align={'center'} size={4}>

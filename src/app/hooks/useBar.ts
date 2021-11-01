@@ -2,6 +2,7 @@ import {PrimitiveAtom} from 'jotai';
 import {useImmerAtom} from 'jotai/immer';
 import {barAtomFamily, BarState} from '../atoms/barAtomFamily';
 import _ from 'lodash';
+import cryptoRandomString from 'crypto-random-string';
 
 export function useBar(id: string) {
     const [bar, setBar] = useImmerAtom(barAtomFamily({id}) as PrimitiveAtom<BarState>);
@@ -33,13 +34,19 @@ export function useBar(id: string) {
 
     function addKey(key: string) {
         setBar((draftState) => {
-            draftState.data.map((datum) => (datum[key] = Math.random()));
+            draftState.data.map((datum) => (datum[key] = (Math.random() * 100).toFixed(0)));
             draftState.keys.push(key);
         });
     }
 
     function setPartialState(state: Partial<BarState>) {
         setBar((draftState) => Object.assign(draftState, state));
+    }
+
+    function addRow() {
+        setBar((draftState) => {
+            draftState.data.push({...draftState.data[0], id: cryptoRandomString({length: 4})});
+        });
     }
 
     return {
@@ -49,5 +56,6 @@ export function useBar(id: string) {
         removeKey,
         addKey,
         setPartialState,
+        addRow,
     };
 }

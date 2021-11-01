@@ -8,14 +8,12 @@ import {ComputedDatum} from '@nivo/bar';
 import {useImmerAtom} from 'jotai/immer';
 // import { usePie } from '../../hooks/usePie'
 import {appAtom, Param} from '../../atoms/appAtom';
-import PieWidget from '../Widgets/PieWidget';
 import DimensionIndicator from '../DimensionIndicator';
 
 export default function VisPieChart({id}: Param) {
     const [pie, setPie] = useImmerAtom(pieAtomFamily({id}));
     const [app, setApp] = useImmerAtom(appAtom);
-    const [activeArc, setActiveArc] =
-        React.useState<Omit<ComputedDatum<DefaultRawDatum>, 'index' | 'indexValue'>>(null);
+    const [, setActiveArc] = React.useState<Omit<ComputedDatum<DefaultRawDatum>, 'index' | 'indexValue'>>(null);
     // const { t } = useTranslation()
     // const { addArc, removeArcById } = usePie(id)
 
@@ -106,7 +104,6 @@ export default function VisPieChart({id}: Param) {
                     }
                 }}
             /> */}
-            <PieWidget id={id} visible={app.activeKey === id && activeArc !== null} activeArc={activeArc} />
             {id === app.activeKey ? <DimensionIndicator width={pie.width} height={pie.height} /> : null}
         </StyledRnd>
     );

@@ -53,7 +53,8 @@ body * {
 }
 
 .Config .ant-tabs-content-holder {
-    overflow: scroll !important;
+    overflow-y: scroll !important;
+    padding: 0;
 }
 
 .Gallery .ant-form-item-label > label {

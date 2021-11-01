@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Button, Table} from 'antd';
+import {Button, message, Table} from 'antd';
 import {useImmerAtom} from 'jotai/immer';
 import {useTranslation} from 'react-i18next';
 import EditableDiv from '../../CustomInput/EditableDiv';
@@ -7,7 +7,6 @@ import {pieAtomFamily} from '../../../atoms/pieAtomFamily';
 import {Param} from '../../../atoms/appAtom';
 import {usePie} from '../../../hooks/usePie';
 import {DeleteOutlined} from '@ant-design/icons';
-import DataMock from '../DataMock/DataMock';
 
 export default function PieDataTable({id}: Param) {
     const [pie, setPie] = useImmerAtom(pieAtomFamily({id}));
@@ -15,7 +14,28 @@ export default function PieDataTable({id}: Param) {
     const {addArc, removeArcById, changeArcValueById} = usePie(id);
 
     const columns = [
-        {dataIndex: 'id', title: t('ID')},
+        {
+            dataIndex: 'id',
+            title: t('ID'),
+            render: (value, record) => (
+                <EditableDiv
+                    value={value}
+                    onFinishEditing={(value) => {
+                        if ((value + '').length <= 0) {
+                            message.error('Cannot leave this field empty');
+                            return;
+                        }
+                        if (pie.data.some((datum) => datum.id === value + '')) {
+                            message.error(`${value} exists.`);
+                            return;
+                        }
+                        setPie((pie) => {
+                            pie.data.find((i) => i.id === record.id).id = value as string;
+                        });
+                    }}
+                />
+            ),
+        },
         {
             dataIndex: 'label',
             title: t('Label'),
@@ -62,12 +82,11 @@ export default function PieDataTable({id}: Param) {
 
     return (
         <>
-            <DataMock />
             <Table
                 rowKey={'id'}
                 dataSource={pie.data}
                 columns={columns}
-                scroll={{y: 160}}
+                scroll={{y: 140}}
                 footer={() => <Button onClick={addArc}>{t('Add Row')}</Button>}
             />
         </>

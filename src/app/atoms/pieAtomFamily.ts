@@ -4,13 +4,10 @@ import {data} from '../data/basePieData';
 import {atomFamily} from 'jotai/utils';
 import {atom} from 'jotai';
 
-export interface PieState extends PieSvgProps<DefaultRawDatum> {
-    id: string;
-    data: DefaultRawDatum[];
+export interface PieState extends PieSvgProps<DefaultRawDatum & {label: string}> {
+    data: (DefaultRawDatum & {label: string})[];
     x: number;
     y: number;
-    scale: number;
-    render: 'svg' | 'canvas';
 }
 
 type Param = {id: string};
@@ -28,7 +25,7 @@ export const pieAtomFamily = atomFamily(
             sortByValue: false,
             margin: {top: 40, right: 80, bottom: 80, left: 80},
             // Style
-            // colors: { schema: 'nivo' },
+            colors: {scheme: 'nivo'},
             borderColor: {from: 'color'},
             borderWidth: 0,
             // Arc Labels
@@ -59,6 +56,6 @@ export const pieAtomFamily = atomFamily(
             x: 400,
             y: 100,
             render: 'svg',
-        }),
+        } as PieState),
     (a: Param, b: Param) => a.id === b.id
 );

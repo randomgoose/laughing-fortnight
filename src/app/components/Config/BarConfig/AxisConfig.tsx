@@ -39,7 +39,7 @@ export default ({id}: Param) => {
                         layout={'vertical'}
                         initialValues={axisBottom}
                         onValuesChange={(changedValue) => {
-                            setPartialState({axisBottom: changedValue});
+                            setPartialState({axisBottom: Object.assign({...axisBottom}, changedValue)});
                         }}
                     >
                         <Form.Item name={'legend'} label={t('Title')}>

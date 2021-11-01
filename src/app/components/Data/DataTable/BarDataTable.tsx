@@ -10,7 +10,7 @@ import DataMock from '../DataMock/DataMock';
 
 export default function BarDataTable({id}: Param) {
     const {t} = useTranslation();
-    const {bar, setData, setKey, removeKey, addKey} = useBar(id);
+    const {bar, setData, setKey, removeKey, addKey, addRow} = useBar(id);
 
     return (
         <>
@@ -19,6 +19,8 @@ export default function BarDataTable({id}: Param) {
                 rowKey={bar.indexBy as string}
                 key={'barDataTable'}
                 dataSource={bar.data}
+                scroll={{y: 140, x: 2000}}
+                footer={() => <Button onClick={addRow}>{t('Add row')}</Button>}
                 columns={[
                     {
                         title: 'id',
@@ -29,10 +31,15 @@ export default function BarDataTable({id}: Param) {
                                 value={value}
                                 key={value}
                                 onFinishEditing={(value: number) => {
+                                    if (bar.data.some((datum) => datum[bar.indexBy as string] === value)) {
+                                        message.error(`${value} ${t('exists')}`);
+                                        return;
+                                    }
                                     setData(bar.data.indexOf(record), bar.indexBy as string, value);
                                 }}
                             />
                         ),
+                        fixed: 'left',
                     },
                     ...bar.keys.map((key) => {
                         return {
@@ -47,8 +54,11 @@ export default function BarDataTable({id}: Param) {
                                             bar.keys.filter((item) => item !== key).includes(value)
                                         }
                                         onFinishEditing={(value: string) => {
-                                            if (bar.keys.filter((item) => item !== key).includes(value)) {
-                                                message.error(`${value} 已存在`);
+                                            if (value.length <= 0) {
+                                                message.error(`${t('Cannot leave this input empty')}`);
+                                                return;
+                                            } else if (bar.keys.filter((item) => item !== key).includes(value)) {
+                                                message.error(`${value} ${t('exists')}`);
                                                 return;
                                             } else {
                                                 setKey(key, value);

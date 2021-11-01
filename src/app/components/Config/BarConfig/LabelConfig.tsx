@@ -19,6 +19,7 @@ export default function LabelConfig({id}: Param) {
                 </Space>
             </Typography.Title>
             <Form
+                layout={'vertical'}
                 initialValues={{
                     enableLabel,
                     labelSkipHeight,

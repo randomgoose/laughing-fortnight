@@ -1,7 +1,6 @@
 import cryptoRandomString from 'crypto-random-string';
 import {useImmerAtom} from 'jotai/immer';
 import {pieAtomFamily} from '../atoms/pieAtomFamily';
-import {generateRandomHexColor} from '../utils/generateRandomHexColor';
 
 export function usePie(id: string) {
     const [pie, setPie] = useImmerAtom(pieAtomFamily({id}));
@@ -9,7 +8,7 @@ export function usePie(id: string) {
     function addArc() {
         const name = cryptoRandomString({length: 4});
         setPie((pie) => {
-            pie.data.push({value: 100, label: name, id: name, color: generateRandomHexColor()});
+            pie.data.push({value: 100, label: name, id: name});
         });
     }
 

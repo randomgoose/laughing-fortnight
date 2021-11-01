@@ -76,7 +76,11 @@ export const zh_translation = {
     'Legend Align': '图例对齐方式',
     'Legend Vertical Align': '图例对齐方式（垂直）',
     'Add column': '添加列',
+    'Add row': '增加行',
     Scatter: '散点图',
     scatter: '散点图',
     'Click an icon to insert a chart': '点击上方图标插入数据图',
+    'Select a chart': '选择图表',
+    'Select a chart to view its data': '选择图表以显示数据',
+    Pie: '饼图',
 };

@@ -44,7 +44,11 @@ const VisBarChart = ({id}: Param) => {
                 setApp((app) => ({...app, activeKey: id}));
             }}
         >
-            <ResponsiveBar {...bar} />
+            <ResponsiveBar
+                {...bar}
+                axisBottom={bar.showXAxis && bar.axisBottom}
+                axisLeft={bar.showYAxis && bar.axisLeft}
+            />
             {id === app.activeKey ? <DimensionIndicator width={bar.width} height={bar.height} /> : null}
         </StyledRnd>
     );

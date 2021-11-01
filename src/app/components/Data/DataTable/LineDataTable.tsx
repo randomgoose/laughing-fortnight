@@ -1,12 +1,14 @@
-import {EyeInvisibleOutlined, EyeOutlined} from '@ant-design/icons';
-import {Button, Table} from 'antd';
+import {DeleteOutlined, EyeInvisibleOutlined, EyeOutlined} from '@ant-design/icons';
+import {Button, message, Table} from 'antd';
 import * as React from 'react';
+import {useTranslation} from 'react-i18next';
 import {useLine} from '../../../hooks/useLine';
 import EditableDiv from '../../CustomInput/EditableDiv';
 import DataMock from '../DataMock/DataMock';
 
 export default function LineDataTable({id}: {id: string}) {
-    const {line, setSerieValue, setSerieId, setPartialState} = useLine(id);
+    const {line, setSerieValue, setSerieId, setPartialState, removeSerieById, addSerie, updateTick} = useLine(id);
+    const {t} = useTranslation();
 
     const newData = line.data
         .map((datum) =>
@@ -28,13 +30,27 @@ export default function LineDataTable({id}: {id: string}) {
             <DataMock />
             <Table
                 size={'small'}
-                scroll={{y: 120}}
+                scroll={{y: 140, x: 2000}}
                 dataSource={newData}
                 rowKey={'x'}
                 columns={[
                     {
                         dataIndex: 'x',
                         title: 'x',
+                        fixed: 'left',
+                        render: (value) => (
+                            <EditableDiv
+                                value={value + ''}
+                                onFinishEditing={(tick: string) => {
+                                    if ((tick + '').length < 0) {
+                                        message.error('Cannot leave this field empty');
+                                        return;
+                                    }
+                                    //TODO: 解决重复问题
+                                    updateTick(value, tick);
+                                }}
+                            />
+                        ),
                     },
                     ...line.data.map((datum, index) => ({
                         dataIndex: datum.id,
@@ -43,6 +59,10 @@ export default function LineDataTable({id}: {id: string}) {
                                 <EditableDiv
                                     value={datum.id}
                                     onFinishEditing={(value: string) => {
+                                        if (value.length <= 0) {
+                                            message.error(t('Cannot leave this field empty'));
+                                            return;
+                                        }
                                         setSerieId(datum.id as string, value);
                                     }}
                                 />
@@ -52,6 +72,12 @@ export default function LineDataTable({id}: {id: string}) {
                                         line.lines.includes(datum.id)
                                             ? setPartialState({lines: line.lines.filter((id) => id !== datum.id)})
                                             : setPartialState({lines: [...line.lines, datum.id]});
+                                    }}
+                                />
+                                <Button
+                                    icon={<DeleteOutlined />}
+                                    onClick={() => {
+                                        removeSerieById(datum.id + '');
                                     }}
                                 />
                             </div>
@@ -66,7 +92,13 @@ export default function LineDataTable({id}: {id: string}) {
                             />
                         ),
                     })),
+                    {
+                        dataIndex: 'x',
+                        title: () => <Button onClick={addSerie}>{t('Add column')}</Button>,
+                        render: () => null,
+                    },
                 ]}
+                footer={() => <Button></Button>}
             ></Table>
         </>
         // <Tabs

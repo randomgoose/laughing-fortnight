@@ -5,7 +5,6 @@ import {FcPieChart} from 'react-icons/fc';
 import ConfigPage from '../ConfigPage';
 import {useAtom} from 'jotai';
 import {pieAtomFamily} from '../../../atoms/pieAtomFamily';
-import MarginInput from '../../CustomInput/MarginInput';
 import {Param} from '../../../atoms/appAtom';
 
 export default function ArcConfig({id}: Param) {
@@ -33,9 +32,6 @@ export default function ArcConfig({id}: Param) {
                 </Form.Item>
                 <Form.Item name={'sortByValue'} label={t('Sort by Value')} valuePropName={'checked'}>
                     <Switch />
-                </Form.Item>
-                <Form.Item name={'margin'} label={t('Margin')}>
-                    <MarginInput />
                 </Form.Item>
                 <Form.Item name={'cornerRadius'} label={t('Corner Radius')}>
                     <Slider />

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Form, Slider, Switch} from 'antd';
+import {Form, Select, Slider, Switch} from 'antd';
 import {useTranslation} from 'react-i18next';
 import {FcSettings} from 'react-icons/fc';
 import ConfigPage from '../ConfigPage';
@@ -8,6 +8,9 @@ import {pieAtomFamily} from '../../../atoms/pieAtomFamily';
 import MarginInput from '../../CustomInput/MarginInput';
 import {Param} from '../../../atoms/appAtom';
 import {useForm} from 'antd/lib/form/Form';
+import {colorSchemes} from '@nivo/colors';
+
+const colorSchemeList = Object.keys(colorSchemes);
 
 export default function GeneralConfig({id}: Param) {
     const {t} = useTranslation();
@@ -41,6 +44,15 @@ export default function GeneralConfig({id}: Param) {
                 </Form.Item>
                 <Form.Item name={'sortByValue'} label={t('Sort by Value')} valuePropName={'checked'}>
                     <Switch />
+                </Form.Item>
+                <Form.Item name={['colors', 'scheme']} label={t('Colors')}>
+                    <Select style={{width: '100%'}}>
+                        {colorSchemeList.map((scheme) => (
+                            <Select.Option key={scheme} value={scheme}>
+                                {scheme}
+                            </Select.Option>
+                        ))}
+                    </Select>
                 </Form.Item>
                 <Form.Item name={'margin'} label={t('Margin')}>
                     <MarginInput />
