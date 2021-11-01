@@ -21,10 +21,10 @@ export default function ArcConfig({id}: Param) {
                 <Form.Item name={'enableArcLabels'} label={t('Enable arc labels')} valuePropName={'checked'}>
                     <Switch />
                 </Form.Item>
-                <Form.Item name={'arcLabelsRadiusOffset'} label={t('Arc label radius offset')}>
+                <Form.Item name={'arcLabelsRadiusOffset'} label={t('Arc labels radius offset')}>
                     <Slider min={0} max={2} step={0.1} />
                 </Form.Item>
-                <Form.Item name={'arcLabelSkipAngle'} label={t('Arc label skip angle')}>
+                <Form.Item name={'arcLabelsSkipAngle'} label={t('Arc labels skip angle')}>
                     <Slider min={0} max={45} step={1} />
                 </Form.Item>
                 <Form.Item name={'padAngle'} label={t('Pad Angle')}>

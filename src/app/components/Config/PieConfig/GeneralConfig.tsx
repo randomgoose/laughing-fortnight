@@ -39,9 +39,6 @@ export default function GeneralConfig({id}: Param) {
                 <Form.Item name={'endAngle'} label={t('End Angle')}>
                     <Slider min={-180} max={360} step={1} />
                 </Form.Item>
-                <Form.Item name={'padAngle'} label={t('Pad Angle')}>
-                    <Slider min={0} max={45} step={1} />
-                </Form.Item>
                 <Form.Item name={'sortByValue'} label={t('Sort by Value')} valuePropName={'checked'}>
                     <Switch />
                 </Form.Item>
