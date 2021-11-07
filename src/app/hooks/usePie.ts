@@ -1,3 +1,4 @@
+import {DefaultRawDatum} from '@nivo/pie';
 import cryptoRandomString from 'crypto-random-string';
 import {useImmerAtom} from 'jotai/immer';
 import {pieAtomFamily} from '../atoms/pieAtomFamily';
@@ -5,11 +6,13 @@ import {pieAtomFamily} from '../atoms/pieAtomFamily';
 export function usePie(id: string) {
     const [pie, setPie] = useImmerAtom(pieAtomFamily({id}));
 
-    function addArc() {
-        const name = cryptoRandomString({length: 4});
+    function addArc(): string {
+        const id = cryptoRandomString({length: 4});
         setPie((pie) => {
-            pie.data.push({value: 100, label: name, id: name});
+            pie.data.push({value: 100, label: id, id: id});
         });
+
+        return id;
     }
 
     function removeArcById(arcId: string) {
@@ -24,11 +27,24 @@ export function usePie(id: string) {
         });
     }
 
+    function getValueById(arcId: string): number {
+        return pie.data.find((datum) => datum.id === arcId).value;
+    }
+
+    function getDatumById(arcId: string): DefaultRawDatum & {
+        label: string;
+        color?: string;
+    } {
+        return pie.data.find((datum) => datum.id === arcId);
+    }
+
     return {
         pie,
         addArc,
         removeArcById,
         changeArcValueById,
         data: pie.data,
+        getValueById,
+        getDatumById,
     };
 }

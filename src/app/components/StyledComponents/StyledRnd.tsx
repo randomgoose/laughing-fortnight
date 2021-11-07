@@ -20,6 +20,7 @@ interface Props {
     style?: React.CSSProperties;
     className?: string;
     showHandles?: boolean;
+    onClickAway?: () => void;
 }
 
 const handles = ['top', 'topLeft', 'topRight', 'left', 'right', 'bottomLeft', 'bottom', 'bottomRight'];
@@ -37,12 +38,14 @@ export default function StyledRnd({
     className,
     style,
     showHandles,
+    onClickAway,
 }: Props) {
     const ref = React.useRef();
     const [, setApp] = useAtom(appAtom);
 
     useClickAway(() => {
         // if (showHandles) setApp(app => ({ ...app, activeKey: '' }))
+        onClickAway();
     }, ref);
 
     function createHandle(handles: string[]) {

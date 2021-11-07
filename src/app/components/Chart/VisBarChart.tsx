@@ -48,6 +48,10 @@ const VisBarChart = ({id}: Param) => {
                 {...bar}
                 axisBottom={bar.showXAxis && bar.axisBottom}
                 axisLeft={bar.showYAxis && bar.axisLeft}
+                onClick={(datum, event) => {
+                    console.log(datum);
+                    console.log(event);
+                }}
             />
             {id === app.activeKey ? <DimensionIndicator width={bar.width} height={bar.height} /> : null}
         </StyledRnd>

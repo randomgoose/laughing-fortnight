@@ -124,7 +124,7 @@ export default function GeneralConfig({id}: Param) {
                             _.maxBy(
                                 line.data.map((datum) => _.maxBy(datum.data, (d) => d.y)),
                                 (d) => d.y
-                            ).y
+                            ).y as number
                         }
                     />
                 </Form.Item>

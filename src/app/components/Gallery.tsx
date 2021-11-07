@@ -1,4 +1,4 @@
-import {Tabs} from 'antd';
+import {Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react';
 import * as React from 'react';
 import DataTable from './Data/DataTable';
 import {Rnd} from 'react-rnd';
@@ -47,10 +47,15 @@ export default function Gallery() {
             className={'cursor-default'}
         >
             <div className={'Gallery'} style={{padding: '0 12px', width: '100%', height: '100%', background: 'white'}}>
-                <Tabs defaultActiveKey={'data'} style={{height: '100%'}}>
-                    <Tabs.TabPane key={'data'} tab={t('Data')}>
-                        <DataTable />
-                    </Tabs.TabPane>
+                <Tabs style={{height: '100%'}}>
+                    <TabList>
+                        <Tab>{t('Data')}</Tab>
+                    </TabList>
+                    <TabPanels>
+                        <TabPanel>
+                            <DataTable />
+                        </TabPanel>
+                    </TabPanels>
                 </Tabs>
             </div>
         </Rnd>

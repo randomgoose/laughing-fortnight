@@ -2,20 +2,36 @@ import * as React from 'react';
 import {DefaultRawDatum, ResponsivePie} from '@nivo/pie';
 import StyledRnd from '../StyledComponents/StyledRnd';
 import {pieAtomFamily} from '../../atoms/pieAtomFamily';
-// import { Menu } from 'antd'
 import {ComputedDatum} from '@nivo/bar';
-// import { useTranslation } from 'react-i18next'
 import {useImmerAtom} from 'jotai/immer';
-// import { usePie } from '../../hooks/usePie'
 import {appAtom, Param} from '../../atoms/appAtom';
 import DimensionIndicator from '../DimensionIndicator';
+import {useTranslation} from 'react-i18next';
+import {usePie} from '../../hooks/usePie';
+import {
+    Input,
+    Heading,
+    Button,
+    Popover,
+    PopoverArrow,
+    PopoverBody,
+    PopoverContent,
+    PopoverCloseButton,
+    PopoverHeader,
+} from '@chakra-ui/react';
+import _ from 'lodash';
 
 export default function VisPieChart({id}: Param) {
+    const [isOpen, setIsOpen] = React.useState(false);
+    const [position, setPosition] = React.useState({x: 0, y: 0});
+    const open = () => setIsOpen(true);
+    const close = () => setIsOpen(false);
     const [pie, setPie] = useImmerAtom(pieAtomFamily({id}));
     const [app, setApp] = useImmerAtom(appAtom);
-    const [, setActiveArc] = React.useState<Omit<ComputedDatum<DefaultRawDatum>, 'index' | 'indexValue'>>(null);
-    // const { t } = useTranslation()
-    // const { addArc, removeArcById } = usePie(id)
+    const [activeArc, setActiveArc] =
+        React.useState<Omit<ComputedDatum<DefaultRawDatum>, 'index' | 'indexValue'>>(null);
+    const {t} = useTranslation();
+    const {removeArcById, addArc, changeArcValueById, getValueById, getDatumById} = usePie(id);
 
     function onDragStop(_e, d) {
         setPie((pie) => {
@@ -33,24 +49,10 @@ export default function VisPieChart({id}: Param) {
         });
     }
 
-    // const menu = (
-    //     <Menu>
-    //         <Menu.Item
-    //             key="1"
-    //             danger
-    //             onClick={() => {
-    //                 removeArcById(activeArc ? (activeArc.id as string) : '')
-    //             }}
-    //         >{`${t('Delete')} ${activeArc ? activeArc.id : ''}`}</Menu.Item>
-    //         <Menu.Item key="2" onClick={addArc}>
-    //             {t('Add row')}
-    //         </Menu.Item>
-    //     </Menu>
-    // )
-
     return (
         <StyledRnd
             onMouseDown={() => {
+                close();
                 setApp((app) => ({...app, activeKey: id}));
             }}
             scale={app.scale}
@@ -62,18 +64,21 @@ export default function VisPieChart({id}: Param) {
             onResize={onResize}
             style={{background: id === app.activeKey ? 'rgba(123, 97, 255, .05)' : ''}}
             showHandles={id === app.activeKey}
+            onClickAway={() => {
+                close();
+            }}
         >
-            {/* <Dropdown overlay={menu} trigger={['click']}> */}
             <ResponsivePie
                 {...pie}
                 onClick={(node, event) => {
                     console.log(node);
                     console.log(event);
+                    setPosition({x: event.clientX, y: event.clientY});
+                    open();
                     id === app.activeKey && setActiveArc(node);
                 }}
                 isInteractive={id === app.activeKey}
             />
-            {/* </Dropdown> */}
 
             {/* <Rnd
                 style={{ zIndex: -1 }}
@@ -105,6 +110,71 @@ export default function VisPieChart({id}: Param) {
                 }}
             /> */}
             {id === app.activeKey ? <DimensionIndicator width={pie.width} height={pie.height} /> : null}
+            <Popover
+                returnFocusOnClose={false}
+                isOpen={isOpen}
+                onClose={close}
+                closeOnBlur={false}
+                computePositionOnMount
+                // strategy={'fixed'}
+                // styleConfig={{ screenLeft: state.screenX, screenTop: state.screenY }}
+            >
+                {activeArc ? (
+                    <PopoverContent
+                        style={{top: position.y - pie.y, left: position.x - pie.x, position: 'absolute'}}
+                        onMouseDown={(e) => e.stopPropagation()}
+                    >
+                        <PopoverArrow />
+                        <PopoverHeader>{activeArc.id}</PopoverHeader>
+                        <PopoverCloseButton />
+                        <PopoverBody>
+                            <div className={'flex flex-col gap-4'}>
+                                <div className={'flex flex-col gap-1'}>
+                                    <Heading as={'h5'}>{activeArc.id}</Heading>
+                                    <Input
+                                        value={getValueById(activeArc.id as string)}
+                                        onKeyDown={(e) => {
+                                            e.stopPropagation();
+                                        }}
+                                        onChange={(e) => {
+                                            e.stopPropagation();
+                                            e.nativeEvent.stopImmediatePropagation();
+
+                                            if (!_.isNaN(parseFloat(e.target.value))) {
+                                                changeArcValueById(activeArc.id as string, parseFloat(e.target.value));
+                                            } else {
+                                                changeArcValueById(activeArc.id as string, 0);
+                                            }
+                                        }}
+                                        size={'sm'}
+                                    />
+                                </div>
+                                <div className={'flex gap-1'}>
+                                    <Button
+                                        size={'sm'}
+                                        colorScheme={'red'}
+                                        onClick={() => {
+                                            console.log(getDatumById(activeArc.id as string));
+                                            setActiveArc(null);
+                                            removeArcById(activeArc.id as string);
+                                        }}
+                                    >
+                                        {t('Remove') + ' ' + activeArc.id}
+                                    </Button>
+                                    <Button
+                                        size={'sm'}
+                                        onClick={() => {
+                                            addArc();
+                                        }}
+                                    >
+                                        {t('Add an arc')}
+                                    </Button>
+                                </div>
+                            </div>
+                        </PopoverBody>
+                    </PopoverContent>
+                ) : null}
+            </Popover>
         </StyledRnd>
     );
 }

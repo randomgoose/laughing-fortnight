@@ -102,4 +102,6 @@ export const zh_translation = {
     'Corner Radius': '圆角',
     'Active inner radius offset': '悬停时内径偏移',
     'Active outer radius offset': '悬停时外径偏移',
+    Remove: '移除',
+    'Add an arc': '增加扇形',
 };

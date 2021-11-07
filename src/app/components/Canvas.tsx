@@ -54,7 +54,7 @@ export default function Canvas() {
             ref={domTarget}
             tabIndex={1}
             onKeyDown={(e: React.KeyboardEvent) => {
-                e.preventDefault();
+                // e.preventDefault()
                 if (e.key === 'Delete' || e.key === 'Backspace') {
                     setApp({...app, activeKey: '', charts: app.charts.filter((chart) => chart.id !== app.activeKey)});
                 }

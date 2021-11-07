@@ -1,8 +1,14 @@
+import {ChakraProvider} from '@chakra-ui/react';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import App from './App';
 
-ReactDOM.render(<App />, document.getElementById('react-page'));
+ReactDOM.render(
+    <ChakraProvider>
+        <App />
+    </ChakraProvider>,
+    document.getElementById('react-page')
+);
 
 // @ts-ignore
 if (module.hot) {

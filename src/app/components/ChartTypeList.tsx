@@ -40,6 +40,8 @@ export function ChartType({
             }
         >
             <button
+                aria-label={'Insert chart'}
+                // size={'xs'}
                 className={`w-7 h-7 flex justify-center items-center rounded-lg transition-all duration-200 hover:bg-gray-100 active:bg-gray-200`}
                 onClick={() => {
                     const id = cryptoRandomString({length: 16});
