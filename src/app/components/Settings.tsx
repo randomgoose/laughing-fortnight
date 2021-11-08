@@ -4,7 +4,16 @@ import {Radio, Space} from 'antd';
 import {useTranslation} from 'react-i18next';
 import {Button} from '@chakra-ui/button';
 import {useDisclosure} from '@chakra-ui/hooks';
-import {Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay} from '@chakra-ui/modal';
+import {
+    Modal,
+    ModalBody,
+    ModalCloseButton,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+} from '@chakra-ui/modal';
+import ColorSchemeBuilder from './ThemeBuilder/ColorSchemeBuilder';
 
 const languages: {name: string; key: string}[] = [
     {name: '简体中文', key: 'zh'},
@@ -44,7 +53,10 @@ export default function Settings() {
                 <ModalContent>
                     <ModalHeader>{t('Theme Builder')}</ModalHeader>
                     <ModalCloseButton />
-                    <ModalBody>hi</ModalBody>
+                    <ModalBody>
+                        <ColorSchemeBuilder />
+                    </ModalBody>
+                    <ModalFooter />
                 </ModalContent>
             </Modal>
         </Space>

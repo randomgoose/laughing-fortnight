@@ -3,7 +3,7 @@ import cryptoRandomString from 'crypto-random-string';
 import {useAtom} from 'jotai';
 import * as React from 'react';
 import {useTranslation} from 'react-i18next';
-import {FcBarChart, FcLineChart, FcPieChart, FcScatterPlot} from 'react-icons/fc';
+import {FcBarChart, FcLineChart, FcPieChart, FcRadarPlot, FcScatterPlot} from 'react-icons/fc';
 import {appAtom, ChartType as Type} from '../atoms/appAtom';
 import classnames from 'classnames';
 
@@ -78,6 +78,9 @@ export function ChartTypeList({
             </ChartType>
             <ChartType type={'scatter'} placement={tooltipPlacement}>
                 <FcScatterPlot size={16} />
+            </ChartType>
+            <ChartType type={'radar'} placement={tooltipPlacement}>
+                <FcRadarPlot size={16} />
             </ChartType>
         </div>
     );

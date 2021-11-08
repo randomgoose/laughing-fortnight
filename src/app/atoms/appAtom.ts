@@ -1,6 +1,6 @@
 import {atom} from 'jotai';
 
-export type ChartType = 'line' | 'pie' | 'bar' | 'scatter';
+export type ChartType = 'line' | 'pie' | 'bar' | 'scatter' | 'radar';
 export type Param = {id: string};
 
 export interface Chart {

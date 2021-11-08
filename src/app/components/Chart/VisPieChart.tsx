@@ -81,30 +81,27 @@ export default function VisPieChart({id}: Param) {
             />
 
             {/* <Rnd
-                style={{ zIndex: -1 }}
+                style={{ zIndex: 50 }}
                 className={'h-full absolute top-1/2 transform -translate-y-2/4'}
                 size={{
                     width: pie.width - pie.margin.left - pie.margin.right,
                     height: pie.height - pie.margin.top - pie.margin.bottom,
                 }}
-                resizeHandleComponent={
-                    { left: <div className={'w-4 h-4 bg-white z-50 absolute'} style={{ zIndex: 9999 }}></div> }
-                }
                 position={{ x: pie.margin.left, y: pie.margin.top }}
                 disableDragging
                 onResizeStop={(_e, direction, _ref, delta, _position) => {
                     switch (direction) {
                         case 'right':
-                            setPie({ ...pie, margin: { ...pie.margin, right: pie.margin.right - delta.width } })
+                            setPie(() => ({ ...pie, margin: { ...pie.margin, right: pie.margin.right - delta.width } }))
                             break
                         case 'left':
-                            setPie({ ...pie, margin: { ...pie.margin, left: pie.margin.left - delta.width } })
+                            setPie(() => ({ ...pie, margin: { ...pie.margin, left: pie.margin.left - delta.width } }))
                             break
                         case 'top':
-                            setPie({ ...pie, margin: { ...pie.margin, top: pie.margin.top - delta.height } })
+                            setPie(() => ({ ...pie, margin: { ...pie.margin, top: pie.margin.top - delta.height } }))
                             break
                         case 'bottom':
-                            setPie({ ...pie, margin: { ...pie.margin, bottom: pie.margin.bottom - delta.height } })
+                            setPie(() => ({ ...pie, margin: { ...pie.margin, bottom: pie.margin.bottom - delta.height } }))
                             break
                     }
                 }}
