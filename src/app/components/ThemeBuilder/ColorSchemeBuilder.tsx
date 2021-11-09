@@ -1,6 +1,9 @@
+import {PlusOutlined} from '@ant-design/icons';
 import {Pie} from '@nivo/pie';
+import cryptoRandomString from 'crypto-random-string';
 import {useAtom} from 'jotai';
 import * as React from 'react';
+import {useTranslation} from 'react-i18next';
 import {pieAtomFamily} from '../../atoms/pieAtomFamily';
 import ColorScheme, {IColorScheme} from './ColorScheme';
 
@@ -17,9 +20,20 @@ const baseColorSchemes = [
     },
 ];
 
-export default function ColorSchemeBuilder() {
+export default function ColorSchemeBuilder({
+    onCreateColorScheme,
+}: {
+    onCreateColorScheme?: (colorScheme: IColorScheme) => void;
+}) {
     const [pie] = useAtom(pieAtomFamily({id: 'example__pie'}));
     const [activeColorScheme, setActiveColorScheme] = React.useState<IColorScheme>(null);
+    const {t} = useTranslation();
+
+    function createColorScheme(): IColorScheme {
+        const id = cryptoRandomString({length: 4});
+        const name = 'new color scheme';
+        return {id, name, colors: []};
+    }
 
     return (
         <div className={'ColorSchemeBuilder'}>
@@ -27,6 +41,18 @@ export default function ColorSchemeBuilder() {
                 {baseColorSchemes.map((scheme) => (
                     <ColorScheme {...scheme} key={scheme.id} onClick={() => setActiveColorScheme(scheme)} />
                 ))}
+                <button
+                    className={
+                        'relative border border-dashed rounded-lg w-32 h-24 overflow-hidden flex flex-col items-center justify-center text-center transition-all duration-200 cursor-pointer'
+                    }
+                    onClick={() => {
+                        const scheme = createColorScheme();
+                        onCreateColorScheme(scheme);
+                    }}
+                >
+                    <PlusOutlined />
+                    {t('Create a color scheme')}
+                </button>
             </div>
 
             <div
