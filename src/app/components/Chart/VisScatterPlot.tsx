@@ -7,11 +7,18 @@ import {scatterAtomFamily, ScatterState} from '../../atoms/scatterAtomFamily';
 import DimensionIndicator from '../DimensionIndicator';
 import StyledRnd from '../StyledComponents/StyledRnd';
 
-export default function VisScatterPlot({id}: Param) {
+export default function VisScatterPlot({id, initialState}: Param & {initialState?: ScatterState}) {
     const [{activeKey, scale}, setApp] = useAtom(appAtom);
     const [{width, height, x, y, enableXAxis, enableYAxis, ...rest}, setScatter] = useImmerAtom(
         scatterAtomFamily({id}) as PrimitiveAtom<ScatterState>
     );
+
+    React.useEffect(() => {
+        if (initialState)
+            setScatter((scatter) => {
+                Object.assign(scatter, initialState);
+            });
+    }, []);
 
     function onDragStop(_e, d) {
         setScatter((scatter) => {

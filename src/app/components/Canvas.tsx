@@ -12,6 +12,7 @@ import {appAtom, Chart} from '../atoms/appAtom';
 import {ChartTypeList} from './ChartTypeList';
 import {useTranslation} from 'react-i18next';
 import VisScatterPlot from './Chart/VisScatterPlot';
+import VisRadar from './Chart/VisRadar';
 
 export default function Canvas() {
     const [app, setApp] = useAtom(appAtom);
@@ -29,13 +30,15 @@ export default function Canvas() {
     function renderChart(chart: Chart) {
         switch (chart.type) {
             case 'pie':
-                return <VisPieChart id={chart.id} key={chart.id} />;
+                return <VisPieChart id={chart.id} key={chart.id} initialState={chart.initialState} />;
             case 'bar':
-                return <VisBarChart id={chart.id} key={chart.id} />;
+                return <VisBarChart id={chart.id} key={chart.id} initialState={chart.initialState} />;
             case 'line':
-                return <VisLineChart id={chart.id} key={chart.id} />;
+                return <VisLineChart id={chart.id} key={chart.id} initialState={chart.initialState} />;
             case 'scatter':
-                return <VisScatterPlot id={chart.id} key={chart.id} />;
+                return <VisScatterPlot id={chart.id} key={chart.id} initialState={chart.initialState} />;
+            case 'radar':
+                return <VisRadar id={chart.id} key={chart.id} initialState={chart.initialState} />;
         }
     }
 

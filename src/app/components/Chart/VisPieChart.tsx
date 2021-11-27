@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {DefaultRawDatum, ResponsivePie} from '@nivo/pie';
 import StyledRnd from '../StyledComponents/StyledRnd';
-import {pieAtomFamily} from '../../atoms/pieAtomFamily';
+import {pieAtomFamily, PieState} from '../../atoms/pieAtomFamily';
 import {ComputedDatum} from '@nivo/bar';
 import {useImmerAtom} from 'jotai/immer';
 import {appAtom, Param} from '../../atoms/appAtom';
@@ -21,7 +21,7 @@ import {
 } from '@chakra-ui/react';
 import _ from 'lodash';
 
-export default function VisPieChart({id}: Param) {
+export default function VisPieChart({id, initialState}: Param & {initialState?: PieState}) {
     const [isOpen, setIsOpen] = React.useState(false);
     const [position, setPosition] = React.useState({x: 0, y: 0});
     const open = () => setIsOpen(true);
@@ -32,6 +32,13 @@ export default function VisPieChart({id}: Param) {
         React.useState<Omit<ComputedDatum<DefaultRawDatum>, 'index' | 'indexValue'>>(null);
     const {t} = useTranslation();
     const {removeArcById, addArc, changeArcValueById, getValueById, getDatumById} = usePie(id);
+
+    React.useEffect(() => {
+        if (initialState)
+            setPie((pie) => {
+                Object.assign(pie, initialState);
+            });
+    }, []);
 
     function onDragStop(_e, d) {
         setPie((pie) => {

@@ -4,14 +4,21 @@ import StyledRnd from '../StyledComponents/StyledRnd';
 import {useImmerAtom} from 'jotai/immer';
 import {lineAtomFamily, LineState} from '../../atoms/lineAtomFamily';
 import {PrimitiveAtom, useAtom} from 'jotai';
-import {appAtom} from '../../atoms/appAtom';
+import {appAtom, Param} from '../../atoms/appAtom';
 import DimensionIndicator from '../DimensionIndicator';
 
-export default function VisLineChart({id}: {id: string}) {
+export default function VisLineChart({id, initialState}: Param & {initialState?: LineState}) {
     const [{scale}] = useAtom(appAtom);
     const [{width, height, x, y, render, activeSerie, showXAxis, showYAxis, data, lines, ...rest}, setLine] =
         useImmerAtom(lineAtomFamily({id}) as PrimitiveAtom<LineState>);
     const [app, setApp] = useAtom(appAtom);
+
+    React.useEffect(() => {
+        if (initialState)
+            setLine((line) => {
+                Object.assign(line, initialState);
+            });
+    }, []);
 
     function onDragStop(_e, d) {
         setLine((line) => {
@@ -49,6 +56,7 @@ export default function VisLineChart({id}: {id: string}) {
                 axisBottom={showXAxis && rest.axisBottom}
                 axisLeft={showYAxis && rest.axisLeft}
                 data={data.filter((datum) => lines.includes(datum.id))}
+                isInteractive={true}
             />
 
             {id === app.activeKey ? <DimensionIndicator width={width} height={height} /> : null}

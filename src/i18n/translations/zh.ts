@@ -104,4 +104,5 @@ export const zh_translation = {
     'Active outer radius offset': '悬停时外径偏移',
     Remove: '移除',
     'Add an arc': '增加扇形',
+    Preview: '预览',
 };

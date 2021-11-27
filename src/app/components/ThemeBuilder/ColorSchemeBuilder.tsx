@@ -6,6 +6,7 @@ import * as React from 'react';
 import {useTranslation} from 'react-i18next';
 import {pieAtomFamily} from '../../atoms/pieAtomFamily';
 import ColorScheme, {IColorScheme} from './ColorScheme';
+import {Heading, Stack} from '@chakra-ui/react';
 
 const baseColorSchemes = [
     {
@@ -55,13 +56,17 @@ export default function ColorSchemeBuilder({
                 </button>
             </div>
 
-            <div
-                className={
-                    'ColorSchemeBuilder__Preview w-full h-96 bg-gray-50 border rounded-lg flex items-center justify-center'
-                }
-            >
-                <Pie {...pie} colors={activeColorScheme ? activeColorScheme.colors : {scheme: 'nivo'}} />
-            </div>
+            <Stack spacing={'8px'}>
+                <Heading>{t('Preview')}</Heading>
+
+                <div
+                    className={
+                        'ColorSchemeBuilder__Preview w-full h-96 bg-gray-50 border rounded-lg flex items-center justify-center'
+                    }
+                >
+                    <Pie {...pie} colors={activeColorScheme ? activeColorScheme.colors : {scheme: 'nivo'}} />
+                </div>
+            </Stack>
         </div>
     );
 }

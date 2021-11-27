@@ -1,4 +1,6 @@
+import {WindowSize} from '../app/atoms/appAtom';
 import {sendMessage} from './functions/message';
+import {resizeWindow} from './functions/resize-window';
 
 figma.showUI(__html__);
 figma.ui.resize(960, 800);
@@ -30,6 +32,9 @@ figma.ui.onmessage = async (msg) => {
                 createChart(selection[0], msg.render, msg.data);
             }
             break;
+        case 'resize-window':
+            const size: WindowSize = msg.data.size;
+            resizeWindow(size);
         default:
             console.log(msg.type);
     }

@@ -4,8 +4,23 @@ import {useAtom} from 'jotai';
 import * as React from 'react';
 import {useTranslation} from 'react-i18next';
 import {FcBarChart, FcLineChart, FcPieChart, FcRadarPlot, FcScatterPlot} from 'react-icons/fc';
-import {appAtom, ChartType as Type} from '../atoms/appAtom';
+import {appAtom, ChartType as IChartType, ChartType as Type} from '../atoms/appAtom';
 import classnames from 'classnames';
+import {Pie} from '@nivo/pie';
+import {initialPieState} from '../atoms/pieAtomFamily';
+import {examples, IExample} from '../examples';
+import {Line} from '@nivo/line';
+
+function getChart(type: IChartType, state: any) {
+    switch (type) {
+        case 'pie':
+            return <Pie {...{...initialPieState, ...state}} isInteractive={false} />;
+        case 'line':
+            return <Line {...{...initialPieState, ...state}} isInteractive={false} />;
+        default:
+            return <Pie {...{...initialPieState, ...state}} isInteractive={false} />;
+    }
+}
 
 export function ChartType({
     type,
@@ -25,17 +40,36 @@ export function ChartType({
             placement={placement}
             content={
                 <div className={'grid grid-cols-3 gap-2 max-h-44 overflow-scroll'}>
-                    <div className={'w-40 h-40 bg-gray-100 rounded-md'}></div>
-                    <div className={'w-40 h-40 bg-gray-100 rounded-md'}></div>
-                    <div className={'w-40 h-40 bg-gray-100 rounded-md'}></div>
-                    <div className={'w-40 h-40 bg-gray-100 rounded-md'}></div>
-                    <div className={'w-40 h-40 bg-gray-100 rounded-md'}></div>
-                    <div className={'w-40 h-40 bg-gray-100 rounded-md'}></div>
-                    <div className={'w-40 h-40 bg-gray-100 rounded-md'}></div>
-                    <div className={'w-40 h-40 bg-gray-100 rounded-md'}></div>
-                    <div className={'w-40 h-40 bg-gray-100 rounded-md'}></div>
-                    <div className={'w-40 h-40 bg-gray-100 rounded-md'}></div>
-                    <div className={'w-40 h-40 bg-gray-100 rounded-md'}></div>
+                    {examples[type] &&
+                        examples[type].map((example: IExample, index: number) => (
+                            <div
+                                className={
+                                    'example w-40 h-40 bg-gray-100 rounded-md overflow-hidden flex items-center justify-center transform'
+                                }
+                            >
+                                <div
+                                    className={
+                                        'example__mask h-2/5 w-full absolute bottom-0 z-10 flex items-center p-3 text-white font-bold'
+                                    }
+                                >
+                                    {example.name}
+                                </div>
+                                <div
+                                    className={'transform scale-50'}
+                                    key={index}
+                                    onClick={() => {
+                                        const id = cryptoRandomString({length: 16});
+                                        setApp((app) => ({
+                                            ...app,
+                                            activeKey: id,
+                                            charts: [...app.charts, {type, id, initialState: example.state}],
+                                        }));
+                                    }}
+                                >
+                                    {getChart(type, example.state)}
+                                </div>
+                            </div>
+                        ))}
                 </div>
             }
         >

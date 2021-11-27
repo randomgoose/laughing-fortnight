@@ -8,7 +8,7 @@ import {barAtomFamily, BarState} from '../../atoms/barAtomFamily';
 import {useImmerAtom} from 'jotai/immer';
 import DimensionIndicator from '../DimensionIndicator';
 
-const VisBarChart = ({id}: Param) => {
+const VisBarChart = ({id, initialState}: Param & {initialState?: BarState}) => {
     const [bar, setBar] = useImmerAtom(barAtomFamily({id}) as PrimitiveAtom<BarState>);
 
     const [app, setApp] = useAtom(appAtom);
@@ -19,6 +19,13 @@ const VisBarChart = ({id}: Param) => {
             bar.y = d.y;
         });
     }
+
+    React.useEffect(() => {
+        if (initialState)
+            setBar((bar) => {
+                Object.assign(bar, initialState);
+            });
+    }, []);
 
     function onResize(_e, _direction, ref, _delta, position) {
         setBar((bar) => {

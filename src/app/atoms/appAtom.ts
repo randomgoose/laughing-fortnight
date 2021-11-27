@@ -1,11 +1,13 @@
 import {atom} from 'jotai';
 
 export type ChartType = 'line' | 'pie' | 'bar' | 'scatter' | 'radar';
+export type WindowSize = 'sm' | 'md' | 'lg';
 export type Param = {id: string};
 
 export interface Chart {
     id: string;
     type: ChartType;
+    initialState?: any;
 }
 
 export interface AppState {
@@ -18,6 +20,7 @@ export interface AppState {
     hideInterface: boolean;
     scale: number;
     decimalDigit: number;
+    windowSize: WindowSize;
 }
 
 export const appAtom = atom<AppState>({
@@ -30,4 +33,5 @@ export const appAtom = atom<AppState>({
     hideInterface: false,
     scale: 1,
     decimalDigit: 2,
+    windowSize: 'sm',
 });

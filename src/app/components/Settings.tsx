@@ -14,6 +14,9 @@ import {
     ModalOverlay,
 } from '@chakra-ui/modal';
 import ColorSchemeBuilder from './ThemeBuilder/ColorSchemeBuilder';
+import {useAtom} from 'jotai';
+import {appAtom} from '../atoms/appAtom';
+import {sendMessage} from '../utils/send-message';
 
 const languages: {name: string; key: string}[] = [
     {name: '简体中文', key: 'zh'},
@@ -23,6 +26,7 @@ const languages: {name: string; key: string}[] = [
 export default function Settings() {
     const {t} = useTranslation();
     const {isOpen, onOpen, onClose} = useDisclosure();
+    const [{windowSize}] = useAtom(appAtom);
 
     return (
         <Space direction={'vertical'}>
@@ -47,6 +51,28 @@ export default function Settings() {
                 <Button size={'xs'} onClick={onOpen}>
                     {t('Theme maker')}
                 </Button>
+            </Space>
+            <Space direction={'vertical'} className={'mb-2'}>
+                <h6 className={'font-bold'}>{t('Window size')}</h6>
+                <Radio.Group
+                    defaultValue={windowSize}
+                    onChange={(e) => sendMessage('resize-window', {size: e.target.value})}
+                    options={[
+                        {
+                            value: 'sm',
+                            label: t('sm'),
+                        },
+                        {
+                            value: 'md',
+                            label: t('md'),
+                        },
+                        {
+                            value: 'lg',
+                            label: t('lg'),
+                        },
+                    ]}
+                    optionType={'button'}
+                />
             </Space>
             <Modal onClose={onClose} isOpen={isOpen} isCentered size={'3xl'}>
                 <ModalOverlay />

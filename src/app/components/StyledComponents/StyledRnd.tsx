@@ -45,7 +45,7 @@ export default function StyledRnd({
 
     useClickAway(() => {
         // if (showHandles) setApp(app => ({ ...app, activeKey: '' }))
-        onClickAway();
+        onClickAway && onClickAway();
     }, ref);
 
     function createHandle(handles: string[]) {
