@@ -2,16 +2,13 @@ import {ResponsiveBar} from '@nivo/bar';
 import * as React from 'react';
 import StyledRnd from '../StyledComponents/StyledRnd';
 import _ from 'lodash';
-import {appAtom, Param} from '../../atoms/appAtom';
-import {PrimitiveAtom, useAtom} from 'jotai';
+import {Param} from '../../atoms/appAtom';
+import {PrimitiveAtom} from 'jotai';
 import {barAtomFamily, BarState} from '../../atoms/barAtomFamily';
 import {useImmerAtom} from 'jotai/immer';
-import DimensionIndicator from '../DimensionIndicator';
 
 const VisBarChart = ({id, initialState}: Param & {initialState?: BarState}) => {
     const [bar, setBar] = useImmerAtom(barAtomFamily({id}) as PrimitiveAtom<BarState>);
-
-    const [app, setApp] = useAtom(appAtom);
 
     function onDragStop(_e, d) {
         setBar((bar) => {
@@ -38,18 +35,13 @@ const VisBarChart = ({id, initialState}: Param & {initialState?: BarState}) => {
 
     return (
         <StyledRnd
-            scale={app.scale}
+            chartId={id}
             width={bar.width}
             height={bar.height}
             x={bar.x}
             y={bar.y}
             onDragStop={onDragStop}
             onResize={onResize}
-            style={{background: id === app.activeKey ? 'rgba(123, 97, 255, .05)' : ''}}
-            showHandles={id === app.activeKey}
-            onMouseDown={() => {
-                setApp((app) => ({...app, activeKey: id}));
-            }}
         >
             <ResponsiveBar
                 {...bar}
@@ -60,7 +52,6 @@ const VisBarChart = ({id, initialState}: Param & {initialState?: BarState}) => {
                     console.log(event);
                 }}
             />
-            {id === app.activeKey ? <DimensionIndicator width={bar.width} height={bar.height} /> : null}
         </StyledRnd>
     );
 };

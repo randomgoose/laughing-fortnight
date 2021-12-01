@@ -13,6 +13,7 @@ import {ChartTypeList} from './ChartTypeList';
 import {useTranslation} from 'react-i18next';
 import VisScatterPlot from './Chart/VisScatterPlot';
 import VisRadar from './Chart/VisRadar';
+import VisCalendar from './Chart/VisCalendar';
 
 export default function Canvas() {
     const [app, setApp] = useAtom(appAtom);
@@ -39,6 +40,8 @@ export default function Canvas() {
                 return <VisScatterPlot id={chart.id} key={chart.id} initialState={chart.initialState} />;
             case 'radar':
                 return <VisRadar id={chart.id} key={chart.id} initialState={chart.initialState} />;
+            case 'calendar':
+                return <VisCalendar id={chart.id} key={chart.id} initialState={chart.initialState} />;
         }
     }
 

@@ -3,20 +3,25 @@ import cryptoRandomString from 'crypto-random-string';
 import {useAtom} from 'jotai';
 import * as React from 'react';
 import {useTranslation} from 'react-i18next';
-import {FcBarChart, FcLineChart, FcPieChart, FcRadarPlot, FcScatterPlot} from 'react-icons/fc';
+import {FcBarChart, FcCalendar, FcLineChart, FcPieChart, FcRadarPlot, FcScatterPlot} from 'react-icons/fc';
 import {appAtom, ChartType as IChartType, ChartType as Type} from '../atoms/appAtom';
 import classnames from 'classnames';
 import {Pie} from '@nivo/pie';
 import {initialPieState} from '../atoms/pieAtomFamily';
 import {examples, IExample} from '../examples';
 import {Line} from '@nivo/line';
+import {initialLineState} from '../atoms/lineAtomFamily';
+import {Bar} from '@nivo/bar';
+import {initialBarState} from '../atoms/barAtomFamily';
 
 function getChart(type: IChartType, state: any) {
     switch (type) {
         case 'pie':
             return <Pie {...{...initialPieState, ...state}} isInteractive={false} />;
         case 'line':
-            return <Line {...{...initialPieState, ...state}} isInteractive={false} />;
+            return <Line {...{...initialLineState, ...state}} isInteractive={false} />;
+        case 'bar':
+            return <Bar {...{...initialBarState, ...state}} isInteractive={false} animate={false} />;
         default:
             return <Pie {...{...initialPieState, ...state}} isInteractive={false} />;
     }
@@ -41,13 +46,15 @@ export function ChartType({
             content={
                 <div className={'grid grid-cols-3 gap-2 max-h-44 overflow-scroll'}>
                     {examples[type] &&
-                        examples[type].map((example: IExample, index: number) => (
+                        examples[type].map((example: IExample<any>, index: number) => (
                             <div
                                 className={
                                     'example w-40 h-40 bg-gray-100 rounded-md overflow-hidden flex items-center justify-center transform'
                                 }
+                                key={index}
                             >
                                 <div
+                                    style={{pointerEvents: 'none'}}
                                     className={
                                         'example__mask h-2/5 w-full absolute bottom-0 z-10 flex items-center p-3 text-white font-bold'
                                     }
@@ -115,6 +122,9 @@ export function ChartTypeList({
             </ChartType>
             <ChartType type={'radar'} placement={tooltipPlacement}>
                 <FcRadarPlot size={16} />
+            </ChartType>
+            <ChartType type={'calendar'} placement={tooltipPlacement}>
+                <FcCalendar size={16} />
             </ChartType>
         </div>
     );

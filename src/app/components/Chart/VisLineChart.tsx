@@ -3,15 +3,13 @@ import {ResponsiveLine} from '@nivo/line';
 import StyledRnd from '../StyledComponents/StyledRnd';
 import {useImmerAtom} from 'jotai/immer';
 import {lineAtomFamily, LineState} from '../../atoms/lineAtomFamily';
-import {PrimitiveAtom, useAtom} from 'jotai';
-import {appAtom, Param} from '../../atoms/appAtom';
-import DimensionIndicator from '../DimensionIndicator';
+import {PrimitiveAtom} from 'jotai';
+import {Param} from '../../atoms/appAtom';
 
 export default function VisLineChart({id, initialState}: Param & {initialState?: LineState}) {
-    const [{scale}] = useAtom(appAtom);
-    const [{width, height, x, y, render, activeSerie, showXAxis, showYAxis, data, lines, ...rest}, setLine] =
-        useImmerAtom(lineAtomFamily({id}) as PrimitiveAtom<LineState>);
-    const [app, setApp] = useAtom(appAtom);
+    const [{width, height, x, y, activeSerie, showXAxis, showYAxis, data, lines, ...rest}, setLine] = useImmerAtom(
+        lineAtomFamily({id}) as PrimitiveAtom<LineState>
+    );
 
     React.useEffect(() => {
         if (initialState)
@@ -37,20 +35,7 @@ export default function VisLineChart({id, initialState}: Param & {initialState?:
     }
 
     return (
-        <StyledRnd
-            onMouseDown={() => {
-                setApp((app) => ({...app, activeKey: id}));
-            }}
-            scale={scale}
-            width={width}
-            height={height}
-            x={x}
-            y={y}
-            onDragStop={onDragStop}
-            onResize={onResize}
-            style={{background: id === app.activeKey ? 'rgba(123, 97, 255, .05)' : ''}}
-            showHandles={id === app.activeKey}
-        >
+        <StyledRnd chartId={id} width={width} height={height} x={x} y={y} onDragStop={onDragStop} onResize={onResize}>
             <ResponsiveLine
                 {...rest}
                 axisBottom={showXAxis && rest.axisBottom}
@@ -58,8 +43,6 @@ export default function VisLineChart({id, initialState}: Param & {initialState?:
                 data={data.filter((datum) => lines.includes(datum.id))}
                 isInteractive={true}
             />
-
-            {id === app.activeKey ? <DimensionIndicator width={width} height={height} /> : null}
         </StyledRnd>
     );
 }

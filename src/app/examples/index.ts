@@ -1,3 +1,4 @@
+import {barExamples} from './bar-examples';
 import {lineExamples} from './line-examples';
 import {pieExamples} from './pie-examples';
 export interface IExample<T> {
@@ -9,4 +10,5 @@ export interface IExample<T> {
 export const examples = {
     pie: pieExamples,
     line: lineExamples,
+    bar: barExamples,
 };

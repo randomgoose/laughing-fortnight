@@ -1,4 +1,3 @@
-//@ts-nocheck
 import * as React from 'react';
 import {Rnd} from 'react-rnd';
 import {Handle} from './StyledComponents';
@@ -6,20 +5,19 @@ import classNames from 'classnames';
 import {useClickAway} from 'ahooks';
 import {useAtom} from 'jotai';
 import {appAtom} from '../../atoms/appAtom';
+import DimensionIndicator from '../DimensionIndicator';
 
 interface Props {
+    chartId: string;
     children: React.ReactNode;
     width: number;
     height: number;
     x: number;
     y: number;
-    scale: number;
     onResize: (e, direction, ref, delta, position) => void;
     onDragStop: (e, d) => void;
     onMouseDown?: () => void;
-    style?: React.CSSProperties;
     className?: string;
-    showHandles?: boolean;
     onClickAway?: () => void;
 }
 
@@ -31,17 +29,15 @@ export default function StyledRnd({
     height,
     x,
     y,
-    scale,
     onMouseDown,
     onResize,
     onDragStop,
     className,
-    style,
-    showHandles,
     onClickAway,
+    chartId,
 }: Props) {
     const ref = React.useRef();
-    const [, setApp] = useAtom(appAtom);
+    const [{activeKey, scale}, setApp] = useAtom(appAtom);
 
     useClickAway(() => {
         // if (showHandles) setApp(app => ({ ...app, activeKey: '' }))
@@ -55,7 +51,7 @@ export default function StyledRnd({
                 <Handle
                     className={`Handle__${handle} bg-blue-600`}
                     pos={handle}
-                    showHandles={showHandles}
+                    showHandles={activeKey === chartId}
                     scale={scale}
                 />
             );
@@ -68,8 +64,11 @@ export default function StyledRnd({
             <Rnd
                 scale={scale}
                 className={classNames(className, 'chart-box relative')}
-                style={style}
-                onMouseDown={onMouseDown}
+                style={{background: chartId === activeKey ? 'rgba(123, 97, 255, .05)' : ''}}
+                onMouseDown={() => {
+                    onMouseDown();
+                    setApp((app) => ({...app, activeKey: chartId}));
+                }}
                 resizeHandleComponent={createHandle(handles)}
                 size={{
                     width: width,
@@ -83,6 +82,7 @@ export default function StyledRnd({
                 onDragStop={onDragStop}
             >
                 {children}
+                {chartId === activeKey ? <DimensionIndicator width={width} height={height} /> : null}
             </Rnd>
         </div>
     );

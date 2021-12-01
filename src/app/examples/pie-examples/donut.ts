@@ -1,6 +1,7 @@
 import {IExample} from '..';
+import {PieState} from '../../atoms/pieAtomFamily';
 
-export const donut: IExample = {
+export const donut: IExample<Partial<PieState>> = {
     name: 'donut',
     id: 'donut',
     state: {

@@ -1,16 +1,13 @@
 import * as React from 'react';
 import StyledRnd from '../StyledComponents/StyledRnd';
 import _ from 'lodash';
-import {appAtom, Param} from '../../atoms/appAtom';
-import {useAtom} from 'jotai';
+import {Param} from '../../atoms/appAtom';
 import {useImmerAtom} from 'jotai/immer';
-import DimensionIndicator from '../DimensionIndicator';
 import {ResponsiveRadar} from '@nivo/radar';
 import {radarAtomFamily, RadarState} from '../../atoms/radarAtomFamily';
 
 const VisRadar = ({id, initialState}: Param & {initialState?: RadarState}) => {
     const [radar, setRadar] = useImmerAtom(radarAtomFamily({id}));
-    const [app, setApp] = useAtom(appAtom);
 
     React.useEffect(() => {
         if (initialState)
@@ -37,21 +34,15 @@ const VisRadar = ({id, initialState}: Param & {initialState?: RadarState}) => {
 
     return (
         <StyledRnd
-            scale={app.scale}
+            chartId={id}
             width={radar.width}
             height={radar.height}
             x={radar.x}
             y={radar.y}
             onDragStop={onDragStop}
             onResize={onResize}
-            style={{background: id === app.activeKey ? 'rgba(123, 97, 255, .05)' : ''}}
-            showHandles={id === app.activeKey}
-            onMouseDown={() => {
-                setApp((app) => ({...app, activeKey: id}));
-            }}
         >
             <ResponsiveRadar {...radar} />
-            {id === app.activeKey ? <DimensionIndicator width={radar.width} height={radar.height} /> : null}
         </StyledRnd>
     );
 };

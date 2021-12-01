@@ -27,7 +27,7 @@ export default function VisPieChart({id, initialState}: Param & {initialState?: 
     const open = () => setIsOpen(true);
     const close = () => setIsOpen(false);
     const [pie, setPie] = useImmerAtom(pieAtomFamily({id}));
-    const [app, setApp] = useImmerAtom(appAtom);
+    const [app] = useImmerAtom(appAtom);
     const [activeArc, setActiveArc] =
         React.useState<Omit<ComputedDatum<DefaultRawDatum>, 'index' | 'indexValue'>>(null);
     const {t} = useTranslation();
@@ -58,19 +58,16 @@ export default function VisPieChart({id, initialState}: Param & {initialState?: 
 
     return (
         <StyledRnd
+            chartId={id}
             onMouseDown={() => {
                 close();
-                setApp((app) => ({...app, activeKey: id}));
             }}
-            scale={app.scale}
             width={pie.width}
             height={pie.height}
             x={pie.x}
             y={pie.y}
             onDragStop={onDragStop}
             onResize={onResize}
-            style={{background: id === app.activeKey ? 'rgba(123, 97, 255, .05)' : ''}}
-            showHandles={id === app.activeKey}
             onClickAway={() => {
                 close();
             }}
