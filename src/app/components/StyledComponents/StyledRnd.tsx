@@ -66,7 +66,7 @@ export default function StyledRnd({
                 className={classNames(className, 'chart-box relative')}
                 style={{background: chartId === activeKey ? 'rgba(123, 97, 255, .05)' : ''}}
                 onMouseDown={() => {
-                    onMouseDown();
+                    onMouseDown && onMouseDown();
                     setApp((app) => ({...app, activeKey: chartId}));
                 }}
                 resizeHandleComponent={createHandle(handles)}

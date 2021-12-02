@@ -14,6 +14,7 @@ import {useAtom} from 'jotai';
 import {Empty} from 'antd';
 import {useTranslation} from 'react-i18next';
 import Gallery from './components/Gallery';
+import CalendarConfig from './components/Config/CalendarConfig/Config';
 
 function App() {
     const [{hideInterface, activeKey, charts, selectionId}, setApp] = useAtom(appAtom);
@@ -79,6 +80,8 @@ function App() {
                 return <BarConfig />;
             case 'scatter':
                 return <ScatterConfig />;
+            case 'calendar':
+                return <CalendarConfig />;
         }
     }
 

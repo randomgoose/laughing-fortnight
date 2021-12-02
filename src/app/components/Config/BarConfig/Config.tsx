@@ -11,7 +11,6 @@ import {appAtom} from '../../../atoms/appAtom';
 import LabelConfig from './LabelConfig';
 
 export default function Config() {
-    // const {activeIndex} = useSelector((state: RootState) => state.bar);
     const [{activeKey}] = useAtom(appAtom);
     const config = (
         <Tabs tabPosition={'left'} type={'card'} className={'w-full h-full'}>

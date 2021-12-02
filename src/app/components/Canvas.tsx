@@ -65,6 +65,12 @@ export default function Canvas() {
                     setApp({...app, activeKey: '', charts: app.charts.filter((chart) => chart.id !== app.activeKey)});
                 }
             }}
+            onScroll={(e) => {
+                console.log(e);
+            }}
+            onWheel={(e) => {
+                console.log(e);
+            }}
         >
             <animated.div
                 ref={ref}

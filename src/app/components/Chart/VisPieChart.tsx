@@ -122,7 +122,9 @@ export default function VisPieChart({id, initialState}: Param & {initialState?: 
             >
                 {activeArc ? (
                     <PopoverContent
-                        style={{top: position.y - pie.y, left: position.x - pie.x, position: 'absolute'}}
+                        top={position.y - pie.y}
+                        left={position.x - pie.x}
+                        position={'absolute'}
                         onMouseDown={(e) => e.stopPropagation()}
                     >
                         <PopoverArrow />
