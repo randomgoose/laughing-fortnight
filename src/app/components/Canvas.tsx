@@ -2,8 +2,7 @@ import * as React from 'react';
 import VisLineChart from './Chart/VisLineChart';
 import VisPieChart from './Chart/VisPieChart';
 import VisBarChart from './Chart/VisBarChart';
-import {usePinch} from 'react-use-gesture';
-import {useSpring, to} from '@react-spring/core';
+import {useSpring} from '@react-spring/core';
 import {animated} from '@react-spring/web';
 import {Button, Space} from 'antd';
 import {AimOutlined, ArrowsAltOutlined, ShrinkOutlined} from '@ant-design/icons';
@@ -14,19 +13,85 @@ import {useTranslation} from 'react-i18next';
 import VisScatterPlot from './Chart/VisScatterPlot';
 import VisRadar from './Chart/VisRadar';
 import VisCalendar from './Chart/VisCalendar';
+import {createUseGesture, pinchAction, wheelAction} from '@use-gesture/react';
+
+const useGesture = createUseGesture([pinchAction, wheelAction]);
 
 export default function Canvas() {
     const [app, setApp] = useAtom(appAtom);
     const {t} = useTranslation();
 
-    const [{zoom, scale}, set] = useSpring(() => ({
+    React.useEffect(() => {
+        const handler = (e) => e.preventDefault();
+        document.addEventListener('gesturestart', handler);
+        document.addEventListener('gesturechange', handler);
+        document.addEventListener('gestureend', handler);
+        return () => {
+            document.removeEventListener('gesturestart', handler);
+            document.removeEventListener('gesturechange', handler);
+            document.removeEventListener('gestureend', handler);
+        };
+    }, []);
+
+    const [style, api] = useSpring(() => ({
+        x: 0,
+        y: 0,
         scale: 1,
-        zoom: 0,
-        config: {mass: 5, tension: 350, friction: 80},
+        rotateZ: 0,
     }));
 
-    const domTarget = React.useRef(null);
     const ref = React.useRef(null);
+    const wrapperRef = React.useRef(null);
+
+    useGesture(
+        {
+            onWheel: ({event, offset: [x, y], direction: [_dx, _dy]}) => {
+                event.preventDefault();
+                api.start({y: -y, x: -x});
+            },
+        },
+        {
+            target: wrapperRef,
+        }
+    );
+
+    useGesture(
+        {
+            // onHover: ({ active, event }) => console.log('hover', event, active),
+            // onMove: ({ event }) => console.log('move', event),
+
+            // onDrag: ({ pinching, cancel, offset: [x, y] }) => {
+            //     if (pinching) return cancel()
+            //     api.start({ x, y })
+            // },
+            onPinch: ({origin: [ox, oy], first, movement: [ms], offset: [s, a], memo}) => {
+                if (first) {
+                    const {width, height, x, y} = ref.current.getBoundingClientRect();
+                    const tx = ox - (x + width / 2);
+                    const ty = oy - (y + height / 2);
+                    memo = [style.x.get(), style.y.get(), tx, ty];
+                }
+
+                const x = memo[0] - ms * memo[2];
+                const y = memo[1] - ms * memo[3];
+                api.start({scale: s, rotateZ: a, x, y});
+
+                setApp({...app, scale: s});
+                return memo;
+            },
+        },
+        {
+            target: ref,
+            // drag: { from: () => [style.x.get(), style.y.get()] },
+            pinch: {scaleBounds: {min: 0.1, max: 4}, rubberband: true},
+        }
+    );
+
+    // const [{ zoom, scale }, set] = useSpring(() => ({
+    //     scale: 1,
+    //     zoom: 0,
+    //     config: { mass: 5, tension: 350, friction: 80 },
+    // }))
 
     function renderChart(chart: Chart) {
         switch (chart.type) {
@@ -45,19 +110,19 @@ export default function Canvas() {
         }
     }
 
-    const bind = usePinch(
-        ({offset: [d]}) => {
-            set({zoom: d / 1600});
-            setApp({...app, scale: 1 + d / 1600});
-        },
-        {domTarget, eventOptions: {passive: false}}
-    );
+    // const bind = usePinch(
+    //     ({ offset: [d] }) => {
+    //         set({ zoom: d / 1600 })
+    //         setApp({ ...app, scale: 1 + d / 1600 })
+    //     },
+    //     { domTarget, eventOptions: { passive: false } }
+    // )
 
     return (
         <div
-            {...bind()}
-            className={'canvas__wrapper'}
-            ref={domTarget}
+            // {...bind()}
+            className={'canvas__wrapper w-full h-full overflow-hidden z-0'}
+            ref={wrapperRef}
             tabIndex={1}
             onKeyDown={(e: React.KeyboardEvent) => {
                 // e.preventDefault()
@@ -75,13 +140,14 @@ export default function Canvas() {
             <animated.div
                 ref={ref}
                 className={'w-full h-full absolute'}
-                style={{
-                    scale: to([scale, zoom], (s, z) => {
-                        if (s + z >= 0) {
-                            return s + z;
-                        }
-                    }),
-                }}
+                style={style}
+                // style={{
+                //     scale: to([scale, zoom], (s, z) => {
+                //         if (s + z >= 0) {
+                //             return s + z
+                //         }
+                //     }),
+                // }}
             >
                 {app.charts.length > 0 ? (
                     app.charts.map((chart) => renderChart(chart))
@@ -134,7 +200,7 @@ export default function Canvas() {
                     icon={<AimOutlined />}
                     onClick={() => {
                         setApp({...app, scale: 1});
-                        set({zoom: 0, scale: 1});
+                        // set({ zoom: 0, scale: 1 })
                     }}
                 ></Button>
             </Space>

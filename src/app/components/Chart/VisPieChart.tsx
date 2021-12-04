@@ -8,18 +8,9 @@ import {appAtom, Param} from '../../atoms/appAtom';
 import DimensionIndicator from '../DimensionIndicator';
 import {useTranslation} from 'react-i18next';
 import {usePie} from '../../hooks/usePie';
-import {
-    Input,
-    Heading,
-    Button,
-    Popover,
-    PopoverArrow,
-    PopoverBody,
-    PopoverContent,
-    PopoverCloseButton,
-    PopoverHeader,
-} from '@chakra-ui/react';
+import {Input, Heading, Button, Portal} from '@chakra-ui/react';
 import _ from 'lodash';
+import Widget from '../../widgets/Widget';
 
 export default function VisPieChart({id, initialState}: Param & {initialState?: PieState}) {
     const [isOpen, setIsOpen] = React.useState(false);
@@ -31,7 +22,7 @@ export default function VisPieChart({id, initialState}: Param & {initialState?: 
     const [activeArc, setActiveArc] =
         React.useState<Omit<ComputedDatum<DefaultRawDatum>, 'index' | 'indexValue'>>(null);
     const {t} = useTranslation();
-    const {removeArcById, addArc, changeArcValueById, getValueById, getDatumById} = usePie(id);
+    const {removeArcById, addArc, changeArcValueById, getValueById} = usePie(id);
 
     React.useEffect(() => {
         if (initialState)
@@ -84,53 +75,17 @@ export default function VisPieChart({id, initialState}: Param & {initialState?: 
                 isInteractive={id === app.activeKey}
             />
 
-            {/* <Rnd
-                style={{ zIndex: 50 }}
-                className={'h-full absolute top-1/2 transform -translate-y-2/4'}
-                size={{
-                    width: pie.width - pie.margin.left - pie.margin.right,
-                    height: pie.height - pie.margin.top - pie.margin.bottom,
-                }}
-                position={{ x: pie.margin.left, y: pie.margin.top }}
-                disableDragging
-                onResizeStop={(_e, direction, _ref, delta, _position) => {
-                    switch (direction) {
-                        case 'right':
-                            setPie(() => ({ ...pie, margin: { ...pie.margin, right: pie.margin.right - delta.width } }))
-                            break
-                        case 'left':
-                            setPie(() => ({ ...pie, margin: { ...pie.margin, left: pie.margin.left - delta.width } }))
-                            break
-                        case 'top':
-                            setPie(() => ({ ...pie, margin: { ...pie.margin, top: pie.margin.top - delta.height } }))
-                            break
-                        case 'bottom':
-                            setPie(() => ({ ...pie, margin: { ...pie.margin, bottom: pie.margin.bottom - delta.height } }))
-                            break
-                    }
-                }}
-            /> */}
             {id === app.activeKey ? <DimensionIndicator width={pie.width} height={pie.height} /> : null}
-            <Popover
-                returnFocusOnClose={false}
-                isOpen={isOpen}
-                onClose={close}
-                closeOnBlur={false}
-                computePositionOnMount
-                // strategy={'fixed'}
-                // styleConfig={{ screenLeft: state.screenX, screenTop: state.screenY }}
-            >
-                {activeArc ? (
-                    <PopoverContent
-                        top={position.y - pie.y}
-                        left={position.x - pie.x}
-                        position={'absolute'}
-                        onMouseDown={(e) => e.stopPropagation()}
-                    >
-                        <PopoverArrow />
-                        <PopoverHeader>{activeArc.id}</PopoverHeader>
-                        <PopoverCloseButton />
-                        <PopoverBody>
+            {activeArc && (
+                <Portal>
+                    <Widget
+                        position={position}
+                        isOpen={isOpen}
+                        title={activeArc.id}
+                        onClose={() => {
+                            close();
+                        }}
+                        content={
                             <div className={'flex flex-col gap-4'}>
                                 <div className={'flex flex-col gap-1'}>
                                     <Heading as={'h5'}>{activeArc.id}</Heading>
@@ -157,7 +112,6 @@ export default function VisPieChart({id, initialState}: Param & {initialState?: 
                                         size={'sm'}
                                         colorScheme={'red'}
                                         onClick={() => {
-                                            console.log(getDatumById(activeArc.id as string));
                                             setActiveArc(null);
                                             removeArcById(activeArc.id as string);
                                         }}
@@ -174,10 +128,10 @@ export default function VisPieChart({id, initialState}: Param & {initialState?: 
                                     </Button>
                                 </div>
                             </div>
-                        </PopoverBody>
-                    </PopoverContent>
-                ) : null}
-            </Popover>
+                        }
+                    />
+                </Portal>
+            )}
         </StyledRnd>
     );
 }

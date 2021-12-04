@@ -8,7 +8,6 @@ import BarConfig from './components/Config/BarConfig/Config';
 import ScatterConfig from './components/Config/ScatterConfig/Config';
 import {Button, ConfigProvider} from 'antd';
 import 'tailwindcss/tailwind.css';
-import {PieConfigProvider} from './context/pie-context';
 import {appAtom, ChartType} from './atoms/appAtom';
 import {useAtom} from 'jotai';
 import {Empty} from 'antd';
@@ -106,37 +105,35 @@ function App() {
 
     return (
         <ConfigProvider componentSize={'small'}>
-            <PieConfigProvider>
-                <div className={'App w-full h-full flex'}>
-                    {!hideInterface ? <SideBar /> : null}
-                    <div className={'App__content relative flex border-r flex-grow overflow-hidden bg-gray-100'}>
-                        <Canvas />
-                        {!hideInterface ? <Gallery /> : null}
-                    </div>
-
-                    {!hideInterface && (
-                        <div className={'Config h-full w-48 flex-shrink-0 flex items-center justify-center'}>
-                            {activeChart ? renderConfig(activeChart.type) : <Empty description={t('Select a chart')} />}
-                        </div>
-                    )}
-
-                    <Button
-                        className={'fixed bottom-16 left-1/2 transform -translate-x-1/2 text-base overflow-visible'}
-                        type={'primary'}
-                        size={'large'}
-                        onClick={() => {
-                            renderChart();
-                            // if (chartType === 'line')
-                            //     renderChart(line.render, { width: line.width, height: line.height })
-                            // if (chartType === 'bar') renderChart(bar.render, { width: bar.width, height: bar.height })
-                        }}
-                        shape={'round'}
-                        disabled={!(selectionId.length > 0)}
-                    >
-                        {selectionId.length > 0 ? t('Render') : t('Select a Frame')}
-                    </Button>
+            <div className={'App w-full h-full flex'}>
+                {!hideInterface ? <SideBar /> : null}
+                <div className={'App__content relative flex border-r flex-grow overflow-hidden bg-gray-100'}>
+                    <Canvas />
+                    {!hideInterface ? <Gallery /> : null}
                 </div>
-            </PieConfigProvider>
+
+                {!hideInterface && (
+                    <div className={'Config h-full w-48 flex-shrink-0 flex items-center justify-center'}>
+                        {activeChart ? renderConfig(activeChart.type) : <Empty description={t('Select a chart')} />}
+                    </div>
+                )}
+
+                <Button
+                    className={'fixed bottom-16 left-1/2 transform -translate-x-1/2 text-base overflow-visible'}
+                    type={'primary'}
+                    size={'large'}
+                    onClick={() => {
+                        renderChart();
+                        // if (chartType === 'line')
+                        //     renderChart(line.render, { width: line.width, height: line.height })
+                        // if (chartType === 'bar') renderChart(bar.render, { width: bar.width, height: bar.height })
+                    }}
+                    shape={'round'}
+                    disabled={!(selectionId.length > 0)}
+                >
+                    {selectionId.length > 0 ? t('Render') : t('Select a Frame')}
+                </Button>
+            </div>
         </ConfigProvider>
     );
 }
