@@ -11,7 +11,6 @@ interface ColorPickerProps {
 export default function ColorPicker({color, onChange}: ColorPickerProps) {
     const [visible, setVisible] = React.useState(false);
 
-    const {r, g, b} = color;
     const ref = React.useRef(null);
 
     useClickAway(() => setVisible(false), ref);
@@ -24,7 +23,7 @@ export default function ColorPicker({color, onChange}: ColorPickerProps) {
                         width: 12,
                         height: 12,
                         borderRadius: 2,
-                        background: `rgba(${r}, ${g}, ${b})`,
+                        background: typeof color === 'string' ? color : `rgba(${color.r}, ${color.g}, ${color.b})`,
                     }}
                 ></div>
             </Button>

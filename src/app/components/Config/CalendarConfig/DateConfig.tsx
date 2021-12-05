@@ -6,6 +6,7 @@ import {useTranslation} from 'react-i18next';
 import {FcCalendar} from 'react-icons/fc';
 import {useCalendar} from '../../../hooks/useCalendar';
 import {Heading} from '@chakra-ui/layout';
+import ColorPicker from '../../CustomInput/ColorPicker';
 
 export default function DateConfig({id}: Param) {
     const {t} = useTranslation();
@@ -42,6 +43,12 @@ export default function DateConfig({id}: Param) {
                 <Heading as={'h6'}>{t('Month')}</Heading>
                 <Form.Item name={'monthSpacing'} label={t('Month Spacing')}>
                     <Slider />
+                </Form.Item>
+                <Form.Item name={'monthBorderWidth'} label={t('Month Border Width')}>
+                    <Slider />
+                </Form.Item>
+                <Form.Item name={'monthBorderColor'} label={t('Month Border Color')}>
+                    <ColorPicker />
                 </Form.Item>
                 <Form.Item name={'monthLegendPosition'} label={t('Month Legend Position')}>
                     <Radio.Group
