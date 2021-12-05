@@ -1,5 +1,6 @@
 import React from 'react';
 import {Popover, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader} from '@chakra-ui/react';
+import {useClickAway} from 'ahooks';
 
 interface WidgetProps {
     isOpen: boolean;
@@ -7,9 +8,16 @@ interface WidgetProps {
     content: React.ReactNode;
     title: React.ReactNode;
     onClose?: () => void;
+    onClickAway?: () => void;
 }
 
-export default function Widget({isOpen, position, title, content, onClose}: WidgetProps) {
+export default function Widget({isOpen, position, title, content, onClose, onClickAway}: WidgetProps) {
+    const ref = React.useRef();
+
+    useClickAway(() => {
+        onClickAway && onClickAway();
+    }, ref);
+
     return (
         <Popover
             returnFocusOnClose={false}
@@ -19,6 +27,7 @@ export default function Widget({isOpen, position, title, content, onClose}: Widg
             computePositionOnMount
         >
             <PopoverContent
+                ref={ref}
                 position={'absolute'}
                 top={position.y}
                 left={position.x}

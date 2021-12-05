@@ -4,6 +4,7 @@ import * as React from 'react';
 import {useTranslation} from 'react-i18next';
 import {appAtom} from '../../atoms/appAtom';
 import BarDataTable from './DataTable/BarDataTable';
+import CalendarDataTable from './DataTable/CalendarDataTable';
 import LineDataTable from './DataTable/LineDataTable';
 import PieDataTable from './DataTable/PieDataTable';
 import ScatterDataTable from './DataTable/ScatterDataTable';
@@ -25,6 +26,8 @@ export default function DataTable() {
                     return <PieDataTable id={activeChart.id} />;
                 case 'scatter':
                     return <ScatterDataTable id={activeChart.id} />;
+                case 'calendar':
+                    return <CalendarDataTable id={activeChart.id} />;
                 default:
                     return null;
             }

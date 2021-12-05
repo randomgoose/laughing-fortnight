@@ -5,7 +5,7 @@ import {calendaraAtomFamily} from '../atoms/calendarAtomFamily';
 export function useCalendar(id: string) {
     const [calendar, setCalendar] = useImmerAtom(calendaraAtomFamily({id}));
 
-    function getValueByDate(date: string) {
+    function getValueByDate(date: string | moment.Moment) {
         const datum = calendar.data.find((datum) => moment(datum.day).isSame(date));
         if (datum) {
             return datum.value;
@@ -14,7 +14,7 @@ export function useCalendar(id: string) {
         }
     }
 
-    function changeValueByDate(date: string, value: number) {
+    function changeValueByDate(date: string | moment.Moment, value: number) {
         setCalendar((calendar) => {
             const datum = calendar.data.find((datum) => moment(datum.day).isSame(date));
             console.log(datum);
@@ -22,7 +22,7 @@ export function useCalendar(id: string) {
             if (datum) {
                 datum.value = value;
             } else {
-                calendar.data.push({day: date, value: value});
+                calendar.data.push({day: typeof date === 'string' ? date : date.format('YYYY-MM-DD'), value: value});
             }
         });
     }

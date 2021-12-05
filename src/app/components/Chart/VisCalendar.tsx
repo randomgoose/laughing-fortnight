@@ -55,6 +55,7 @@ export default function VisCalendar({id, initialState}: Param & {initialState?: 
                 <Widget
                     position={position}
                     isOpen={isOpen}
+                    // onClickAway={onClose}
                     content={
                         activeDate ? (
                             <div>

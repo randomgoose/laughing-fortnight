@@ -16,15 +16,11 @@ export default function ColorPicker({color, onChange}: ColorPickerProps) {
     useClickAway(() => setVisible(false), ref);
 
     return (
-        <div className={'ColorPicker__wrapper'} ref={ref} style={{position: 'relative', width: 'fit-content'}}>
+        <div className={'ColorPicker__wrapper z-50'} ref={ref} style={{position: 'relative', width: 'fit-content'}}>
             <Button onClick={() => setVisible(true)}>
                 <div
-                    style={{
-                        width: 12,
-                        height: 12,
-                        borderRadius: 2,
-                        background: typeof color === 'string' ? color : `rgba(${color.r}, ${color.g}, ${color.b})`,
-                    }}
+                    className={'w-3 h-3 rounded-sm'}
+                    style={{background: typeof color === 'string' ? color : `rgba(${color.r}, ${color.g}, ${color.b})`}}
                 ></div>
             </Button>
             {visible ? (
@@ -35,6 +31,7 @@ export default function ColorPicker({color, onChange}: ColorPickerProps) {
                         default: {
                             picker: {
                                 position: 'absolute',
+                                top: 32,
                                 right: 0,
                                 zIndex: 999,
                             },

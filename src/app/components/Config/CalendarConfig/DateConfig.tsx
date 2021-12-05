@@ -47,7 +47,7 @@ export default function DateConfig({id}: Param) {
                 <Form.Item name={'monthBorderWidth'} label={t('Month Border Width')}>
                     <Slider />
                 </Form.Item>
-                <Form.Item name={'monthBorderColor'} label={t('Month Border Color')}>
+                <Form.Item name={'monthBorderColor'} label={t('Month Border Color')} valuePropName={'color'}>
                     <ColorPicker />
                 </Form.Item>
                 <Form.Item name={'monthLegendPosition'} label={t('Month Legend Position')}>

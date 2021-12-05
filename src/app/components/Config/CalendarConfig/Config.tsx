@@ -11,7 +11,7 @@ export default function CalendarConfig() {
     const [{activeKey}] = useAtom(appAtom);
 
     return (
-        <Tabs tabPosition={'left'} type={'card'} className={'h-full w-full'}>
+        <Tabs tabPosition={'left'} type={'card'} className={'h-full w-full overflow-visible'}>
             <StyledTabPane key={'general'} tab={<FcSettings />}>
                 <GeneralConfig id={activeKey} />
             </StyledTabPane>
