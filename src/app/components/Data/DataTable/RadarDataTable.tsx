@@ -55,7 +55,24 @@ export default function RadarDataTable({id}: Param) {
                 },
                 ...radar.keys.map((key) => ({
                     dataIndex: key,
-                    title: key,
+                    title: () => (
+                        <div className={'flex items-center gap-2'}>
+                            {key}
+                            <IconButton
+                                onClick={() =>
+                                    setRadar((draftState) => {
+                                        draftState.data.map((datum) => {
+                                            delete datum[key];
+                                        });
+                                        draftState.keys = draftState.keys.filter((name) => name !== key);
+                                    })
+                                }
+                                size={'xs'}
+                                icon={<DeleteFilled />}
+                                aria-label={'remove serie'}
+                            />
+                        </div>
+                    ),
                     render: (value, item) => (
                         <EditableDiv
                             value={value}
