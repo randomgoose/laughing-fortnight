@@ -13,6 +13,7 @@ import {Line} from '@nivo/line';
 import {initialLineState} from '../atoms/lineAtomFamily';
 import {Bar} from '@nivo/bar';
 import {initialBarState} from '../atoms/barAtomFamily';
+import {Radar} from '@nivo/radar';
 
 function getChart(type: IChartType, state: any) {
     switch (type) {
@@ -22,6 +23,8 @@ function getChart(type: IChartType, state: any) {
             return <Line {...{...initialLineState, ...state}} isInteractive={false} />;
         case 'bar':
             return <Bar {...{...initialBarState, ...state}} isInteractive={false} animate={false} />;
+        case 'radar':
+            return <Radar {...{...initialBarState, ...state}} isInteractive={false} />;
         default:
             return <Pie {...{...initialPieState, ...state}} isInteractive={false} />;
     }

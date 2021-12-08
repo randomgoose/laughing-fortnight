@@ -53,7 +53,7 @@ export default function BarConfig() {
                         </Space>
                     }
                 >
-                    <Input></Input>
+                    <Input />
                 </Form.Item>
             </Form>
         </ConfigPage>

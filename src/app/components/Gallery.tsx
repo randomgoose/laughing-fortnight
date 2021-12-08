@@ -9,7 +9,7 @@ export default function Gallery() {
     const [height, setHeight] = React.useState('320px');
     const [width, setWidth] = React.useState('100%');
     const [x, setX] = React.useState(0);
-    const [y, setY] = React.useState(window.innerHeight - 320);
+    const [y, setY] = React.useState(window.innerHeight - parseFloat(height));
     const {t} = useTranslation();
 
     function loadSnapShots() {

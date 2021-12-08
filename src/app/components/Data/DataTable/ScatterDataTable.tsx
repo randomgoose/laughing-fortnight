@@ -89,6 +89,7 @@ export default function ScatterDataTable({id}: Param) {
                                 key={datum.id + ''}
                             >
                                 <Table
+                                    rowKey={'x'}
                                     dataSource={datum.data}
                                     scroll={{y: 140}}
                                     columns={[

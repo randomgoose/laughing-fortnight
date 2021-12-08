@@ -2,27 +2,30 @@ import * as React from 'react';
 import {DefaultRawDatum, ResponsivePie} from '@nivo/pie';
 import StyledRnd from '../StyledComponents/StyledRnd';
 import {pieAtomFamily, PieState} from '../../atoms/pieAtomFamily';
-import {ComputedDatum} from '@nivo/bar';
+import {ComputedDatum} from '@nivo/pie';
 import {useImmerAtom} from 'jotai/immer';
 import {appAtom, Param} from '../../atoms/appAtom';
 import DimensionIndicator from '../DimensionIndicator';
 import {useTranslation} from 'react-i18next';
 import {usePie} from '../../hooks/usePie';
-import {Input, Heading, Button, Portal} from '@chakra-ui/react';
+import {Input, Heading, Button, Portal, useDisclosure} from '@chakra-ui/react';
 import _ from 'lodash';
 import Widget from '../../widgets/Widget';
 
 export default function VisPieChart({id, initialState}: Param & {initialState?: PieState}) {
-    const [isOpen, setIsOpen] = React.useState(false);
+    const {isOpen, onOpen, onClose} = useDisclosure();
     const [position, setPosition] = React.useState({x: 0, y: 0});
-    const open = () => setIsOpen(true);
-    const close = () => setIsOpen(false);
     const [pie, setPie] = useImmerAtom(pieAtomFamily({id}));
     const [app] = useImmerAtom(appAtom);
-    const [activeArc, setActiveArc] =
-        React.useState<Omit<ComputedDatum<DefaultRawDatum>, 'index' | 'indexValue'>>(null);
+    const [activeArc, setActiveArc] = React.useState<
+        ComputedDatum<
+            DefaultRawDatum & {
+                label: string;
+            }
+        >
+    >(null);
     const {t} = useTranslation();
-    const {removeArcById, addArc, changeArcValueById, getValueById} = usePie(id);
+    const {removeArcById, addArc, changeArcValueById, getValueById, changeId, getDatumById} = usePie(id);
 
     React.useEffect(() => {
         if (initialState)
@@ -66,10 +69,8 @@ export default function VisPieChart({id, initialState}: Param & {initialState?: 
             <ResponsivePie
                 {...pie}
                 onClick={(node, event) => {
-                    console.log(node);
-                    console.log(event);
                     setPosition({x: event.clientX, y: event.clientY});
-                    open();
+                    onOpen();
                     id === app.activeKey && setActiveArc(node);
                 }}
                 isInteractive={id === app.activeKey}
@@ -82,15 +83,28 @@ export default function VisPieChart({id, initialState}: Param & {initialState?: 
                         position={position}
                         isOpen={isOpen}
                         title={activeArc.id}
-                        onClose={() => {
-                            close();
-                        }}
+                        onClose={onClose}
                         content={
                             <div className={'flex flex-col gap-4'}>
                                 <div className={'flex flex-col gap-1'}>
-                                    <Heading as={'h5'}>{activeArc.id}</Heading>
+                                    <Heading as={'h5'}>{'Label'}</Heading>
                                     <Input
-                                        value={getValueById(activeArc.id as string)}
+                                        className={'mb-2'}
+                                        value={getDatumById(activeArc.id + '').label}
+                                        onKeyDown={(e) => {
+                                            e.stopPropagation();
+                                        }}
+                                        onChange={(e) => {
+                                            e.stopPropagation();
+                                            // e.nativeEvent.stopImmediatePropagation()
+                                            changeId(activeArc.id + '', e.target.value);
+                                        }}
+                                        size={'sm'}
+                                    />
+
+                                    <Heading as={'h5'}>{t('Value')}</Heading>
+                                    <Input
+                                        value={getValueById(activeArc.id + '')}
                                         onKeyDown={(e) => {
                                             e.stopPropagation();
                                         }}

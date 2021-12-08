@@ -38,6 +38,12 @@ export function usePie(id: string) {
         return pie.data.find((datum) => datum.id === arcId);
     }
 
+    function changeId(arcId: string, newId: string) {
+        setPie((pie) => {
+            pie.data.find((datum) => datum.id === arcId).label = newId;
+        });
+    }
+
     return {
         pie,
         addArc,
@@ -46,5 +52,6 @@ export function usePie(id: string) {
         data: pie.data,
         getValueById,
         getDatumById,
+        changeId,
     };
 }

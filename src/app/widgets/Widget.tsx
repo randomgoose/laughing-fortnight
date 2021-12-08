@@ -12,20 +12,14 @@ interface WidgetProps {
 }
 
 export default function Widget({isOpen, position, title, content, onClose, onClickAway}: WidgetProps) {
-    const ref = React.useRef();
+    const ref = React.useRef(null);
 
     useClickAway(() => {
         onClickAway && onClickAway();
     }, ref);
 
     return (
-        <Popover
-            returnFocusOnClose={false}
-            isOpen={isOpen}
-            onClose={onClose}
-            closeOnBlur={false}
-            computePositionOnMount
-        >
+        <Popover returnFocusOnClose={false} isOpen={isOpen} onClose={onClose} closeOnBlur={true} computePositionOnMount>
             <PopoverContent
                 ref={ref}
                 position={'absolute'}
@@ -34,7 +28,7 @@ export default function Widget({isOpen, position, title, content, onClose, onCli
                 onMouseDown={(e) => e.stopPropagation()}
             >
                 <PopoverHeader>{title}</PopoverHeader>
-                <PopoverCloseButton />
+                <PopoverCloseButton onClick={onClose} />
                 <PopoverBody>
                     <div className={'flex flex-col gap-4'}>{content}</div>
                 </PopoverBody>

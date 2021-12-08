@@ -7,6 +7,7 @@ import BarDataTable from './DataTable/BarDataTable';
 import CalendarDataTable from './DataTable/CalendarDataTable';
 import LineDataTable from './DataTable/LineDataTable';
 import PieDataTable from './DataTable/PieDataTable';
+import RadarDataTable from './DataTable/RadarDataTable';
 import ScatterDataTable from './DataTable/ScatterDataTable';
 
 export default function DataTable() {
@@ -28,6 +29,8 @@ export default function DataTable() {
                     return <ScatterDataTable id={activeChart.id} />;
                 case 'calendar':
                     return <CalendarDataTable id={activeChart.id} />;
+                case 'radar':
+                    return <RadarDataTable id={activeChart.id} />;
                 default:
                     return null;
             }

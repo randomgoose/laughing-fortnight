@@ -51,6 +51,7 @@ export function useBar(id: string) {
 
     return {
         bar,
+        setBar,
         setData,
         setKey,
         removeKey,

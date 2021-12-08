@@ -14,6 +14,7 @@ import {Empty} from 'antd';
 import {useTranslation} from 'react-i18next';
 import Gallery from './components/Gallery';
 import CalendarConfig from './components/Config/CalendarConfig/Config';
+import RadarConfig from './components/Config/RadarConfig/Config';
 
 function App() {
     const [{hideInterface, activeKey, charts, selectionId}, setApp] = useAtom(appAtom);
@@ -81,6 +82,8 @@ function App() {
                 return <ScatterConfig />;
             case 'calendar':
                 return <CalendarConfig />;
+            case 'radar':
+                return <RadarConfig />;
         }
     }
 

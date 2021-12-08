@@ -8,6 +8,18 @@ export function useScatter(id: string) {
         setScatter((draftState) => Object.assign(draftState, state));
     }
 
+    function changeNodeDataX(serieId: number | string, index: number, value: number) {
+        setScatter((draftState) => {
+            draftState.data.find((datum) => datum.id === serieId).data[index].x = value;
+        });
+    }
+
+    function changeNodeDataY(serieId: number | string, index: number, value: number) {
+        setScatter((draftState) => {
+            draftState.data.find((datum) => datum.id === serieId).data[index].y = value;
+        });
+    }
+
     function removeGroup(group: string) {
         setScatter((draftState) => {
             draftState.data = draftState.data.filter((datum) => datum.id !== group);
@@ -35,6 +47,19 @@ export function useScatter(id: string) {
         });
     }
 
+    // function changeNodeGroup(originGroupId: string, index: number, targetGroupId: string) {
+    //     setScatter((draftState) => {
+    //         const originGroup = scatter.data.find(group => group.id === originGroupId)
+    //         const targetGroup = scatter.data.find(group => group.id === targetGroupId)
+
+    //         if (originGroup && targetGroup) {
+    //             const node = originGroup.data[index]
+    //             draftState.data.find(group => group.id === targetGroupId).data.push(node)
+    //             draftState.data.find(group => group.id === originGroupId).data.splice(index, 1)
+    //         }
+    //     })
+    // }
+
     return {
         scatter,
         setPartialState,
@@ -42,5 +67,7 @@ export function useScatter(id: string) {
         changeGroupName,
         setNewData,
         removeGroup,
+        changeNodeDataX,
+        changeNodeDataY,
     };
 }

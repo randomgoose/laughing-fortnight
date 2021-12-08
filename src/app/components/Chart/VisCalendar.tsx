@@ -39,9 +39,9 @@ export default function VisCalendar({id, initialState}: Param & {initialState?: 
             y={calendar.y}
             onResize={(e, direction, ref, delta, position) => onResize(e, direction, ref, delta, position, setCalendar)}
             onDragStop={(e, d) => onDragStop(e, d, setCalendar)}
-            onMouseDown={() => {
-                onClose();
-            }}
+            // onMouseDown={() => {
+            //     onClose()
+            // }}
         >
             <ResponsiveCalendar
                 {...calendar}
@@ -51,13 +51,13 @@ export default function VisCalendar({id, initialState}: Param & {initialState?: 
                     onOpen();
                 }}
             />
-            <Portal>
-                <Widget
-                    position={position}
-                    isOpen={isOpen}
-                    // onClickAway={onClose}
-                    content={
-                        activeDate ? (
+            {activeDate ? (
+                <Portal>
+                    <Widget
+                        onClose={onClose}
+                        position={position}
+                        isOpen={isOpen}
+                        content={
                             <div>
                                 <div>
                                     <Heading as={'h6'} size={'xs'}>
@@ -75,11 +75,11 @@ export default function VisCalendar({id, initialState}: Param & {initialState?: 
                                     </NumberInput>
                                 </div>
                             </div>
-                        ) : null
-                    }
-                    title={`${t('Date')}: ${activeDate && activeDate.day}`}
-                />
-            </Portal>
+                        }
+                        title={`${t('Date')}: ${activeDate && activeDate.day}`}
+                    />
+                </Portal>
+            ) : null}
         </StyledRnd>
     );
 }

@@ -55,8 +55,8 @@ export const scatterAtomFamily = atomFamily(
                 legendPosition: 'middle',
                 legendOffset: -60,
             },
-            useMesh: true,
             legends: [...baseLegend],
+            isInteractive: true,
         } as ScatterState),
     (a: Param, b: Param) => a.id === b.id
 );

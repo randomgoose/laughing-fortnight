@@ -9,29 +9,11 @@ import {useTranslation} from 'react-i18next';
 import {useLine} from '../../../hooks/useLine';
 import {Param} from '../../../atoms/appAtom';
 import {LineState} from '../../../atoms/lineAtomFamily';
+import {blendModeList} from '../../../atoms/types';
 
 const colorSchemeList = Object.keys(colorSchemes);
 
 const scaleTypes = ['linear', 'point'];
-
-const blendModeList = [
-    'normal',
-    'multiply',
-    'screen',
-    'overlay',
-    'darken',
-    'lighten',
-    'color-dodge',
-    'color-burn',
-    'hard-light',
-    'soft-light',
-    'difference',
-    'exclusion',
-    'hue',
-    'saturation',
-    'color',
-    'luminosity',
-];
 
 export default function GeneralConfig({id}: Param) {
     const {line, setPartialState} = useLine(id);
@@ -134,12 +116,10 @@ export default function GeneralConfig({id}: Param) {
                 <Form.Item name={'areaBlendMode'} label={<Space>{t('Area blend mode')}</Space>}>
                     <Select
                         placeholder={'Blend mode'}
-                        options={blendModeList.map((mode) => {
-                            return {
-                                value: mode,
-                                label: mode,
-                            };
-                        })}
+                        options={blendModeList.map((mode) => ({
+                            value: mode,
+                            label: mode,
+                        }))}
                     />
                 </Form.Item>
             </Form>
