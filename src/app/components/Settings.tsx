@@ -2,7 +2,7 @@ import * as React from 'react';
 import i18n from '../../i18n/i18n';
 import {Radio, Space} from 'antd';
 import {useTranslation} from 'react-i18next';
-import {Button} from '@chakra-ui/button';
+// import { Button } from '@chakra-ui/button'
 import {useDisclosure} from '@chakra-ui/hooks';
 import {
     Modal,
@@ -25,7 +25,7 @@ const languages: {name: string; key: string}[] = [
 
 export default function Settings() {
     const {t} = useTranslation();
-    const {isOpen, onOpen, onClose} = useDisclosure();
+    const {isOpen, onClose} = useDisclosure();
     const [{windowSize}] = useAtom(appAtom);
 
     return (
@@ -46,12 +46,12 @@ export default function Settings() {
                     }}
                 />
             </Space>
-            <Space direction={'vertical'} className={'mb-2'}>
+            {/* <Space direction={'vertical'} className={'mb-2'}>
                 <h6 className={'font-bold'}>{t('Theme')}</h6>
                 <Button size={'xs'} onClick={onOpen}>
                     {t('Theme maker')}
                 </Button>
-            </Space>
+            </Space> */}
             <Space direction={'vertical'} className={'mb-2'}>
                 <h6 className={'font-bold'}>{t('Window size')}</h6>
                 <Radio.Group
