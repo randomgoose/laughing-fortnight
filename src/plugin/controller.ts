@@ -1,9 +1,20 @@
 import {WindowSize} from '../app/atoms/appAtom';
+import {getAllColorSchemes, saveColorSchemes} from './functions/color-scheme';
 import {sendMessage} from './functions/message';
 import {resizeWindow} from './functions/resize-window';
+import {GET_ALL_COLOR_SCHEMES, RESIZE_WINDOW, SAVE_COLOR_SCHEMES} from './message-types';
 
 figma.showUI(__html__);
 figma.ui.resize(960, 800);
+
+// Get all local color schemes on init.
+getAllColorSchemes()
+    .then((data) => {
+        sendMessage(GET_ALL_COLOR_SCHEMES, data);
+    })
+    .catch((err) => {
+        console.log(err);
+    });
 
 function createChart(frame: FrameNode, render: 'canvas' | 'svg', data): FrameNode {
     if (render === 'svg') {
@@ -32,9 +43,18 @@ figma.ui.onmessage = async (msg) => {
                 createChart(selection[0], msg.render, msg.data);
             }
             break;
-        case 'resize-window':
+        case RESIZE_WINDOW:
             const size: WindowSize = msg.data.size;
             resizeWindow(size);
+            break;
+        case GET_ALL_COLOR_SCHEMES:
+            const colorSchemes = await getAllColorSchemes();
+            sendMessage(GET_ALL_COLOR_SCHEMES, colorSchemes);
+            break;
+        case SAVE_COLOR_SCHEMES:
+            const {schemes} = msg.data;
+            await saveColorSchemes(schemes);
+            break;
         default:
             console.log(msg.type);
     }

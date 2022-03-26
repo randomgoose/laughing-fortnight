@@ -1,3 +1,4 @@
+import {IconButton} from '@chakra-ui/react';
 import {Dropdown, Menu} from 'antd';
 import * as React from 'react';
 import {FcSettings} from 'react-icons/fc';
@@ -16,13 +17,7 @@ export default function SideBar() {
                 }
                 className={'App__settings'}
             >
-                <button
-                    className={
-                        'w-7 h-7 flex justify-center items-center rounded-lg transition-all duration-200 hover:bg-gray-100 active:bg-gray-200'
-                    }
-                >
-                    <FcSettings />
-                </button>
+                <IconButton icon={<FcSettings />} aria-label={'Settings'} size={'xs'} bg={'white'}></IconButton>
             </Dropdown>
         </div>
     );

@@ -1,4 +1,5 @@
 import {atom} from 'jotai';
+import {IColorScheme} from '../../types';
 
 export type ChartType = 'line' | 'pie' | 'bar' | 'scatter' | 'radar' | 'calendar';
 export type WindowSize = 'sm' | 'md' | 'lg';
@@ -21,6 +22,8 @@ export interface AppState {
     scale: number;
     decimalDigit: number;
     windowSize: WindowSize;
+    colorSchemes: IColorScheme[];
+    activeColorSchemeId: IColorScheme['id'];
 }
 
 export const appAtom = atom<AppState>({
@@ -34,4 +37,6 @@ export const appAtom = atom<AppState>({
     scale: 1,
     decimalDigit: 2,
     windowSize: 'sm',
+    colorSchemes: [],
+    activeColorSchemeId: '',
 });

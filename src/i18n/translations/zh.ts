@@ -105,4 +105,5 @@ export const zh_translation = {
     Remove: '移除',
     'Add an arc': '增加扇形',
     Preview: '预览',
+    Version: '版本',
 };

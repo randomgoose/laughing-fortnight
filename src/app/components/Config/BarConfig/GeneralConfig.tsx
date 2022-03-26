@@ -8,13 +8,18 @@ import {colorSchemes} from '@nivo/colors';
 import {useTranslation} from 'react-i18next';
 import {useBar} from '../../../hooks/useBar';
 import {Param} from '../../../atoms/appAtom';
+import {useApp} from '../../../hooks/useApp';
 
-const colorSchemeList = Object.keys(colorSchemes);
 const valueScaleType = ['linear', 'symlog'];
 const indexScaleType = ['band'];
 
+const colorSchemeList = Object.keys(colorSchemes);
+
 export default function GeneralConfig({id}: Param) {
     const {bar, setPartialState} = useBar(id);
+    const {
+        app: {colorSchemes: customSchemes},
+    } = useApp();
     const {groupMode, layout, margin, padding, innerPadding, colors, indexScale, valueScale} = bar;
     const {t} = useTranslation();
 
@@ -95,14 +100,25 @@ export default function GeneralConfig({id}: Param) {
                             {t('Colors')}
                         </Space>
                     }
-                    name={['colors', 'scheme']}
+                    name={'colorSchemeId'}
                 >
                     <Select style={{width: '100%'}}>
-                        {colorSchemeList.map((scheme) => (
-                            <Select.Option key={scheme} value={scheme}>
-                                {scheme}
-                            </Select.Option>
-                        ))}
+                        {customSchemes.length > 0 ? (
+                            <Select.OptGroup label={'Custom colors'}>
+                                {customSchemes.map((scheme) => (
+                                    <Select.Option key={scheme.name} value={scheme.id}>
+                                        {scheme.name}
+                                    </Select.Option>
+                                ))}
+                            </Select.OptGroup>
+                        ) : null}
+                        <Select.OptGroup label={'Nivo colors'}>
+                            {colorSchemeList.map((scheme) => (
+                                <Select.Option key={scheme} value={scheme}>
+                                    {scheme}
+                                </Select.Option>
+                            ))}
+                        </Select.OptGroup>
                     </Select>
                 </Form.Item>
             </Form>

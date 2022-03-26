@@ -2,21 +2,13 @@ import * as React from 'react';
 import i18n from '../../i18n/i18n';
 import {Radio, Space} from 'antd';
 import {useTranslation} from 'react-i18next';
-// import { Button } from '@chakra-ui/button'
+import {Button} from '@chakra-ui/button';
 import {useDisclosure} from '@chakra-ui/hooks';
-import {
-    Modal,
-    ModalBody,
-    ModalCloseButton,
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
-    ModalOverlay,
-} from '@chakra-ui/modal';
 import ColorSchemeBuilder from './ThemeBuilder/ColorSchemeBuilder';
 import {useAtom} from 'jotai';
 import {appAtom} from '../atoms/appAtom';
 import {sendMessage} from '../utils/send-message';
+import {Flex, Heading} from '@chakra-ui/react';
 
 const languages: {name: string; key: string}[] = [
     {name: '简体中文', key: 'zh'},
@@ -25,7 +17,7 @@ const languages: {name: string; key: string}[] = [
 
 export default function Settings() {
     const {t} = useTranslation();
-    const {isOpen, onClose} = useDisclosure();
+    const {isOpen, onClose, onOpen} = useDisclosure();
     const [{windowSize}] = useAtom(appAtom);
 
     return (
@@ -46,12 +38,12 @@ export default function Settings() {
                     }}
                 />
             </Space>
-            {/* <Space direction={'vertical'} className={'mb-2'}>
+            <Space direction={'vertical'} className={'mb-2'}>
                 <h6 className={'font-bold'}>{t('Theme')}</h6>
                 <Button size={'xs'} onClick={onOpen}>
                     {t('Theme maker')}
                 </Button>
-            </Space> */}
+            </Space>
             <Space direction={'vertical'} className={'mb-2'}>
                 <h6 className={'font-bold'}>{t('Window size')}</h6>
                 <Radio.Group
@@ -74,17 +66,11 @@ export default function Settings() {
                     optionType={'button'}
                 />
             </Space>
-            <Modal onClose={onClose} isOpen={isOpen} isCentered size={'3xl'}>
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>{t('Theme Builder')}</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                        <ColorSchemeBuilder />
-                    </ModalBody>
-                    <ModalFooter />
-                </ModalContent>
-            </Modal>
+            <ColorSchemeBuilder isOpen={isOpen} onClose={onClose} isCentered size={'3xl'} />
+            <Flex direction={'column'}>
+                <Heading as={'h6'}>{t('Version')}</Heading>
+                v7
+            </Flex>
         </Space>
     );
 }

@@ -21,6 +21,7 @@ export interface BarState extends BarSvgProps<BarDatum> {
     activeDatum: ComputedBarDatum<BarDatum> & {
         color: string;
     };
+    colorSchemeId: string;
 }
 
 type Param = {id: string};
@@ -86,6 +87,7 @@ export const initialBarState = {
     activeBar: '',
     activeIndex: -1,
     activeDatum: null,
+    colorSchemeId: 'nivo',
 };
 
 export const barAtomFamily = atomFamily(

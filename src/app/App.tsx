@@ -15,6 +15,7 @@ import {useTranslation} from 'react-i18next';
 import Gallery from './components/Gallery';
 import CalendarConfig from './components/Config/CalendarConfig/Config';
 import RadarConfig from './components/Config/RadarConfig/Config';
+import {GET_ALL_COLOR_SCHEMES} from '../plugin/message-types';
 
 function App() {
     const [{hideInterface, activeKey, charts, selectionId}, setApp] = useAtom(appAtom);
@@ -99,6 +100,11 @@ function App() {
                         break;
                     case 'set-selection':
                         setApp((app) => ({...app, selectionId: data}));
+                        break;
+                    case GET_ALL_COLOR_SCHEMES:
+                        if (data) {
+                            setApp((state) => ({...state, colorSchemes: data}));
+                        }
                         break;
                     default:
                 }
