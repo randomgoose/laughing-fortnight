@@ -9,6 +9,7 @@ import MarginInput from '../../CustomInput/MarginInput';
 import {Param} from '../../../atoms/appAtom';
 import {useForm} from 'antd/lib/form/Form';
 import {colorSchemes} from '@nivo/colors';
+import ColorSchemeSelector from '../../color-scheme-selector';
 
 const colorSchemeList = Object.keys(colorSchemes);
 
@@ -54,6 +55,7 @@ export default function GeneralConfig({id}: Param) {
                 <Form.Item name={'margin'} label={t('Margin')}>
                     <MarginInput />
                 </Form.Item>
+                <ColorSchemeSelector />
             </Form>
         </ConfigPage>
     );

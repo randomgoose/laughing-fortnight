@@ -3,9 +3,28 @@ import cryptoRandomString from 'crypto-random-string';
 import {PrimitiveAtom} from 'jotai';
 import {useImmerAtom} from 'jotai/immer';
 import {lineAtomFamily, LineState} from '../atoms/lineAtomFamily';
+import useDeepCompareEffect from 'use-deep-compare-effect';
+import {useApp} from './useApp';
+import {colorSchemes, ColorSchemeId} from '@nivo/colors';
 
 export function useLine(id: string) {
     const [line, setLine] = useImmerAtom(lineAtomFamily({id}) as PrimitiveAtom<LineState>);
+    const {app} = useApp();
+
+    useDeepCompareEffect(() => {
+        if (line.colorSchemeId in colorSchemes) {
+            setLine((state) => {
+                state.colors = {scheme: line.colorSchemeId as ColorSchemeId};
+            });
+        } else {
+            setLine((state) => {
+                const colorScheme = app.colorSchemes.find((item) => item.id === line.colorSchemeId);
+                if (colorScheme) {
+                    state.colors = colorScheme.colors;
+                }
+            });
+        }
+    }, [line.colorSchemeId, app.colorSchemes]);
 
     function setSerieValue(serieIndex, datumIndex, key, value) {
         setLine((draftState) => {

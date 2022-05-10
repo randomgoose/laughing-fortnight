@@ -9,6 +9,7 @@ export interface RadarState extends RadarSvgProps<Record<string, unknown>> {
     height: number;
     x: number;
     y: number;
+    colorSchemeId: string;
 }
 
 export const radarAtomFamily = atomFamily(
@@ -33,6 +34,7 @@ export const radarAtomFamily = atomFamily(
             blendMode: 'multiply',
             borderWidth: 2,
             borderColor: {from: 'color'},
+            colorSchemeId: 'nivo',
             // Grid
             gridLevels: 5,
             gridShape: 'circular',

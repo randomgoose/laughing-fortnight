@@ -106,4 +106,5 @@ export const zh_translation = {
     'Add an arc': '增加扇形',
     Preview: '预览',
     Version: '版本',
+    'Version History': '更新日志',
 };

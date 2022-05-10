@@ -1,8 +1,7 @@
 import * as React from 'react';
 import {Space, Slider, Select, Form, Switch, Typography} from 'antd';
 import MarginInput from '../../CustomInput/MarginInput';
-import {colorSchemes} from '@nivo/colors';
-import {AreaChartOutlined, ColumnWidthOutlined, HighlightOutlined} from '@ant-design/icons';
+import {AreaChartOutlined, ColumnWidthOutlined} from '@ant-design/icons';
 import {FcSettings} from 'react-icons/fc';
 import _ from 'lodash';
 import {useTranslation} from 'react-i18next';
@@ -10,8 +9,7 @@ import {useLine} from '../../../hooks/useLine';
 import {Param} from '../../../atoms/appAtom';
 import {LineState} from '../../../atoms/lineAtomFamily';
 import {blendModeList} from '../../../atoms/types';
-
-const colorSchemeList = Object.keys(colorSchemes);
+import ColorSchemeSelector from '../../color-scheme-selector';
 
 const scaleTypes = ['linear', 'point'];
 
@@ -59,23 +57,7 @@ export default function GeneralConfig({id}: Param) {
                     ></Select>
                 </Form.Item>
                 {/* //TODO: Check sequential color schemes */}
-                <Form.Item
-                    label={
-                        <Space>
-                            <HighlightOutlined />
-                            {t('Color')}
-                        </Space>
-                    }
-                    name={['colors', 'scheme']}
-                >
-                    <Select style={{width: '100%'}}>
-                        {colorSchemeList.map((scheme) => (
-                            <Select.Option key={scheme} value={scheme}>
-                                {scheme}
-                            </Select.Option>
-                        ))}
-                    </Select>
-                </Form.Item>
+                <ColorSchemeSelector />
                 <Form.Item
                     label={
                         <Space>

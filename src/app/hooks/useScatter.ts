@@ -1,8 +1,27 @@
 import {useImmerAtom} from 'jotai/immer';
 import {scatterAtomFamily, ScatterState} from '../atoms/scatterAtomFamily';
+import useDeepCompareEffect from 'use-deep-compare-effect';
+import {colorSchemes, ColorSchemeId} from '@nivo/colors';
+import {useApp} from './useApp';
 
 export function useScatter(id: string) {
     const [scatter, setScatter] = useImmerAtom(scatterAtomFamily({id}));
+    const {app} = useApp();
+
+    useDeepCompareEffect(() => {
+        if (scatter.colorSchemeId in colorSchemes) {
+            setScatter((state) => {
+                state.colors = {scheme: scatter.colorSchemeId as ColorSchemeId};
+            });
+        } else {
+            setScatter((state) => {
+                const colorScheme = app.colorSchemes.find((item) => item.id === scatter.colorSchemeId);
+                if (colorScheme) {
+                    state.colors = colorScheme.colors;
+                }
+            });
+        }
+    }, [scatter.colorSchemeId, app.colorSchemes]);
 
     function setPartialState(state: Partial<ScatterState>) {
         setScatter((draftState) => Object.assign(draftState, state));

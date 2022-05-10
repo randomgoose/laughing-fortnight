@@ -5,10 +5,8 @@ import {Param} from '../../../atoms/appAtom';
 import useRadar from '../../../hooks/useRadar';
 import ConfigPage from '../ConfigPage';
 import {Form, Select, Slider} from 'antd';
-import {colorSchemes} from '@nivo/colors';
 import {blendModeList} from '../../../atoms/types';
-
-const colorSchemeList = Object.keys(colorSchemes);
+import ColorSchemeSelector from '../../color-scheme-selector';
 
 export default function StyleConfig({id}: Param) {
     const {radar, setPartialState} = useRadar(id);
@@ -21,15 +19,7 @@ export default function StyleConfig({id}: Param) {
                 initialValues={radar}
                 onValuesChange={(changedValues) => setPartialState(changedValues)}
             >
-                <Form.Item label={t('Colors')} name={['colors', 'scheme']}>
-                    <Select>
-                        {colorSchemeList.map((scheme) => (
-                            <Select.Option key={scheme} value={scheme}>
-                                {scheme}
-                            </Select.Option>
-                        ))}
-                    </Select>
-                </Form.Item>
+                <ColorSchemeSelector />
                 <Form.Item label={t('Blend Mode')} name={'blendMode'}>
                     <Select
                         placeholder={'Blend mode'}

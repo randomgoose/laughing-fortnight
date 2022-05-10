@@ -22,6 +22,7 @@ export interface LineState extends LineSvgProps {
     render: 'svg' | 'canvas';
     showGridX: boolean;
     showGridY: boolean;
+    colorSchemeId: 'nivo';
 }
 
 export const initialLineState: LineState = {
@@ -60,6 +61,7 @@ export const initialLineState: LineState = {
     showLegend: true,
     legends: baseLegend,
     colors: {scheme: 'nivo'},
+    colorSchemeId: 'nivo',
     data: data,
     lines: data.map((item) => item.id),
     showGridX: true,

@@ -1,9 +1,28 @@
 import cryptoRandomString from 'crypto-random-string';
 import {useImmerAtom} from 'jotai/immer';
 import {radarAtomFamily, RadarState} from '../atoms/radarAtomFamily';
+import useDeepCompareEffect from 'use-deep-compare-effect';
+import {colorSchemes, ColorSchemeId} from '@nivo/colors';
+import {useApp} from './useApp';
 
 export default function useRadar(id: string) {
     const [radar, setRadar] = useImmerAtom(radarAtomFamily({id}));
+    const {app} = useApp();
+
+    useDeepCompareEffect(() => {
+        if (radar.colorSchemeId in colorSchemes) {
+            setRadar((state) => {
+                state.colors = {scheme: radar.colorSchemeId as ColorSchemeId};
+            });
+        } else {
+            setRadar((state) => {
+                const colorScheme = app.colorSchemes.find((item) => item.id === radar.colorSchemeId);
+                if (colorScheme) {
+                    state.colors = colorScheme.colors;
+                }
+            });
+        }
+    }, [radar.colorSchemeId, app.colorSchemes]);
 
     function setPartialState(state: Partial<RadarState>) {
         setRadar((draftState) => Object.assign(draftState, state));

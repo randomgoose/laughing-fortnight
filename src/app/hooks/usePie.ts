@@ -2,9 +2,28 @@ import {DefaultRawDatum} from '@nivo/pie';
 import cryptoRandomString from 'crypto-random-string';
 import {useImmerAtom} from 'jotai/immer';
 import {pieAtomFamily} from '../atoms/pieAtomFamily';
+import useDeepCompareEffect from 'use-deep-compare-effect';
+import {useApp} from './useApp';
+import {colorSchemes, ColorSchemeId} from '@nivo/colors';
 
 export function usePie(id: string) {
     const [pie, setPie] = useImmerAtom(pieAtomFamily({id}));
+    const {app} = useApp();
+
+    useDeepCompareEffect(() => {
+        if (pie.colorSchemeId in colorSchemes) {
+            setPie((state) => {
+                state.colors = {scheme: pie.colorSchemeId as ColorSchemeId};
+            });
+        } else {
+            setPie((state) => {
+                const colorScheme = app.colorSchemes.find((item) => item.id === pie.colorSchemeId);
+                if (colorScheme) {
+                    state.colors = colorScheme.colors;
+                }
+            });
+        }
+    }, [pie.colorSchemeId, app.colorSchemes]);
 
     function addArc(): string {
         const id = cryptoRandomString({length: 4});

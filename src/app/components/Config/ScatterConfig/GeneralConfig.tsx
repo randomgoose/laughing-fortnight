@@ -3,11 +3,10 @@ import ConfigPage from '../ConfigPage';
 import {FcSettings} from 'react-icons/fc';
 import {Form, Select, Slider, Space} from 'antd';
 import MarginInput from '../../CustomInput/MarginInput';
-import {HighlightOutlined} from '@ant-design/icons';
-import {colorSchemes} from '@nivo/colors';
 import {useTranslation} from 'react-i18next';
 import {useScatter} from '../../../hooks/useScatter';
 import {Param} from '../../../atoms/appAtom';
+import ColorSchemeSelector from '../../color-scheme-selector';
 
 const blendModeList = [
     'normal',
@@ -28,11 +27,9 @@ const blendModeList = [
     'luminosity',
 ];
 
-const colorSchemeList = Object.keys(colorSchemes);
-
 export default function GeneralConfig({id}: Param) {
     const {scatter, setPartialState} = useScatter(id);
-    const {margin, colors, nodeSize, blendMode} = scatter;
+    const {margin, colors, nodeSize, blendMode, colorSchemeId} = scatter;
     const {t} = useTranslation();
 
     return (
@@ -44,6 +41,7 @@ export default function GeneralConfig({id}: Param) {
                     colors,
                     nodeSize,
                     blendMode,
+                    colorSchemeId,
                 }}
                 onValuesChange={(changedValues) => {
                     setPartialState(changedValues);
@@ -55,23 +53,7 @@ export default function GeneralConfig({id}: Param) {
                 <Form.Item name="margin" label={t('Margin')}>
                     <MarginInput />
                 </Form.Item>
-                <Form.Item
-                    label={
-                        <Space>
-                            <HighlightOutlined />
-                            {t('Colors')}
-                        </Space>
-                    }
-                    name={['colors', 'scheme']}
-                >
-                    <Select className={'w-full'}>
-                        {colorSchemeList.map((scheme) => (
-                            <Select.Option key={scheme} value={scheme}>
-                                {scheme}
-                            </Select.Option>
-                        ))}
-                    </Select>
-                </Form.Item>
+                <ColorSchemeSelector />
                 <Form.Item name={'blendMode'} label={<Space>{t('Blend Mode')}</Space>}>
                     <Select
                         placeholder={'Blend mode'}

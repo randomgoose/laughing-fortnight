@@ -26,6 +26,7 @@ import {
     PopoverBody,
     PopoverContent,
     PopoverTrigger,
+    Select,
     Stack,
 } from '@chakra-ui/react';
 import {IColorScheme} from '../../../types';
@@ -45,6 +46,7 @@ export function ColorSchemeSetting({
 }) {
     const {addColor, setColor, setColorSchemeName, removeColor} = useApp();
     const [pie] = useAtom(pieAtomFamily({id: 'example__pie'}));
+    const [colorFormat, setColorFormat] = React.useState('hex');
 
     return (
         <Box>
@@ -59,16 +61,27 @@ export function ColorSchemeSetting({
                     </PopoverTrigger>
                     <PopoverContent w={'fit-content'}>
                         <PopoverBody>
-                            <Input
-                                value={color}
-                                w={'100%'}
-                                size={'sm'}
-                                mb={2}
-                                onChange={(e) => {
-                                    setColor(id, index, e.target.value);
-                                }}
-                            />
+                            <Flex gridGap={1} mb={2}>
+                                <Input
+                                    value={color}
+                                    w={'100%'}
+                                    size={'sm'}
+                                    onChange={(e) => {
+                                        setColor(id, index, e.target.value);
+                                    }}
+                                />
+                                <Select
+                                    value={colorFormat}
+                                    onChange={(e) => setColorFormat(e.target.value)}
+                                    size={'sm'}
+                                    w={160}
+                                >
+                                    <option value={'hex'}>Hex</option>
+                                    <option value={'rgb'}>RGB</option>
+                                </Select>
+                            </Flex>
                             <HexColorPicker
+                                style={{width: '100%'}}
                                 color={color}
                                 onChange={(color) => {
                                     onChange && onChange(color);

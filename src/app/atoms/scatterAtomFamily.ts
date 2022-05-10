@@ -13,6 +13,7 @@ export interface ScatterState extends ScatterPlotSvgProps<ScatterPlotDatum> {
     enableYAxis: boolean;
     scale: number;
     render: 'svg' | 'canvas';
+    colorSchemeId: string;
 }
 
 type Param = {id: string};
@@ -33,6 +34,7 @@ export const scatterAtomFamily = atomFamily(
             data: baseData,
             // Style
             colors: {scheme: 'nivo'},
+            colorSchemeId: 'nivo',
             blendMode: 'multiply',
             // Grid && Axes
             enableXAxis: true,

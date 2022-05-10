@@ -1,26 +1,19 @@
 import * as React from 'react';
 import ConfigPage from '../ConfigPage';
 import {FcSettings} from 'react-icons/fc';
-import {Form, Radio, Select, Slider, Space, Switch} from 'antd';
+import {Form, Radio, Select, Slider, Switch} from 'antd';
 import MarginInput from '../../CustomInput/MarginInput';
-import {HighlightOutlined} from '@ant-design/icons';
-import {colorSchemes} from '@nivo/colors';
 import {useTranslation} from 'react-i18next';
 import {useBar} from '../../../hooks/useBar';
 import {Param} from '../../../atoms/appAtom';
-import {useApp} from '../../../hooks/useApp';
+import ColorSchemeSelector from '../../color-scheme-selector';
 
 const valueScaleType = ['linear', 'symlog'];
 const indexScaleType = ['band'];
 
-const colorSchemeList = Object.keys(colorSchemes);
-
 export default function GeneralConfig({id}: Param) {
     const {bar, setPartialState} = useBar(id);
-    const {
-        app: {colorSchemes: customSchemes},
-    } = useApp();
-    const {groupMode, layout, margin, padding, innerPadding, colors, indexScale, valueScale} = bar;
+    const {groupMode, layout, margin, padding, innerPadding, colors, indexScale, valueScale, colorSchemeId} = bar;
     const {t} = useTranslation();
 
     return (
@@ -36,6 +29,7 @@ export default function GeneralConfig({id}: Param) {
                     colors,
                     indexScale,
                     valueScale,
+                    colorSchemeId,
                 }}
                 onValuesChange={(changedValues) => {
                     setPartialState(changedValues);
@@ -93,34 +87,7 @@ export default function GeneralConfig({id}: Param) {
                 <Form.Item name="margin" label={t('Margin')}>
                     <MarginInput />
                 </Form.Item>
-                <Form.Item
-                    label={
-                        <Space>
-                            <HighlightOutlined />
-                            {t('Colors')}
-                        </Space>
-                    }
-                    name={'colorSchemeId'}
-                >
-                    <Select style={{width: '100%'}}>
-                        {customSchemes.length > 0 ? (
-                            <Select.OptGroup label={'Custom colors'}>
-                                {customSchemes.map((scheme) => (
-                                    <Select.Option key={scheme.name} value={scheme.id}>
-                                        {scheme.name}
-                                    </Select.Option>
-                                ))}
-                            </Select.OptGroup>
-                        ) : null}
-                        <Select.OptGroup label={'Nivo colors'}>
-                            {colorSchemeList.map((scheme) => (
-                                <Select.Option key={scheme} value={scheme}>
-                                    {scheme}
-                                </Select.Option>
-                            ))}
-                        </Select.OptGroup>
-                    </Select>
-                </Form.Item>
+                <ColorSchemeSelector />
             </Form>
         </ConfigPage>
     );

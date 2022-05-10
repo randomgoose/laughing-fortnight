@@ -1,3 +1,4 @@
+//@ts-nocheck
 import * as React from 'react';
 import i18n from '../../i18n/i18n';
 import {Radio, Space} from 'antd';
@@ -8,7 +9,17 @@ import ColorSchemeBuilder from './ThemeBuilder/ColorSchemeBuilder';
 import {useAtom} from 'jotai';
 import {appAtom} from '../atoms/appAtom';
 import {sendMessage} from '../utils/send-message';
-import {Flex, Heading} from '@chakra-ui/react';
+import {
+    Flex,
+    Heading,
+    Modal,
+    ModalBody,
+    ModalCloseButton,
+    ModalContent,
+    ModalHeader,
+    ModalOverlay,
+} from '@chakra-ui/react';
+import Versions from './versions';
 
 const languages: {name: string; key: string}[] = [
     {name: '简体中文', key: 'zh'},
@@ -18,12 +29,13 @@ const languages: {name: string; key: string}[] = [
 export default function Settings() {
     const {t} = useTranslation();
     const {isOpen, onClose, onOpen} = useDisclosure();
+    const {isOpen: isVersionsOpen, onClose: onVersionsClose, onOpen: onVersionsOpen} = useDisclosure();
     const [{windowSize}] = useAtom(appAtom);
 
     return (
         <Space direction={'vertical'}>
-            <Space direction={'vertical'} className={'mb-2'}>
-                <h6 className={'font-bold'}>{t('Language')}</h6>
+            <Flex direction={'column'} mb={2} gridGap={2}>
+                <Heading as={'h6'}>{t('Language')}</Heading>
                 <Radio.Group
                     defaultValue={i18n.language}
                     className={'w-full'}
@@ -37,15 +49,15 @@ export default function Settings() {
                         i18n.changeLanguage(e.target.value);
                     }}
                 />
-            </Space>
+            </Flex>
             <Space direction={'vertical'} className={'mb-2'}>
-                <h6 className={'font-bold'}>{t('Theme')}</h6>
+                <Heading as={'h6'}>{t('Theme')}</Heading>
                 <Button size={'xs'} onClick={onOpen}>
                     {t('Theme maker')}
                 </Button>
             </Space>
             <Space direction={'vertical'} className={'mb-2'}>
-                <h6 className={'font-bold'}>{t('Window size')}</h6>
+                <Heading as={'h6'}>{t('Window size')}</Heading>
                 <Radio.Group
                     defaultValue={windowSize}
                     onChange={(e) => sendMessage('resize-window', {size: e.target.value})}
@@ -67,10 +79,22 @@ export default function Settings() {
                 />
             </Space>
             <ColorSchemeBuilder isOpen={isOpen} onClose={onClose} isCentered size={'3xl'} />
-            <Flex direction={'column'}>
-                <Heading as={'h6'}>{t('Version')}</Heading>
-                v7
+            <Flex direction={'column'} gridGap={2}>
+                <Heading as={'h6'}>{t('Version 7')}</Heading>
+                <Button size={'xs'} onClick={onVersionsOpen}>
+                    {t('Version History')}
+                </Button>
             </Flex>
+            <Modal isOpen={isVersionsOpen} onClose={onVersionsClose} size={'xl'}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalCloseButton />
+                    <ModalHeader>{t('Version History')}</ModalHeader>
+                    <ModalBody>
+                        <Versions />
+                    </ModalBody>
+                </ModalContent>
+            </Modal>
         </Space>
     );
 }
