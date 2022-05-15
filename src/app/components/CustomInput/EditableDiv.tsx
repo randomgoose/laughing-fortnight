@@ -13,7 +13,6 @@ interface Props {
 export default function EditableDiv({value, onFinishEditing, validate}: Props) {
     const [editing, setEditing] = useImmer(false);
     const [temp, setTemp] = useImmer(value);
-    // const [error, setError] = useImmer(false);
     const ref = useRef(null);
 
     function finishEditing() {

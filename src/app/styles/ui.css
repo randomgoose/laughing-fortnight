@@ -52,11 +52,6 @@ body * {
     align-items: center;
 }
 
-.Config .ant-tabs-content-holder {
-    overflow-y: scroll !important;
-    padding: 0;
-}
-
 .Gallery .ant-form-item-label > label {
     font-size: 12px !important;
     line-height: 20px !important;
@@ -139,4 +134,12 @@ body * {
 
 .example:hover .example__mask {
     opacity: 1;
+}
+
+.ConfigPage::-webkit-scrollbar {
+    display: none;
+}
+
+.ConfigPage {
+    scrollbar-width: none;
 }

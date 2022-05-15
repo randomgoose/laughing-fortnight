@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {Space, Typography} from 'antd';
 import {CSSProperties} from 'react';
+import {Box} from '@chakra-ui/react';
 
 interface ConfigPageProps {
     children: React.ReactNode;
@@ -11,7 +12,7 @@ interface ConfigPageProps {
 
 export default function ConfigPage({children, title, icon, style}: ConfigPageProps) {
     return (
-        <div className={'ConfigPage w-full h-full overflow-visible'} style={style}>
+        <Box className={'ConfigPage w-full h-full overflow-visible'} style={style}>
             <Typography.Title level={5}>
                 {title && (
                     <Space align={'center'} size={4}>
@@ -21,6 +22,6 @@ export default function ConfigPage({children, title, icon, style}: ConfigPagePro
                 )}
             </Typography.Title>
             {children}
-        </div>
+        </Box>
     );
 }

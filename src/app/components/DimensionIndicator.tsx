@@ -10,7 +10,7 @@ interface Props {
 
 export default function DimensionIndicator({width, height}: Props) {
     return (
-        <Box className={'DimensionIndicator absolute -bottom-5 left-0 bg-blue-600 text-white px-2'}>
+        <Box position={'absolute'} left={0} bottom={-5} className={'DimensionIndicator bg-blue-600 text-white px-2'}>
             {parseFloat(width.toString())} x {parseFloat(height.toString())}
         </Box>
     );
