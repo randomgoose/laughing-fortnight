@@ -19,6 +19,7 @@ interface Props {
     onMouseDown?: () => void;
     className?: string;
     onClickAway?: () => void;
+    tools?: React.ReactNode;
 }
 
 const handles = ['top', 'topLeft', 'topRight', 'left', 'right', 'bottomLeft', 'bottom', 'bottomRight'];
@@ -35,6 +36,7 @@ export default function StyledRnd({
     className,
     onClickAway,
     chartId,
+    tools,
 }: Props) {
     const ref = React.useRef();
     const [{activeKey, scale}, setApp] = useAtom(appAtom);
@@ -83,6 +85,7 @@ export default function StyledRnd({
             >
                 {children}
                 {chartId === activeKey ? <DimensionIndicator width={width} height={height} /> : null}
+                {tools && tools}
             </Rnd>
         </div>
     );

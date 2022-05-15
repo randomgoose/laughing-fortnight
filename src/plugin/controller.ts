@@ -2,7 +2,7 @@ import {WindowSize} from '../app/atoms/appAtom';
 import {getAllColorSchemes, saveColorSchemes} from './functions/color-scheme';
 import {sendMessage} from './functions/message';
 import {resizeWindow} from './functions/resize-window';
-import {GET_ALL_COLOR_SCHEMES, RESIZE_WINDOW, SAVE_COLOR_SCHEMES} from './message-types';
+import {GET_ALL_COLOR_SCHEMES, RESIZE_WINDOW, SAVE_COLOR_SCHEMES, SELECTION_CHANGE} from './message-types';
 
 figma.showUI(__html__);
 figma.ui.resize(960, 800);
@@ -54,6 +54,9 @@ figma.ui.onmessage = async (msg) => {
         case SAVE_COLOR_SCHEMES:
             const {schemes} = msg.data;
             await saveColorSchemes(schemes);
+            break;
+        case SELECTION_CHANGE:
+            figma.currentPage.selection;
             break;
         default:
             console.log(msg.type);
