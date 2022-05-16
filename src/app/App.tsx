@@ -8,7 +8,7 @@ import BarConfig from './components/Config/BarConfig/Config';
 import ScatterConfig from './components/Config/ScatterConfig/Config';
 import {Button, ConfigProvider} from 'antd';
 import 'tailwindcss/tailwind.css';
-import {appAtom, ChartType} from './atoms/appAtom';
+import {appAtom, ChartType, numberOfChartsAtom} from './atoms/appAtom';
 import {useAtom} from 'jotai';
 import {Empty} from 'antd';
 import {useTranslation} from 'react-i18next';
@@ -20,6 +20,9 @@ import {GET_ALL_COLOR_SCHEMES} from '../plugin/message-types';
 function App() {
     const [{hideInterface, activeKey, charts, selectionId}, setApp] = useAtom(appAtom);
     const {t} = useTranslation();
+
+    const [numberOfCharts] = useAtom(numberOfChartsAtom);
+    console.log(numberOfCharts);
 
     const activeChart = charts.find((chart) => chart.id === activeKey);
 

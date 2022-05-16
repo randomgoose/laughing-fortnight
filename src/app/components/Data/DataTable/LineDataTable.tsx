@@ -86,7 +86,7 @@ export default function LineDataTable({id}: {id: string}) {
                             <EditableDiv
                                 value={parseFloat(value)}
                                 key={value}
-                                onFinishEditing={(value: number) => {
+                                onFinishEditing={(value) => {
                                     setSerieValue(index, newData.indexOf(record), 'y', value);
                                 }}
                             />

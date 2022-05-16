@@ -1,6 +1,6 @@
 import {PlusOutlined} from '@ant-design/icons';
-import {Box, Flex, Input} from '@chakra-ui/react';
-import {Table, message} from 'antd';
+import {Box, Flex, useToast} from '@chakra-ui/react';
+import {Table} from 'antd';
 import {IconButton, Button} from '@chakra-ui/react';
 import cryptoRandomString from 'crypto-random-string';
 import * as React from 'react';
@@ -14,6 +14,7 @@ import {FiX} from 'react-icons/fi';
 export default function BarDataTable({id}: Param) {
     const {t} = useTranslation();
     const {bar, setData, setKey, removeKey, addKey, addRow} = useBar(id);
+    const toast = useToast();
 
     return (
         <Box w={'full'} h={'full'}>
@@ -33,16 +34,23 @@ export default function BarDataTable({id}: Param) {
                         title: 'id',
                         dataIndex: bar.indexBy as string,
                         key: 'add_column',
-                        render: (value, record) => (
+                        render: (value, record, index) => (
                             <EditableDiv
                                 value={value}
                                 key={value}
-                                onFinishEditing={(value: number) => {
-                                    if (bar.data.some((datum) => datum[bar.indexBy as string] === value)) {
-                                        message.error(`${value} ${t('exists')}`);
-                                        return;
-                                    }
-                                    setData(bar.data.indexOf(record), bar.indexBy as string, value);
+                                validate={(value) => {
+                                    const identicalRow = bar.data.find(
+                                        (datum) => datum[bar.indexBy as string] === value
+                                    );
+                                    if (identicalRow && bar.data.indexOf(identicalRow) !== index) return false;
+                                    else return true;
+                                }}
+                                onFinishEditing={(value: string) => {
+                                    setData(
+                                        bar.data.indexOf(record),
+                                        bar.indexBy as string,
+                                        value as unknown as number
+                                    );
                                 }}
                             />
                         ),
@@ -60,14 +68,24 @@ export default function BarDataTable({id}: Param) {
                                         key={key}
                                         value={key}
                                         validate={(value: string) =>
-                                            bar.keys.filter((item) => item !== key).includes(value)
+                                            !bar.keys.filter((item) => item !== key).includes(value)
                                         }
                                         onFinishEditing={(value: string) => {
                                             if (value.length <= 0) {
-                                                message.error(`${t('Cannot leave this input empty')}`);
+                                                toast({
+                                                    title: `${t('Cannot leave this input empty')}`,
+                                                    description: '1',
+                                                    status: 'error',
+                                                    isClosable: true,
+                                                });
                                                 return;
                                             } else if (bar.keys.filter((item) => item !== key).includes(value)) {
-                                                message.error(`${value} ${t('exists')}`);
+                                                toast({
+                                                    title: `${value} ${t('exists')}`,
+                                                    description: '2',
+                                                    status: 'error',
+                                                    isClosable: true,
+                                                });
                                                 return;
                                             } else {
                                                 setKey(key, value);
@@ -89,22 +107,17 @@ export default function BarDataTable({id}: Param) {
                             ),
                             render: (value, record) => {
                                 return (
-                                    <Input
+                                    <EditableDiv
                                         value={value}
                                         key={record.id}
-                                        variant={'unstyled'}
-                                        size={'sm'}
-                                        onChange={(e) => {
-                                            const newValue = parseFloat(e.target.value);
+                                        validate={(value) => !Number.isNaN(parseFloat(value))}
+                                        onFinishEditing={(value) => {
+                                            const newValue = parseFloat(value + '');
                                             if (Number.isNaN(newValue)) {
                                                 console.log('nan', newValue);
                                                 setData(bar.data.indexOf(record), key, 0);
                                             } else {
-                                                if (e.target.value.endsWith('.')) {
-                                                    setData(bar.data.indexOf(record), key, newValue);
-                                                } else {
-                                                    setData(bar.data.indexOf(record), key, newValue);
-                                                }
+                                                setData(bar.data.indexOf(record), key, newValue);
                                             }
                                         }}
                                     />

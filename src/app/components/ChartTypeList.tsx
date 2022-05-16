@@ -4,7 +4,7 @@ import {useAtom} from 'jotai';
 import * as React from 'react';
 import {useTranslation} from 'react-i18next';
 import {FcBarChart, FcCalendar, FcLineChart, FcPieChart, FcRadarPlot, FcScatterPlot} from 'react-icons/fc';
-import {appAtom, ChartType as IChartType, ChartType as Type} from '../atoms/appAtom';
+import {ChartType as IChartType, ChartType as Type, insertChartAtom} from '../atoms/appAtom';
 import classnames from 'classnames';
 import {Pie} from '@nivo/pie';
 import {initialPieState} from '../atoms/pieAtomFamily';
@@ -40,7 +40,7 @@ export function ChartType({
     placement?: PopoverProps['placement'];
 }) {
     const {t} = useTranslation();
-    const [, setApp] = useAtom(appAtom);
+    const [, insertChart] = useAtom(insertChartAtom);
 
     return (
         <Popover
@@ -69,11 +69,12 @@ export function ChartType({
                                     key={index}
                                     onClick={() => {
                                         const id = cryptoRandomString({length: 16});
-                                        setApp((app) => ({
-                                            ...app,
-                                            activeKey: id,
-                                            charts: [...app.charts, {type, id, initialState: example.state}],
-                                        }));
+                                        insertChart({type, id, initialState: example.state});
+                                        // setApp((app) => ({
+                                        //     ...app,
+                                        //     activeKey: id,
+                                        //     charts: [...app.charts,],
+                                        // }));
                                     }}
                                 >
                                     {getChart(type, example.state)}
@@ -89,11 +90,13 @@ export function ChartType({
                 className={`w-7 h-7 flex justify-center items-center rounded-lg transition-all duration-200 hover:bg-gray-100 active:bg-gray-200`}
                 onClick={() => {
                     const id = cryptoRandomString({length: 16});
-                    setApp((app) => ({
-                        ...app,
-                        activeKey: id,
-                        charts: [...app.charts, {type, id}],
-                    }));
+                    insertChart({type, id});
+
+                    // setApp((app) => ({
+                    //     ...app,
+                    //     activeKey: id,
+                    //     charts: [...app.charts, { type, id }],
+                    // }));
                 }}
             >
                 {children}

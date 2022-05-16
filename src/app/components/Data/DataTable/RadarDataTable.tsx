@@ -76,8 +76,8 @@ export default function RadarDataTable({id}: Param) {
                     render: (value, item) => (
                         <EditableDiv
                             value={value}
-                            onFinishEditing={(value: number) => {
-                                changeDataByIndex(item[radar['indexBy'].toString()], key, value);
+                            onFinishEditing={(value: string) => {
+                                changeDataByIndex(item[radar['indexBy'].toString()], key, value as unknown as number);
                             }}
                         />
                     ),

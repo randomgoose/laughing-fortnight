@@ -1,89 +1,85 @@
 import * as React from 'react';
-import {useClickAway, useKeyPress} from 'ahooks';
-import {InputNumber, Input} from 'antd';
+import {Box, Input, useToast} from '@chakra-ui/react';
 import {useRef} from 'react';
-import {useImmer} from 'use-immer';
 
 interface Props {
     value: number | string;
-    onFinishEditing?: (value: number | string) => void;
-    validate?: (value: number | string) => boolean;
+    onFinishEditing?: (value: string) => boolean | void;
+    validate?: (value: string) => boolean;
+    message?: string;
 }
 
-export default function EditableDiv({value, onFinishEditing, validate}: Props) {
-    const [editing, setEditing] = useImmer(false);
-    const [temp, setTemp] = useImmer(value);
+export default function EditableDiv({value, onFinishEditing, validate, message}: Props) {
+    const [editing, setEditing] = React.useState(false);
+    const [mounted, setMounted] = React.useState(false);
+    const [temp, setTemp] = React.useState(value + '');
     const ref = useRef(null);
+    const inputRef = useRef(null);
+    const toast = useToast();
+
+    React.useEffect(() => {
+        if (!mounted) {
+            setMounted(true);
+        } else {
+            if (inputRef.current) {
+                if (editing) {
+                    inputRef.current.focus && inputRef.current.focus();
+                } else {
+                    inputRef.current.blur && inputRef.current.blur();
+                    window.focus();
+                }
+            }
+        }
+    }, [editing, mounted]);
+
+    const onFocus = () => {
+        setEditing(true);
+    };
+
+    const onBlur = () => {
+        finishEditing();
+    };
 
     function finishEditing() {
         if (validate) {
             if (!validate(temp)) {
+                toast({
+                    title: 'Error',
+                    description: message && message,
+                    status: 'error',
+                    isClosable: true,
+                });
+                setTemp(value + '');
                 setEditing(false);
             } else {
-                setEditing(true);
+                onFinishEditing(temp);
+                setEditing(false);
+                // setEditing(true);
             }
         } else {
+            onFinishEditing(temp);
             setEditing(false);
         }
-
-        onFinishEditing(temp);
     }
 
-    useClickAway(() => {
-        finishEditing();
-    }, ref);
-
-    useKeyPress('Enter', (e) => {
-        e.preventDefault();
-        editing ? finishEditing() : null;
-    });
-
-    return editing ? (
-        <div ref={ref}>
-            {typeof value === 'string' ? (
-                <Input
-                    onBlur={() => {
+    return (
+        <Box ref={ref} p={2} borderWidth={editing ? 1 : 0} borderStyle={'solid'} borderColor={'blue.500'}>
+            <Input
+                ref={inputRef}
+                variant={'unstyled'}
+                onFocus={onFocus}
+                onBlur={onBlur}
+                autoFocus
+                value={temp}
+                onChange={(e) => {
+                    setTemp(e.target.value);
+                }}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
                         finishEditing();
-                    }}
-                    autoFocus
-                    value={temp}
-                    onChange={(e) => {
-                        setTemp(e.target.value);
-                    }}
-                    onKeyPress={(e) => {
-                        if (e.key === 'Enter') {
-                            setEditing(false);
-                            onFinishEditing(temp);
-                        }
-                    }}
-                />
-            ) : (
-                <InputNumber
-                    onBlur={() => {
-                        finishEditing();
-                    }}
-                    autoFocus
-                    value={temp}
-                    onChange={(value) => {
-                        setTemp(value);
-                    }}
-                    onKeyPress={(e) => {
-                        if (e.key === 'Enter') {
-                            setEditing(false);
-                            onFinishEditing(temp);
-                        }
-                    }}
-                />
-            )}
-        </div>
-    ) : (
-        <div
-            className={'editable-div'}
-            onClick={() => {
-                setEditing(true);
-            }}
-        >
-            {value}
-        </div>
+                    }
+                }}
+            />
+        </Box>
     );
 }

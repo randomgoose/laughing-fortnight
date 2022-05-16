@@ -40,3 +40,9 @@ export const appAtom = atom<AppState>({
     colorSchemes: [],
     activeColorSchemeId: '',
 });
+
+export const numberOfChartsAtom = atom((get) => get(appAtom).charts.length);
+
+export const insertChartAtom = atom(null, (_get, set, update: Chart) => {
+    set(appAtom, (prev) => ({...prev, charts: [...prev.charts, update], activeKey: update.id}));
+});

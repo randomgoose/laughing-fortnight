@@ -5,6 +5,7 @@ html {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
+
 *,
 *:before,
 *:after {
@@ -142,4 +143,12 @@ body * {
 
 .ConfigPage {
     scrollbar-width: none;
+}
+
+.ant-table-tbody {
+    padding: 0 !important;
+}
+
+.ant-table-tbody > tr > td {
+    padding: 0 !important;
 }

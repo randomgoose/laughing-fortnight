@@ -57,7 +57,7 @@ export default function PieDataTable({id}: Param) {
                 <EditableDiv
                     value={value}
                     onFinishEditing={(value) => {
-                        changeArcValueById(record.id, value as number);
+                        changeArcValueById(record.id, value as unknown as number);
                     }}
                 />
             ),
