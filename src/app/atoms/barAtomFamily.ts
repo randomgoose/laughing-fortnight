@@ -26,7 +26,7 @@ export interface BarState extends BarSvgProps<BarDatum> {
 
 type Param = {id: string};
 
-export const initialBarState = {
+export const initialBarState: BarState = {
     // Base
     height: 300,
     width: 400,

@@ -1,5 +1,7 @@
 import {atom} from 'jotai';
 import {IColorScheme} from '../../types';
+import {barAtomFamily} from './barAtomFamily';
+import {chartsAtom} from './history';
 
 export type ChartType = 'line' | 'pie' | 'bar' | 'scatter' | 'radar' | 'calendar';
 export type WindowSize = 'sm' | 'md' | 'lg';
@@ -42,6 +44,11 @@ export const appAtom = atom<AppState>({
 });
 
 export const numberOfChartsAtom = atom((get) => get(appAtom).charts.length);
+
+export const addChartAtom = atom(null, (_get, set, update: string) => {
+    const chartAtom = barAtomFamily({id: update});
+    set(chartsAtom, (prev) => [...prev, chartAtom]);
+});
 
 export const insertChartAtom = atom(null, (_get, set, update: Chart) => {
     set(appAtom, (prev) => ({...prev, charts: [...prev.charts, update], activeKey: update.id}));

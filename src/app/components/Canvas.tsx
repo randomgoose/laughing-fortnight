@@ -14,12 +14,16 @@ import VisScatterPlot from './Chart/VisScatterPlot';
 import VisRadar from './Chart/VisRadar';
 import VisCalendar from './Chart/VisCalendar';
 import {createUseGesture, pinchAction, wheelAction} from '@use-gesture/react';
+import {ChartAtom, chartsAtom, undoAtom} from '../atoms/history';
 
 const useGesture = createUseGesture([pinchAction, wheelAction]);
 
 export default function Canvas() {
     const [app, setApp] = useAtom(appAtom);
     const {t} = useTranslation();
+    const [charts] = useAtom(chartsAtom);
+
+    const [hasHistory, undo] = useAtom(undoAtom);
 
     React.useEffect(() => {
         const handler = (e) => e.preventDefault();
@@ -137,18 +141,7 @@ export default function Canvas() {
                 console.log(e);
             }}
         >
-            <animated.div
-                ref={ref}
-                className={'w-full h-full absolute'}
-                style={style}
-                // style={{
-                //     scale: to([scale, zoom], (s, z) => {
-                //         if (s + z >= 0) {
-                //             return s + z
-                //         }
-                //     }),
-                // }}
-            >
+            <animated.div ref={ref} className={'w-full h-full absolute'} style={style}>
                 {app.charts.length > 0 ? (
                     app.charts.map((chart) => renderChart(chart))
                 ) : (
@@ -168,19 +161,9 @@ export default function Canvas() {
                 )}
             </animated.div>
             <Space className={'absolute top-4 right-4'}>
-                {/* <Radio.Group
-                    options={[
-                        {
-                            value: 'svg',
-                            label: 'SVG',
-                        },
-                        {
-                            value: 'canvas',
-                            label: 'Canvas',
-                        },
-                    ]}
-                    optionType={'button'}
-                ></Radio.Group> */}
+                <Button disabled={!hasHistory} onClick={undo}>
+                    undo
+                </Button>
                 {!app.hideInterface ? (
                     <Button
                         icon={<ArrowsAltOutlined />}
@@ -204,6 +187,15 @@ export default function Canvas() {
                     }}
                 ></Button>
             </Space>
+
+            {charts.map((chart) => (
+                <Hussar atom={chart} key={`${chart}`} />
+            ))}
         </div>
     );
+}
+
+function Hussar({atom}: {atom: ChartAtom}) {
+    const [get] = useAtom(atom);
+    return <div>{get.keys.join('/')}</div>;
 }

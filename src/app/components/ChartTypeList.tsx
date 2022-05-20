@@ -4,7 +4,7 @@ import {useAtom} from 'jotai';
 import * as React from 'react';
 import {useTranslation} from 'react-i18next';
 import {FcBarChart, FcCalendar, FcLineChart, FcPieChart, FcRadarPlot, FcScatterPlot} from 'react-icons/fc';
-import {ChartType as IChartType, ChartType as Type, insertChartAtom} from '../atoms/appAtom';
+import {addChartAtom, ChartType as IChartType, ChartType as Type, insertChartAtom} from '../atoms/appAtom';
 import classnames from 'classnames';
 import {Pie} from '@nivo/pie';
 import {initialPieState} from '../atoms/pieAtomFamily';
@@ -41,6 +41,7 @@ export function ChartType({
 }) {
     const {t} = useTranslation();
     const [, insertChart] = useAtom(insertChartAtom);
+    const [, addChart] = useAtom(addChartAtom);
 
     return (
         <Popover
@@ -69,6 +70,7 @@ export function ChartType({
                                     key={index}
                                     onClick={() => {
                                         const id = cryptoRandomString({length: 16});
+
                                         insertChart({type, id, initialState: example.state});
                                         // setApp((app) => ({
                                         //     ...app,
@@ -90,6 +92,7 @@ export function ChartType({
                 className={`w-7 h-7 flex justify-center items-center rounded-lg transition-all duration-200 hover:bg-gray-100 active:bg-gray-200`}
                 onClick={() => {
                     const id = cryptoRandomString({length: 16});
+                    addChart(id);
                     insertChart({type, id});
 
                     // setApp((app) => ({
