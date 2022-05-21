@@ -35,7 +35,7 @@ export function ChartType({
     children,
     placement,
 }: {
-    type?: Type;
+    type: Type;
     children?: React.ReactNode;
     placement?: PopoverProps['placement'];
 }) {

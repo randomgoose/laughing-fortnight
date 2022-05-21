@@ -141,7 +141,9 @@ export default function ColorSchemeBuilder({
     } = useApp();
     const {t} = useTranslation();
 
-    const activeColorScheme: IColorScheme = colorSchemes.find((scheme) => scheme.id === activeColorSchemeId);
+    const activeColorScheme: IColorScheme | undefined = colorSchemes.find(
+        (scheme) => scheme.id === activeColorSchemeId
+    );
 
     const title = activeColorScheme
         ? activeColorScheme && (

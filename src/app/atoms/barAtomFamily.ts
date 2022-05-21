@@ -18,9 +18,11 @@ export interface BarState extends BarSvgProps<BarDatum> {
     render: 'svg' | 'canvas';
     activeBar: string;
     activeIndex: number;
-    activeDatum: ComputedBarDatum<BarDatum> & {
-        color: string;
-    };
+    activeDatum:
+        | (ComputedBarDatum<BarDatum> & {
+              color: string;
+          })
+        | null;
     colorSchemeId: string;
 }
 

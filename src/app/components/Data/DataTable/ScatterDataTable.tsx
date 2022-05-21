@@ -53,13 +53,17 @@ export default function ScatterDataTable({id}: Param) {
             <Button
                 className={'mb-2'}
                 onClick={() => {
-                    let newData = [];
+                    let newData: {id: string; data: {x: number; y: number}[]}[] = [];
                     for (let i = 0; i < attrs.groups; i++) {
-                        let points = [];
+                        let points: {x: number; y: number}[] = [];
                         for (let j = 0; j < attrs.pointsPerGroup; j++) {
                             points.push({
-                                x: (Math.random() * (attrs.maxX - attrs.minX) + attrs.minX).toFixed(decimalDigit),
-                                y: (Math.random() * (attrs.maxY - attrs.minY) + attrs.minY).toFixed(decimalDigit),
+                                x: parseFloat(
+                                    (Math.random() * (attrs.maxX - attrs.minX) + attrs.minX).toFixed(decimalDigit)
+                                ),
+                                y: parseFloat(
+                                    (Math.random() * (attrs.maxY - attrs.minY) + attrs.minY).toFixed(decimalDigit)
+                                ),
                             });
                         }
                         newData.push({id: cryptoRandomString({length: 4}), data: points});

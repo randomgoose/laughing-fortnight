@@ -37,7 +37,10 @@ export default function useRadar(id: string) {
 
     function changeDataByIndex(index: string, serie: string, value: number) {
         setRadar((radar) => {
-            radar.data.find((datum) => datum[radar.indexBy.toString()] === index)[serie] = value;
+            const datum = radar.data.find((datum) => datum[radar.indexBy.toString()] === index);
+            if (datum) {
+                datum[serie] = value;
+            }
         });
     }
 
@@ -51,7 +54,7 @@ export default function useRadar(id: string) {
         });
     }
 
-    function removeAttribute(id: string) {
+    function removeAttribute(id: any) {
         setRadar((draftState) => {
             draftState.data = draftState.data.filter((datum) => datum[radar['indexBy'].toString()] !== id);
         });

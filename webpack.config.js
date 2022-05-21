@@ -26,7 +26,14 @@ module.exports = (env, argv) => ({
     module: {
         rules: [
             // Converts TypeScript code to JavaScript
-            { test: /\.tsx?$/, use: 'ts-loader', exclude: /node_modules/ },
+            {
+                test: /\.tsx?$/, use: [
+                    {
+                        loader: 'babel-loader',
+                    },
+                    { loader: 'ts-loader' }
+                ], exclude: /node_modules/
+            },
 
             // Enables including CSS by doing "import './file.css'" in your TypeScript code
             { test: /\.css$/, use: ['style-loader', { loader: 'css-loader' }, 'postcss-loader'] },

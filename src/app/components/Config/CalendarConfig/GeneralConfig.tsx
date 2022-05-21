@@ -65,7 +65,7 @@ export default function GeneralConfig({id}: Param) {
                     <div>{calendar.minValue}</div> */}
                 </div>
                 <div className={'flex flex-col-reverse w-1/2'}>
-                    {calendar.colors.map((color, index) => (
+                    {calendar.colors?.map((color, index) => (
                         <div key={index} className={'w-full h-9'} style={{background: color}}></div>
                     ))}
                 </div>

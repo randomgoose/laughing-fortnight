@@ -24,7 +24,7 @@ export default function VisScatterPlot({id, initialState}: Param & {initialState
     const {t} = useTranslation();
 
     const [position, setPosition] = React.useState<{x: number; y: number}>({x: 0, y: 0});
-    const [activeNode, setActiveNode] = React.useState<ScatterPlotNodeData<ScatterPlotDatum>>(null);
+    const [activeNode, setActiveNode] = React.useState<ScatterPlotNodeData<ScatterPlotDatum> | null>(null);
 
     React.useEffect(() => {
         if (initialState)
@@ -55,8 +55,8 @@ export default function VisScatterPlot({id, initialState}: Param & {initialState
                 {...rest}
                 isInteractive
                 useMesh
-                axisBottom={enableXAxis && rest.axisBottom}
-                axisLeft={enableYAxis && rest.axisLeft}
+                axisBottom={enableXAxis ? rest.axisBottom : undefined}
+                axisLeft={enableYAxis ? rest.axisLeft : undefined}
                 onClick={(node: ScatterPlotNodeData<ScatterPlotDatum>, event) => {
                     setPosition({x: event.clientX, y: event.clientY});
                     setActiveNode(node);

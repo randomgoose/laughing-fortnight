@@ -42,24 +42,38 @@ export function usePie(id: string) {
 
     function changeArcValueById(arcId: string, value: number) {
         setPie((pie) => {
-            pie.data.find((datum) => datum.id === arcId).value = value;
+            const datum = pie.data.find((datum) => datum.id === arcId);
+            if (datum) {
+                datum.value = value;
+            }
         });
     }
 
     function getValueById(arcId: string): number {
-        return pie.data.find((datum) => datum.id === arcId).value;
+        const datum = pie.data.find((datum) => datum.id === arcId);
+        if (datum) {
+            return datum.value;
+        } else return 0;
     }
 
-    function getDatumById(arcId: string): DefaultRawDatum & {
-        label: string;
-        color?: string;
-    } {
-        return pie.data.find((datum) => datum.id === arcId);
+    function getDatumById(arcId: string):
+        | (DefaultRawDatum & {
+              label: string;
+              color?: string;
+          })
+        | undefined {
+        const datum = pie.data.find((datum) => datum.id === arcId);
+        if (datum) {
+            return pie.data.find((datum) => datum.id === arcId);
+        }
     }
 
     function changeId(arcId: string, newId: string) {
         setPie((pie) => {
-            pie.data.find((datum) => datum.id === arcId).label = newId;
+            const datum = pie.data.find((datum) => datum.id === arcId);
+            if (datum) {
+                datum.label = newId;
+            }
         });
     }
 

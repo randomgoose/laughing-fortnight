@@ -1,4 +1,4 @@
-import {Serie} from '@nivo/line';
+import {Datum, Serie} from '@nivo/line';
 import cryptoRandomString from 'crypto-random-string';
 import {generateNumberSequence} from '../utils/generateNumbers';
 
@@ -20,7 +20,7 @@ export const mockLineData = (numberSequenceAttr: MockDataProps): Serie[] => {
     for (let i = 0; i < count; i++) {
         const serie: Serie = {
             id: cryptoRandomString({length: 4}),
-            data: generateNumberSequence(numberSequenceAttr),
+            data: generateNumberSequence(numberSequenceAttr) as Datum[],
         };
         series.push(serie);
     }

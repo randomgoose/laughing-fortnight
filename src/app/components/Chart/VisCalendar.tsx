@@ -15,7 +15,7 @@ import StyledRnd from '../StyledComponents/StyledRnd';
 export default function VisCalendar({id, initialState}: Param & {initialState?: CalendarState}) {
     const {calendar, setCalendar, getValueByDate, changeValueByDate} = useCalendar(id);
     const [position, setPosition] = React.useState({x: 0, y: 0});
-    const [activeDate, setActiveDate] = React.useState<Datum | Omit<Datum, 'data' | 'value'>>(null);
+    const [activeDate, setActiveDate] = React.useState<Datum | Omit<Datum, 'data' | 'value'> | null>(null);
     const {isOpen, onOpen, onClose} = useDisclosure();
     const {t} = useTranslation();
 

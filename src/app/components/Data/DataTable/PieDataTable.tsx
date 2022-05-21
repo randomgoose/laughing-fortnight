@@ -30,7 +30,8 @@ export default function PieDataTable({id}: Param) {
                             return;
                         }
                         setPie((pie) => {
-                            pie.data.find((i) => i.id === record.id).id = value as string;
+                            const datum = pie.data.find((i) => i.id === record.id);
+                            if (datum) datum.id = value as string;
                         });
                     }}
                 />
@@ -44,7 +45,8 @@ export default function PieDataTable({id}: Param) {
                     value={value}
                     onFinishEditing={(value) => {
                         setPie((pie) => {
-                            pie.data.find((i) => i.id === record.id).label = value as string;
+                            const datum = pie.data.find((i) => i.id === record.id);
+                            if (datum) datum.label = value as string;
                         });
                     }}
                 />

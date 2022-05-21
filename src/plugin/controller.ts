@@ -28,10 +28,13 @@ function createChart(frame: FrameNode, render: 'canvas' | 'svg', data): FrameNod
         frame.name = 'chart';
         return frame;
     } else if (render === 'canvas') {
+        return frame;
         // const chart = figma.createImage(Uint8Array.from(data))
         // frame.fills = [{ imageHash: chart.hash, type: 'IMAGE', scaleMode: 'FIT' }]
         // frame.resize(size.width, size.height)
         // return frame
+    } else {
+        return frame;
     }
 }
 

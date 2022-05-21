@@ -14,7 +14,7 @@ export default function EditableDiv({value, onFinishEditing, validate, message}:
     const [mounted, setMounted] = React.useState(false);
     const [temp, setTemp] = React.useState(value + '');
     const ref = useRef(null);
-    const inputRef = useRef(null);
+    const inputRef = useRef<HTMLInputElement>(null);
     const toast = useToast();
 
     React.useEffect(() => {
@@ -52,12 +52,12 @@ export default function EditableDiv({value, onFinishEditing, validate, message}:
                 setTemp(value + '');
                 setEditing(false);
             } else {
-                onFinishEditing(temp);
+                onFinishEditing && onFinishEditing(temp);
                 setEditing(false);
                 // setEditing(true);
             }
         } else {
-            onFinishEditing(temp);
+            onFinishEditing && onFinishEditing(temp);
             setEditing(false);
         }
     }

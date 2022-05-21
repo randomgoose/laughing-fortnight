@@ -20,7 +20,9 @@ export default function ColorPicker({color, onChange}: ColorPickerProps) {
             <Button onClick={() => setVisible(true)}>
                 <div
                     className={'w-3 h-3 rounded-sm'}
-                    style={{background: typeof color === 'string' ? color : `rgba(${color.r}, ${color.g}, ${color.b})`}}
+                    style={{
+                        background: typeof color === 'string' ? color : `rgba(${color?.r}, ${color?.g}, ${color?.b})`,
+                    }}
                 ></div>
             </Button>
             {visible ? (

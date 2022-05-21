@@ -2,6 +2,7 @@ import NormalDistribution from 'normal-distribution';
 import {BarDatum} from '@nivo/bar';
 import cryptoRandomString from 'crypto-random-string';
 import {Trend} from '../mock/mock-data';
+import {Serie} from '@nivo/line';
 
 export const generateIncreasingNumberSequence = (
     length: number,
@@ -9,9 +10,9 @@ export const generateIncreasingNumberSequence = (
     min: number = 1,
     decimalDigit: number = 2
 ): number[] => {
-    let res = [];
+    let res: number[] = [];
     for (let i = 0; i < length; i++) {
-        res.push((Math.random() * (max - min) + min).toFixed(decimalDigit));
+        res.push(parseFloat((Math.random() * (max - min) + min).toFixed(decimalDigit)));
     }
     return res.sort((a, b) => a - b);
 };
@@ -22,16 +23,16 @@ export const generateDecreasingNumberSequence = (
     min: number = 1,
     decimalDigit: number = 2
 ): number[] => {
-    let res = [];
+    let res: number[] = [];
     for (let i = 0; i < length; i++) {
-        res.push((Math.random() * (max - min) + min).toFixed(decimalDigit));
+        res.push(parseFloat((Math.random() * (max - min) + min).toFixed(decimalDigit)));
     }
     return res.sort((a, b) => b - a);
 };
 
 export const generateGaussianSequence = (count: number, mean: number, std: number) => {
     const normDist = new NormalDistribution(mean, std);
-    let res = [];
+    let res: number[] = [];
     for (let i = 0; i < count; i++) {
         res.push(normDist.cdf(Math.random()));
     }
@@ -93,8 +94,8 @@ export const generateDatumSequence = ({
     min: number;
     max: number;
     decimalDigit: number;
-}): BarDatum[] => {
-    let res = [];
+}): BarDatum[] | Serie[] => {
+    let res: BarDatum[] = [];
     for (let i = 0; i < length; i++) {
         res.push(generateDatum({attrs, min, max, decimalDigit}));
     }

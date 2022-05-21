@@ -94,15 +94,14 @@ export default function DataMock() {
                     <Button
                         onClick={() => {
                             const {count, length, min, max, decimalDigit} = numberSequenceAttr;
-                            console.log('decimalDigit', decimalDigit);
-                            let temp = [];
+                            let temp: Serie[] = [];
                             switch (type) {
                                 case 'line':
                                     const series = mockLineData(numberSequenceAttr);
                                     temp = series;
                                     break;
                                 case 'bar':
-                                    let attrs = [];
+                                    let attrs: string[] = [];
                                     for (let i = 0; i < length; i++) {
                                         attrs.push(cryptoRandomString({length: 4}));
                                     }
@@ -114,7 +113,7 @@ export default function DataMock() {
                                             max: max,
                                             decimalDigit,
                                         }),
-                                    ];
+                                    ] as Serie[];
                                     setPartialState({keys: attrs, indexBy: 'id'});
                                     break;
                             }

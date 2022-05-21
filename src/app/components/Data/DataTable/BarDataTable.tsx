@@ -16,6 +16,79 @@ export default function BarDataTable({id}: Param) {
     const {bar, setData, setKey, removeKey, addKey, addRow} = useBar(id);
     const toast = useToast();
 
+    const columns = bar.keys
+        ? [
+              ...bar.keys.map((key) => {
+                  return {
+                      key,
+                      dataIndex: key,
+                      width: 120,
+                      title: (
+                          <Flex key={key} align={'center'} role={'group'}>
+                              <EditableDiv
+                                  key={key}
+                                  value={key}
+                                  validate={(value: string) =>
+                                      bar.keys ? !bar.keys.filter((item) => item !== key).includes(value) : true
+                                  }
+                                  onFinishEditing={(value: string) => {
+                                      if (value.length <= 0) {
+                                          toast({
+                                              title: `${t('Cannot leave this input empty')}`,
+                                              description: '1',
+                                              status: 'error',
+                                              isClosable: true,
+                                          });
+                                          return;
+                                      } else if (bar.keys?.filter((item) => item !== key).includes(value)) {
+                                          toast({
+                                              title: `${value} ${t('exists')}`,
+                                              description: '2',
+                                              status: 'error',
+                                              isClosable: true,
+                                          });
+                                          return;
+                                      } else {
+                                          setKey(key, value);
+                                      }
+                                  }}
+                              />
+                              <IconButton
+                                  ml={1}
+                                  opacity={0}
+                                  transition={'all .2s'}
+                                  _groupHover={{opacity: 1}}
+                                  icon={<FiX />}
+                                  onClick={() => removeKey(key)}
+                                  aria-label="remove column"
+                                  size={'xs'}
+                                  variant="ghost"
+                              />
+                          </Flex>
+                      ),
+                      render: (value, record) => {
+                          return (
+                              <EditableDiv
+                                  value={value}
+                                  key={record.id}
+                                  validate={(value) => !Number.isNaN(parseFloat(value))}
+                                  onFinishEditing={(value) => {
+                                      const newValue = parseFloat(value + '');
+                                      if (Number.isNaN(newValue)) {
+                                          console.log('nan', newValue);
+                                          setData(bar.data.indexOf(record), key, 0);
+                                      } else {
+                                          setData(bar.data.indexOf(record), key, newValue);
+                                      }
+                                  }}
+                              />
+                          );
+                      },
+                  };
+              }),
+          ]
+        : [];
+
     return (
         <Box w={'full'} h={'full'}>
             <DataMock />
@@ -57,74 +130,7 @@ export default function BarDataTable({id}: Param) {
                         fixed: 'left',
                         width: 120,
                     },
-                    ...bar.keys.map((key) => {
-                        return {
-                            key,
-                            dataIndex: key,
-                            width: 120,
-                            title: (
-                                <Flex key={key} align={'center'} role={'group'}>
-                                    <EditableDiv
-                                        key={key}
-                                        value={key}
-                                        validate={(value: string) =>
-                                            !bar.keys.filter((item) => item !== key).includes(value)
-                                        }
-                                        onFinishEditing={(value: string) => {
-                                            if (value.length <= 0) {
-                                                toast({
-                                                    title: `${t('Cannot leave this input empty')}`,
-                                                    description: '1',
-                                                    status: 'error',
-                                                    isClosable: true,
-                                                });
-                                                return;
-                                            } else if (bar.keys.filter((item) => item !== key).includes(value)) {
-                                                toast({
-                                                    title: `${value} ${t('exists')}`,
-                                                    description: '2',
-                                                    status: 'error',
-                                                    isClosable: true,
-                                                });
-                                                return;
-                                            } else {
-                                                setKey(key, value);
-                                            }
-                                        }}
-                                    />
-                                    <IconButton
-                                        ml={1}
-                                        opacity={0}
-                                        transition={'all .2s'}
-                                        _groupHover={{opacity: 1}}
-                                        icon={<FiX />}
-                                        onClick={() => removeKey(key)}
-                                        aria-label="remove column"
-                                        size={'xs'}
-                                        variant="ghost"
-                                    />
-                                </Flex>
-                            ),
-                            render: (value, record) => {
-                                return (
-                                    <EditableDiv
-                                        value={value}
-                                        key={record.id}
-                                        validate={(value) => !Number.isNaN(parseFloat(value))}
-                                        onFinishEditing={(value) => {
-                                            const newValue = parseFloat(value + '');
-                                            if (Number.isNaN(newValue)) {
-                                                console.log('nan', newValue);
-                                                setData(bar.data.indexOf(record), key, 0);
-                                            } else {
-                                                setData(bar.data.indexOf(record), key, newValue);
-                                            }
-                                        }}
-                                    />
-                                );
-                            },
-                        };
-                    }),
+                    ...columns,
                     {
                         title: (
                             <Button

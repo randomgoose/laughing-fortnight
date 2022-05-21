@@ -19,7 +19,7 @@ interface Props {
 export default function MarginInput(props: Props) {
     const [values, setValues] = useState({top: 50, right: 110, bottom: 50, left: 60});
     // const {left, right, bottom, top} = useSelector((state: RootState) => state.line.margin);
-    const [editingMargin, setEditingMargin] = useState('');
+    const [editingMargin, setEditingMargin] = useState<string | null>('');
 
     function focusHandler(value) {
         setEditingMargin(value);
@@ -27,7 +27,7 @@ export default function MarginInput(props: Props) {
 
     function handleChange(value: {left: number; right: number; bottom: number; top: number}) {
         setValues(Object.assign(values, value));
-        props.onChange(value);
+        props.onChange && props.onChange(value);
     }
 
     return (
@@ -48,7 +48,7 @@ export default function MarginInput(props: Props) {
                 <InputNumber
                     type={'number'}
                     className={'margin-top w-full'}
-                    value={props.value.top || values.top}
+                    value={props.value?.top || values.top}
                     onFocus={() => focusHandler('top')}
                     onBlur={() => setEditingMargin(null)}
                     onChange={(value) => handleChange({...(values || props.value), top: value})}
@@ -56,7 +56,7 @@ export default function MarginInput(props: Props) {
                 <InputNumber
                     type={'number'}
                     className={'margin-left w-full'}
-                    value={props.value.left || values.left}
+                    value={props.value?.left || values.left}
                     onFocus={() => focusHandler('left')}
                     onBlur={() => setEditingMargin(null)}
                     onChange={(value) => handleChange({...(values || props.value), left: value})}
@@ -64,7 +64,7 @@ export default function MarginInput(props: Props) {
                 <InputNumber
                     type={'number'}
                     className={'margin-right w-full'}
-                    value={props.value.right || values.right}
+                    value={props.value?.right || values.right}
                     onFocus={() => focusHandler('right')}
                     onBlur={() => setEditingMargin(null)}
                     onChange={(value) => handleChange({...(values || props.value), right: value})}
@@ -72,7 +72,7 @@ export default function MarginInput(props: Props) {
                 <InputNumber
                     type={'number'}
                     className={'margin-bottom w-full'}
-                    value={props.value.bottom || values.bottom}
+                    value={props.value?.bottom || values.bottom}
                     onFocus={() => focusHandler('bottom')}
                     onBlur={() => setEditingMargin(null)}
                     onChange={(value) => handleChange({...(values || props.value), bottom: value})}

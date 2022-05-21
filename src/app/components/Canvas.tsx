@@ -8,20 +8,19 @@ import {Button, Space} from 'antd';
 import {AimOutlined, ArrowsAltOutlined, ShrinkOutlined} from '@ant-design/icons';
 import {useAtom} from 'jotai';
 import {appAtom, Chart} from '../atoms/appAtom';
-import {ChartTypeList} from './ChartTypeList';
-import {useTranslation} from 'react-i18next';
+// import { ChartTypeList } from './ChartTypeList';
+// import { useTranslation } from 'react-i18next';
 import VisScatterPlot from './Chart/VisScatterPlot';
 import VisRadar from './Chart/VisRadar';
 import VisCalendar from './Chart/VisCalendar';
 import {createUseGesture, pinchAction, wheelAction} from '@use-gesture/react';
-import {ChartAtom, chartsAtom, undoAtom} from '../atoms/history';
+import {undoAtom} from '../atoms/history';
 
 const useGesture = createUseGesture([pinchAction, wheelAction]);
 
 export default function Canvas() {
     const [app, setApp] = useAtom(appAtom);
-    const {t} = useTranslation();
-    const [charts] = useAtom(chartsAtom);
+    // const { t } = useTranslation();
 
     const [hasHistory, undo] = useAtom(undoAtom);
 
@@ -44,7 +43,7 @@ export default function Canvas() {
         rotateZ: 0,
     }));
 
-    const ref = React.useRef(null);
+    const ref = React.useRef<HTMLDivElement>(null);
     const wrapperRef = React.useRef(null);
 
     useGesture(
@@ -70,10 +69,12 @@ export default function Canvas() {
             // },
             onPinch: ({origin: [ox, oy], first, movement: [ms], offset: [s, a], memo}) => {
                 if (first) {
-                    const {width, height, x, y} = ref.current.getBoundingClientRect();
-                    const tx = ox - (x + width / 2);
-                    const ty = oy - (y + height / 2);
-                    memo = [style.x.get(), style.y.get(), tx, ty];
+                    if (ref.current) {
+                        const {width, height, x, y} = ref.current.getBoundingClientRect();
+                        const tx = ox - (x + width / 2);
+                        const ty = oy - (y + height / 2);
+                        memo = [style.x.get(), style.y.get(), tx, ty];
+                    }
                 }
 
                 const x = memo[0] - ms * memo[2];
@@ -114,6 +115,8 @@ export default function Canvas() {
         }
     }
 
+    console.log(renderChart);
+
     // const bind = usePinch(
     //     ({ offset: [d] }) => {
     //         set({ zoom: d / 1600 })
@@ -142,7 +145,7 @@ export default function Canvas() {
             }}
         >
             <animated.div ref={ref} className={'w-full h-full absolute'} style={style}>
-                {app.charts.length > 0 ? (
+                {/* {app.charts.length > 0 ? (
                     app.charts.map((chart) => renderChart(chart))
                 ) : (
                     <div
@@ -158,7 +161,7 @@ export default function Canvas() {
                         />
                         <span className={'text-gray-700'}>{t('Click an icon to insert a chart')}</span>
                     </div>
-                )}
+                )} */}
             </animated.div>
             <Space className={'absolute top-4 right-4'}>
                 <Button disabled={!hasHistory} onClick={undo}>
@@ -187,15 +190,6 @@ export default function Canvas() {
                     }}
                 ></Button>
             </Space>
-
-            {charts.map((chart) => (
-                <Hussar atom={chart} key={`${chart}`} />
-            ))}
         </div>
     );
-}
-
-function Hussar({atom}: {atom: ChartAtom}) {
-    const [get] = useAtom(atom);
-    return <div>{get.keys.join('/')}</div>;
 }

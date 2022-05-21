@@ -29,13 +29,19 @@ export function useScatter(id: string) {
 
     function changeNodeDataX(serieId: number | string, index: number, value: number) {
         setScatter((draftState) => {
-            draftState.data.find((datum) => datum.id === serieId).data[index].x = value;
+            const datum = draftState.data.find((datum) => datum.id === serieId);
+            if (datum) {
+                datum.data[index].x = value;
+            }
         });
     }
 
     function changeNodeDataY(serieId: number | string, index: number, value: number) {
         setScatter((draftState) => {
-            draftState.data.find((datum) => datum.id === serieId).data[index].y = value;
+            const datum = draftState.data.find((datum) => datum.id === serieId);
+            if (datum) {
+                datum.data[index].y = value;
+            }
         });
     }
 
@@ -49,14 +55,20 @@ export function useScatter(id: string) {
         const existingGroup = scatter.data.find((datum) => datum.id === group);
         if (existingGroup) {
             setScatter((draftState) => {
-                draftState.data.find((datum) => datum.id === group).data.push({x, y});
+                const datum = draftState.data.find((datum) => datum.id === group);
+                if (datum) {
+                    datum.data.push({x, y});
+                }
             });
         }
     }
 
     function changeGroupName(group: string, newGroup: string) {
         setScatter((draftState) => {
-            draftState.data.find((datum) => datum.id === group).id = newGroup;
+            const datum = draftState.data.find((datum) => datum.id === group);
+            if (datum) {
+                datum.id = newGroup;
+            }
         });
     }
 

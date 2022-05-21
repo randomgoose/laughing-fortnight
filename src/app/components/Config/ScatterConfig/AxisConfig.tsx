@@ -41,7 +41,7 @@ export default ({id}: Param) => {
                 >
                     <Form
                         layout={'vertical'}
-                        initialValues={axisBottom}
+                        initialValues={axisBottom ? axisBottom : undefined}
                         onValuesChange={(changedValue) => {
                             setPartialState({axisBottom: Object.assign({...axisBottom}, changedValue)});
                         }}
@@ -90,7 +90,7 @@ export default ({id}: Param) => {
                 >
                     <Form
                         layout={'vertical'}
-                        initialValues={axisLeft}
+                        initialValues={axisLeft ? axisLeft : undefined}
                         onValuesChange={(changedValue) => {
                             setPartialState({axisLeft: Object.assign({...axisLeft}, changedValue)});
                         }}

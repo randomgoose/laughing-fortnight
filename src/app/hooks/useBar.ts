@@ -1,4 +1,4 @@
-import {PrimitiveAtom, useAtom} from 'jotai';
+import {useAtom} from 'jotai';
 import {useImmerAtom} from 'jotai/immer';
 import {barAtomFamily, BarState} from '../atoms/barAtomFamily';
 import _ from 'lodash';
@@ -9,13 +9,11 @@ import useDeepCompareEffect from 'use-deep-compare-effect';
 import {saveHisotryAtom} from '../atoms/history';
 
 export function useBar(id: string) {
-    const [bar, setBar] = useImmerAtom(barAtomFamily({id}) as PrimitiveAtom<BarState>);
+    const [bar, setBar] = useImmerAtom(barAtomFamily({id}));
     const {app} = useApp();
     const [, set] = useAtom(saveHisotryAtom);
 
     useDeepCompareEffect(() => {
-        console.log(app.colorSchemes);
-        console.log(bar.colorSchemeId);
         if (bar.colorSchemeId in colorSchemes) {
             setBar((state) => {
                 state.colors = {scheme: bar.colorSchemeId as ColorSchemeId};
@@ -42,7 +40,7 @@ export function useBar(id: string) {
                 datum[newKey] = datum[key];
                 datum = _.omit(datum, [key]);
             });
-            draftState.keys.splice(draftState.keys.indexOf(key), 1, newKey);
+            draftState.keys?.splice(draftState.keys.indexOf(key), 1, newKey);
         });
     }
 
@@ -52,14 +50,14 @@ export function useBar(id: string) {
             draftState.data.map((datum) => {
                 datum = _.omit(datum, [key]);
             });
-            draftState.keys = draftState.keys.filter((k) => k !== key);
+            draftState.keys = draftState.keys?.filter((k) => k !== key);
         });
     }
 
     function addKey(key: string) {
         setBar((draftState) => {
             draftState.data.map((datum) => (datum[key] = (Math.random() * 100).toFixed(0)));
-            draftState.keys.push(key);
+            draftState.keys?.push(key);
         });
     }
 

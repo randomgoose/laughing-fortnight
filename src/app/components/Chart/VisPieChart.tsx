@@ -17,13 +17,11 @@ export default function VisPieChart({id, initialState}: Param & {initialState?: 
     const [position, setPosition] = React.useState({x: 0, y: 0});
     const [pie, setPie] = useImmerAtom(pieAtomFamily({id}));
     const [app] = useImmerAtom(appAtom);
-    const [activeArc, setActiveArc] = React.useState<
-        ComputedDatum<
-            DefaultRawDatum & {
-                label: string;
-            }
-        >
-    >(null);
+    const [activeArc, setActiveArc] = React.useState<ComputedDatum<
+        DefaultRawDatum & {
+            label: string;
+        }
+    > | null>(null);
     const {t} = useTranslation();
     const {removeArcById, addArc, changeArcValueById, getValueById, changeId, getDatumById} = usePie(id);
 
@@ -90,7 +88,7 @@ export default function VisPieChart({id, initialState}: Param & {initialState?: 
                                     <Heading as={'h5'}>{'Label'}</Heading>
                                     <Input
                                         className={'mb-2'}
-                                        value={getDatumById(activeArc.id + '').label}
+                                        value={getDatumById(activeArc.id + '')?.label}
                                         onKeyDown={(e) => {
                                             e.stopPropagation();
                                         }}

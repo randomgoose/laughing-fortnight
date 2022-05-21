@@ -1,6 +1,5 @@
 import {Serie} from '@nivo/line';
 import cryptoRandomString from 'crypto-random-string';
-import {PrimitiveAtom} from 'jotai';
 import {useImmerAtom} from 'jotai/immer';
 import {lineAtomFamily, LineState} from '../atoms/lineAtomFamily';
 import useDeepCompareEffect from 'use-deep-compare-effect';
@@ -8,7 +7,7 @@ import {useApp} from './useApp';
 import {colorSchemes, ColorSchemeId} from '@nivo/colors';
 
 export function useLine(id: string) {
-    const [line, setLine] = useImmerAtom(lineAtomFamily({id}) as PrimitiveAtom<LineState>);
+    const [line, setLine] = useImmerAtom(lineAtomFamily({id}));
     const {app} = useApp();
 
     useDeepCompareEffect(() => {
@@ -34,7 +33,10 @@ export function useLine(id: string) {
 
     function setSerieId(id: string, newId: string) {
         setLine((draftState) => {
-            draftState.data.find((serie) => serie.id === id).id = newId;
+            const serie = draftState.data.find((serie) => serie.id === id);
+            if (serie) {
+                serie.id = newId;
+            }
             draftState.lines = draftState.lines.filter((i) => i !== id);
             draftState.lines.push(newId);
         });
@@ -42,7 +44,12 @@ export function useLine(id: string) {
 
     function updateTick(tick: string, newTick: string) {
         setLine((draftState) => {
-            draftState.data.map((i) => (i.data.find((datum) => datum.x === tick).x = newTick));
+            draftState.data.map((i) => {
+                const datum = i.data.find((datum) => datum.x === tick);
+                if (datum) {
+                    datum.x = newTick;
+                }
+            });
         });
     }
 

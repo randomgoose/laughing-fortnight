@@ -54,7 +54,7 @@ export default function Anchor({value, onChange}: Props) {
                     className={position}
                     onClick={() => {
                         setActivePoint(position);
-                        onChange(position);
+                        onChange && onChange(position);
                     }}
                     selected={value && value === position}
                 ></Point>

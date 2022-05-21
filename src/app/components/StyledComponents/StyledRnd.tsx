@@ -38,7 +38,7 @@ export default function StyledRnd({
     chartId,
     tools,
 }: Props) {
-    const ref = React.useRef();
+    const ref = React.useRef<HTMLDivElement>(null);
     const [{activeKey, scale}, setApp] = useAtom(appAtom);
 
     useClickAway(() => {

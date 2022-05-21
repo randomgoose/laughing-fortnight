@@ -1,3 +1,4 @@
+//@ts-nocheck
 import * as React from 'react';
 import './styles/ui.css';
 import SideBar from './components/Sidebar';

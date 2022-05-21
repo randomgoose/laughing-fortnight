@@ -4,13 +4,13 @@ import {AlignCenterOutlined, AlignLeftOutlined, AlignRightOutlined} from '@ant-d
 import {FcRuler} from 'react-icons/fc';
 import {StyledCollapsePanel} from '../../StyledComponents/StyledComponents';
 import {useTranslation} from 'react-i18next';
-import {PrimitiveAtom, useAtom} from 'jotai';
+import {useAtom} from 'jotai';
 import {Param} from '../../../atoms/appAtom';
-import {lineAtomFamily, LineState} from '../../../atoms/lineAtomFamily';
+import {lineAtomFamily} from '../../../atoms/lineAtomFamily';
 import {useLine} from '../../../hooks/useLine';
 
 export default ({id}: Param) => {
-    const [{showXAxis, showYAxis, axisBottom, axisLeft}] = useAtom(lineAtomFamily({id}) as PrimitiveAtom<LineState>);
+    const [{showXAxis, showYAxis, axisBottom, axisLeft}] = useAtom(lineAtomFamily({id}));
     const {setPartialState} = useLine(id);
     const {t} = useTranslation();
     console.log(axisLeft);
@@ -40,7 +40,7 @@ export default ({id}: Param) => {
                 >
                     <Form
                         layout={'vertical'}
-                        initialValues={axisBottom}
+                        initialValues={axisBottom ? axisBottom : undefined}
                         onValuesChange={(changedValue) => {
                             console.log(changedValue);
                             setPartialState({axisBottom: Object.assign({...axisBottom}, changedValue)});
@@ -90,7 +90,7 @@ export default ({id}: Param) => {
                 >
                     <Form
                         layout={'vertical'}
-                        initialValues={axisLeft}
+                        initialValues={axisLeft ? axisLeft : undefined}
                         onValuesChange={(changedValue) => {
                             setPartialState({axisLeft: Object.assign({...axisLeft}, changedValue)});
                         }}

@@ -13,7 +13,11 @@ export function useApp() {
 
     function getCurrentChart() {
         const chart = app.charts.find((chart) => chart.id === app.activeKey);
-        return chart;
+        if (chart) {
+            return chart;
+        } else {
+            return {type: '', id: ''};
+        }
     }
 
     function setPartialState(state: Partial<AppState>) {
@@ -22,13 +26,15 @@ export function useApp() {
 
     function renameColorScheme(id: string, name: string) {
         setApp((state) => {
-            state.colorSchemes.find((scheme) => scheme.id === id).name = name;
+            const scheme = state.colorSchemes.find((scheme) => (scheme.id = id));
+            if (scheme) scheme.name = name;
         });
     }
 
     function setColors(id: string, colors: IColorScheme['colors']) {
         setApp((state) => {
-            state.colorSchemes.find((scheme) => (scheme.id = id)).colors = colors;
+            const scheme = state.colorSchemes.find((scheme) => (scheme.id = id));
+            if (scheme) scheme.colors = colors;
         });
     }
 
@@ -41,21 +47,21 @@ export function useApp() {
     const addColor = (schemeId: string, color: string) => {
         setApp((state) => {
             const scheme = state.colorSchemes.find((scheme) => scheme.id === schemeId);
-            scheme.colors.push(color);
+            if (scheme) scheme.colors.push(color);
         });
     };
 
     const setColor = (schemeId: string, colorIndex: number, color: string) => {
         setApp((state) => {
             const scheme = state.colorSchemes.find((scheme) => scheme.id === schemeId);
-            scheme.colors[colorIndex] = color;
+            if (scheme) scheme.colors[colorIndex] = color;
         });
     };
 
     const removeColor = (schemeId: string, colorIndex: number) => {
         setApp((state) => {
             const scheme = state.colorSchemes.find((scheme) => scheme.id === schemeId);
-            scheme.colors.splice(colorIndex, 1);
+            if (scheme) scheme.colors.splice(colorIndex, 1);
         });
     };
 
@@ -68,7 +74,7 @@ export function useApp() {
     const setColorSchemeName = (schemeId: string, name: string) => {
         setApp((state) => {
             const scheme = state.colorSchemes.find((scheme) => scheme.id === schemeId);
-            scheme.name = name;
+            if (scheme) scheme.name = name;
         });
     };
 

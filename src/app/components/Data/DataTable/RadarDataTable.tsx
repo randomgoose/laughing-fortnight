@@ -45,9 +45,12 @@ export default function RadarDataTable({id}: Param) {
                             value={value}
                             onFinishEditing={(newValue) => {
                                 setRadar((draftState) => {
-                                    draftState.data.find((datum) => datum[radar['indexBy'].toString()] === value)[
-                                        radar['indexBy'].toString()
-                                    ] = newValue;
+                                    const datum = draftState.data.find(
+                                        (datum) => datum[radar['indexBy'].toString()] === value
+                                    );
+                                    if (datum) {
+                                        datum[radar['indexBy'].toString()] = newValue;
+                                    }
                                 });
                             }}
                         />

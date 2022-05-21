@@ -3,12 +3,11 @@ import {ResponsiveLine} from '@nivo/line';
 import StyledRnd from '../StyledComponents/StyledRnd';
 import {useImmerAtom} from 'jotai/immer';
 import {lineAtomFamily, LineState} from '../../atoms/lineAtomFamily';
-import {PrimitiveAtom} from 'jotai';
 import {Param} from '../../atoms/appAtom';
 
 export default function VisLineChart({id, initialState}: Param & {initialState?: LineState}) {
     const [{width, height, x, y, activeSerie, showXAxis, showYAxis, data, lines, ...rest}, setLine] = useImmerAtom(
-        lineAtomFamily({id}) as PrimitiveAtom<LineState>
+        lineAtomFamily({id})
     );
 
     React.useEffect(() => {
@@ -38,8 +37,8 @@ export default function VisLineChart({id, initialState}: Param & {initialState?:
         <StyledRnd chartId={id} width={width} height={height} x={x} y={y} onDragStop={onDragStop} onResize={onResize}>
             <ResponsiveLine
                 {...rest}
-                axisBottom={showXAxis && rest.axisBottom}
-                axisLeft={showYAxis && rest.axisLeft}
+                axisBottom={showXAxis ? rest.axisBottom : undefined}
+                axisLeft={showYAxis ? rest.axisLeft : undefined}
                 data={data.filter((datum) => lines.includes(datum.id))}
                 isInteractive={true}
             />

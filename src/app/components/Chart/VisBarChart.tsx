@@ -15,7 +15,7 @@ import {InputNumber} from 'antd';
 const VisBarChart = ({id, initialState}: Param & {initialState?: BarState}) => {
     const {bar, setBar, setData} = useBar(id);
     const [position, setPosition] = React.useState({x: 0, y: 0});
-    const [activeDatum, setActiveDatum] = React.useState<ComputedDatum<BarDatum>>(null);
+    const [activeDatum, setActiveDatum] = React.useState<ComputedDatum<BarDatum> | null>(null);
     const {isOpen, onOpen, onClose} = useDisclosure();
 
     function onDragStop(_e, d) {
@@ -53,8 +53,8 @@ const VisBarChart = ({id, initialState}: Param & {initialState?: BarState}) => {
         >
             <ResponsiveBar
                 {...bar}
-                axisBottom={bar.showXAxis && bar.axisBottom}
-                axisLeft={bar.showYAxis && bar.axisLeft}
+                axisBottom={bar.showXAxis ? bar.axisBottom : null}
+                axisLeft={bar.showYAxis ? bar.axisLeft : null}
                 onClick={(datum, event) => {
                     console.log(datum);
                     setPosition({x: event.clientX, y: event.clientY});
@@ -73,9 +73,9 @@ const VisBarChart = ({id, initialState}: Param & {initialState?: BarState}) => {
                                 <Heading as={'h6'}>Value</Heading>
                                 <InputNumber
                                     onKeyDown={(e) => e.stopPropagation()}
-                                    value={activeDatum && activeDatum.value}
+                                    value={activeDatum.value ? activeDatum.value : 0}
                                     onChange={(value) => {
-                                        setData(activeDatum.index, activeDatum.id + '', value);
+                                        setData(activeDatum.index, activeDatum.id + '', value as number);
                                     }}
                                 ></InputNumber>
                             </div>

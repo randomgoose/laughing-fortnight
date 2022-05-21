@@ -24,6 +24,11 @@ export default function GeneralConfig({id}: Param) {
         form.setFieldsValue({...line});
     }, [line]);
 
+    const max = line.data.map((datum) => _.maxBy(datum.data, (d) => d.y));
+    const max_ = _.maxBy(max, (d) => {
+        if (d) return d.y;
+    });
+    // _.maxBy(line.data.map((datum) => _.maxBy(datum.data, (d) => d.y)), (d) => d.y).y as number
     return (
         <>
             <Typography.Title level={5}>
@@ -82,15 +87,7 @@ export default function GeneralConfig({id}: Param) {
                     <Switch size={'small'} />
                 </Form.Item>
                 <Form.Item name={'areaBaselineValue'} label={<Space>{t('Area baseline')}</Space>}>
-                    <Slider
-                        min={0}
-                        max={
-                            _.maxBy(
-                                line.data.map((datum) => _.maxBy(datum.data, (d) => d.y)),
-                                (d) => d.y
-                            ).y as number
-                        }
-                    />
+                    <Slider min={0} max={max_ as unknown as number} />
                 </Form.Item>
                 <Form.Item name={'areaOpacity'} label={<Space>{t('Area Opacity')}</Space>}>
                     <Slider step={0.01} min={0} max={1} />
