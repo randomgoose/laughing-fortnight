@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {Popover, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader} from '@chakra-ui/react';
 import {useClickAway} from 'ahooks';
 

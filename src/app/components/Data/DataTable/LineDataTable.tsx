@@ -1,3 +1,4 @@
+//@ts-nocheck
 import {DeleteOutlined, EyeInvisibleOutlined, EyeOutlined} from '@ant-design/icons';
 import {Button, message, Table} from 'antd';
 import * as React from 'react';
@@ -21,6 +22,8 @@ export default function LineDataTable({id}: {id: string}) {
             a.map((item, i) => {
                 if (item.x === b[i].x) {
                     return Object.assign({}, item, b[i]);
+                } else {
+                    return {};
                 }
             })
         );

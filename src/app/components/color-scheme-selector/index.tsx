@@ -1,6 +1,6 @@
+import * as React from 'react';
 import {Form, Select, Space} from 'antd';
 import {HighlightOutlined} from '@ant-design/icons';
-import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {colorSchemes} from '@nivo/colors';
 import {useApp} from '../../hooks/useApp';

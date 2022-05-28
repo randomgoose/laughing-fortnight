@@ -17,13 +17,13 @@ import {Radar} from '@nivo/radar';
 
 function getChart(type: IChartType, state: any) {
     switch (type) {
-        case 'pie':
+        case 'PIE':
             return <Pie {...{...initialPieState, ...state}} isInteractive={false} />;
-        case 'line':
+        case 'LINE':
             return <Line {...{...initialLineState, ...state}} isInteractive={false} />;
-        case 'bar':
+        case 'BAR':
             return <Bar {...{...initialBarState, ...state}} isInteractive={false} animate={false} />;
-        case 'radar':
+        case 'RADAR':
             return <Radar {...{...initialBarState, ...state}} isInteractive={false} />;
         default:
             return <Pie {...{...initialPieState, ...state}} isInteractive={false} />;
@@ -92,7 +92,7 @@ export function ChartType({
                 className={`w-7 h-7 flex justify-center items-center rounded-lg transition-all duration-200 hover:bg-gray-100 active:bg-gray-200`}
                 onClick={() => {
                     const id = cryptoRandomString({length: 16});
-                    addChart(id);
+                    addChart({type, id});
                     insertChart({type, id});
 
                     // setApp((app) => ({
@@ -117,22 +117,22 @@ export function ChartTypeList({
 }) {
     return (
         <div className={classnames('ChartTypeList flex gap-1', className)}>
-            <ChartType type={'bar'} placement={tooltipPlacement}>
+            <ChartType type={'BAR'} placement={tooltipPlacement}>
                 <FcBarChart size={16} />
             </ChartType>
-            <ChartType type={'line'} placement={tooltipPlacement}>
+            <ChartType type={'LINE'} placement={tooltipPlacement}>
                 <FcLineChart size={16} />
             </ChartType>
-            <ChartType type={'pie'} placement={tooltipPlacement}>
+            <ChartType type={'PIE'} placement={tooltipPlacement}>
                 <FcPieChart size={16} />
             </ChartType>
-            <ChartType type={'scatter'} placement={tooltipPlacement}>
+            <ChartType type={'SCATTER'} placement={tooltipPlacement}>
                 <FcScatterPlot size={16} />
             </ChartType>
-            <ChartType type={'radar'} placement={tooltipPlacement}>
+            <ChartType type={'RADAR'} placement={tooltipPlacement}>
                 <FcRadarPlot size={16} />
             </ChartType>
-            <ChartType type={'calendar'} placement={tooltipPlacement}>
+            <ChartType type={'CALENDAR'} placement={tooltipPlacement}>
                 <FcCalendar size={16} />
             </ChartType>
         </div>

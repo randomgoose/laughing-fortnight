@@ -19,6 +19,15 @@ export async function saveColorSchemes(schemes: IColorScheme[]) {
     }
 }
 
+export async function saveColorScheme(scheme: IColorScheme) {
+    try {
+        await figma.clientStorage.setAsync(`cm-color-scheme/${scheme.id}`, scheme);
+        return scheme;
+    } catch (err) {
+        console.error(err);
+    }
+}
+
 export async function addColorScheme(scheme: IColorScheme) {
     const colorSchemes: IColorScheme[] = await figma.clientStorage.getAsync('cm-color-schemes');
 

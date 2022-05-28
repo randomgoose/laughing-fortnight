@@ -1,3 +1,4 @@
+//@ts-nocheck
 import * as React from 'react';
 import VisLineChart from './Chart/VisLineChart';
 import VisPieChart from './Chart/VisPieChart';
@@ -8,19 +9,21 @@ import {Button, Space} from 'antd';
 import {AimOutlined, ArrowsAltOutlined, ShrinkOutlined} from '@ant-design/icons';
 import {useAtom} from 'jotai';
 import {appAtom, Chart} from '../atoms/appAtom';
-// import { ChartTypeList } from './ChartTypeList';
-// import { useTranslation } from 'react-i18next';
 import VisScatterPlot from './Chart/VisScatterPlot';
 import VisRadar from './Chart/VisRadar';
 import VisCalendar from './Chart/VisCalendar';
 import {createUseGesture, pinchAction, wheelAction} from '@use-gesture/react';
-import {undoAtom} from '../atoms/history';
+import {chartAtomsAtom, undoAtom} from '../atoms/history';
+import {deleteSelectedChart} from '../atoms/selection';
+import VisChart from './Chart';
+import {useToast} from '@chakra-ui/react';
 
 const useGesture = createUseGesture([pinchAction, wheelAction]);
 
 export default function Canvas() {
     const [app, setApp] = useAtom(appAtom);
-    // const { t } = useTranslation();
+    const [charts] = useAtom(chartAtomsAtom);
+    const [, del] = useAtom(deleteSelectedChart);
 
     const [hasHistory, undo] = useAtom(undoAtom);
 
@@ -98,24 +101,22 @@ export default function Canvas() {
     //     config: { mass: 5, tension: 350, friction: 80 },
     // }))
 
-    function renderChart(chart: Chart) {
-        switch (chart.type) {
-            case 'pie':
-                return <VisPieChart id={chart.id} key={chart.id} initialState={chart.initialState} />;
-            case 'bar':
-                return <VisBarChart id={chart.id} key={chart.id} initialState={chart.initialState} />;
-            case 'line':
-                return <VisLineChart id={chart.id} key={chart.id} initialState={chart.initialState} />;
-            case 'scatter':
-                return <VisScatterPlot id={chart.id} key={chart.id} initialState={chart.initialState} />;
-            case 'radar':
-                return <VisRadar id={chart.id} key={chart.id} initialState={chart.initialState} />;
-            case 'calendar':
-                return <VisCalendar id={chart.id} key={chart.id} initialState={chart.initialState} />;
-        }
-    }
-
-    console.log(renderChart);
+    // function renderChart(chart: Chart) {
+    //     switch (chart.type) {
+    //         case 'pie':
+    //             return <VisPieChart id={chart.id} key={chart.id} initialState={chart.initialState} />;
+    //         case 'bar':
+    //         // return <VisBarChart key={chart.id} initialState={chart.initialState} />;
+    //         case 'line':
+    //             return <VisLineChart id={chart.id} key={chart.id} initialState={chart.initialState} />;
+    //         case 'scatter':
+    //             return <VisScatterPlot id={chart.id} key={chart.id} initialState={chart.initialState} />;
+    //         case 'radar':
+    //             return <VisRadar id={chart.id} key={chart.id} initialState={chart.initialState} />;
+    //         case 'calendar':
+    //             return <VisCalendar id={chart.id} key={chart.id} initialState={chart.initialState} />;
+    //     }
+    // }
 
     // const bind = usePinch(
     //     ({ offset: [d] }) => {
@@ -127,24 +128,21 @@ export default function Canvas() {
 
     return (
         <div
-            // {...bind()}
             className={'canvas__wrapper w-full h-full overflow-hidden z-0'}
             ref={wrapperRef}
             tabIndex={1}
             onKeyDown={(e: React.KeyboardEvent) => {
                 // e.preventDefault()
                 if (e.key === 'Delete' || e.key === 'Backspace') {
+                    del();
                     setApp({...app, activeKey: '', charts: app.charts.filter((chart) => chart.id !== app.activeKey)});
                 }
             }}
-            onScroll={(e) => {
-                console.log(e);
-            }}
-            onWheel={(e) => {
-                console.log(e);
-            }}
         >
             <animated.div ref={ref} className={'w-full h-full absolute'} style={style}>
+                {charts.map((atom) => (
+                    <VisChart atom={atom} key={`${atom}`} />
+                ))}
                 {/* {app.charts.length > 0 ? (
                     app.charts.map((chart) => renderChart(chart))
                 ) : (

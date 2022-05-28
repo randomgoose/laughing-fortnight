@@ -10,11 +10,22 @@ import {useBar} from '../../../hooks/useBar';
 import EditableDiv from '../../CustomInput/EditableDiv';
 import DataMock from '../DataMock/DataMock';
 import {FiX} from 'react-icons/fi';
+import {PrimitiveAtom, useAtom} from 'jotai';
+import {BarState} from '../../../atoms/barAtomFamily';
+import {saveHisotryAtom} from '../../../atoms/history';
 
-export default function BarDataTable({id}: Param) {
+export default function BarDataTable({id, atom}: Param & {atom: PrimitiveAtom<BarState>}) {
     const {t} = useTranslation();
-    const {bar, setData, setKey, removeKey, addKey, addRow} = useBar(id);
+    const [bar, set] = useAtom(atom);
+    const {setData, setKey, removeKey, addKey} = useBar(id);
     const toast = useToast();
+    const [, save] = useAtom(saveHisotryAtom);
+
+    console.log('length', bar.data.length);
+
+    React.useEffect(() => {
+        console.log('table', bar.data.length);
+    }, [bar.data.length]);
 
     const columns = bar.keys
         ? [
@@ -91,14 +102,24 @@ export default function BarDataTable({id}: Param) {
 
     return (
         <Box w={'full'} h={'full'}>
+            {bar.data.length}
             <DataMock />
             <Table
                 rowKey={bar.indexBy as string}
                 key={'barDataTable'}
-                dataSource={bar.data}
+                dataSource={[...bar.data]}
                 scroll={{y: 140, x: 2000}}
                 footer={() => (
-                    <Button onClick={addRow} size={'sm'}>
+                    <Button
+                        onClick={() => {
+                            save(null);
+                            set((prev) => ({
+                                ...prev,
+                                data: [...prev.data, {...prev.data[0], id: cryptoRandomString({length: 4})}],
+                            }));
+                        }}
+                        size={'sm'}
+                    >
                         {t('Add row')}
                     </Button>
                 )}
@@ -147,7 +168,7 @@ export default function BarDataTable({id}: Param) {
                         key: 'add_column',
                     },
                 ]}
-            ></Table>
+            />
         </Box>
     );
 }

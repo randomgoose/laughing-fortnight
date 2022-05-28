@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "esnext",
+        "target": "es5",
         "outDir": "dist",
         "jsx": "react",
         "noUnusedLocals": true,
@@ -11,5 +11,10 @@
         "moduleResolution": "node",
         "typeRoots": ["./node_modules/@types", "./node_modules/@figma"],
         "allowSyntheticDefaultImports": true,
-    }
+        "strict": true
+    },
+    "include": [
+        "src/**/*.ts", 
+        "src/**/*.tsx"
+    ]
 }

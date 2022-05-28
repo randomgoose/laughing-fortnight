@@ -1,7 +1,7 @@
 import {useAtom} from 'jotai';
 import {useImmerAtom} from 'jotai/immer';
 import {barAtomFamily, BarState} from '../atoms/barAtomFamily';
-import _ from 'lodash';
+import * as _ from 'lodash';
 import cryptoRandomString from 'crypto-random-string';
 import {colorSchemes, ColorSchemeId} from '@nivo/colors';
 import {useApp} from './useApp';
@@ -11,7 +11,7 @@ import {saveHisotryAtom} from '../atoms/history';
 export function useBar(id: string) {
     const [bar, setBar] = useImmerAtom(barAtomFamily({id}));
     const {app} = useApp();
-    const [, set] = useAtom(saveHisotryAtom);
+    const [, save] = useAtom(saveHisotryAtom);
 
     useDeepCompareEffect(() => {
         if (bar.colorSchemeId in colorSchemes) {
@@ -45,7 +45,7 @@ export function useBar(id: string) {
     }
 
     function removeKey(key: string) {
-        set(null);
+        save(null);
         setBar((draftState) => {
             draftState.data.map((datum) => {
                 datum = _.omit(datum, [key]);
@@ -62,6 +62,7 @@ export function useBar(id: string) {
     }
 
     function setPartialState(state: Partial<BarState>) {
+        save(null);
         setBar((draftState) => Object.assign(draftState, state));
     }
 
@@ -83,6 +84,7 @@ export function useBar(id: string) {
     }
 
     function addRow() {
+        save(null);
         setBar((draftState) => {
             draftState.data.push({...draftState.data[0], id: cryptoRandomString({length: 4})});
         });

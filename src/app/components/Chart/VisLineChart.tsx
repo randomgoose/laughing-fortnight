@@ -1,14 +1,12 @@
 import * as React from 'react';
 import {ResponsiveLine} from '@nivo/line';
-import StyledRnd from '../StyledComponents/StyledRnd';
 import {useImmerAtom} from 'jotai/immer';
-import {lineAtomFamily, LineState} from '../../atoms/lineAtomFamily';
-import {Param} from '../../atoms/appAtom';
+import {LineState} from '../../atoms/lineAtomFamily';
+import {PrimitiveAtom} from 'jotai';
 
-export default function VisLineChart({id, initialState}: Param & {initialState?: LineState}) {
-    const [{width, height, x, y, activeSerie, showXAxis, showYAxis, data, lines, ...rest}, setLine] = useImmerAtom(
-        lineAtomFamily({id})
-    );
+export default function VisLineChart({initialState, atom}: {initialState?: LineState; atom: PrimitiveAtom<LineState>}) {
+    const [{width, height, x, y, activeSerie, showXAxis, showYAxis, data, lines, ...rest}, setLine] =
+        useImmerAtom(atom);
 
     React.useEffect(() => {
         if (initialState)
@@ -17,32 +15,14 @@ export default function VisLineChart({id, initialState}: Param & {initialState?:
             });
     }, []);
 
-    function onDragStop(_e, d) {
-        setLine((line) => {
-            line.x = d.x;
-            line.y = d.y;
-        });
-    }
-
-    function onResize(_e, _direction, ref, _delta, position) {
-        setLine((line) => {
-            line.width = ref.style.width;
-            line.height = ref.style.height;
-            line.x = position.x;
-            line.y = position.y;
-        });
-    }
-
     return (
-        <StyledRnd chartId={id} width={width} height={height} x={x} y={y} onDragStop={onDragStop} onResize={onResize}>
-            <ResponsiveLine
-                {...rest}
-                axisBottom={showXAxis ? rest.axisBottom : undefined}
-                axisLeft={showYAxis ? rest.axisLeft : undefined}
-                data={data.filter((datum) => lines.includes(datum.id))}
-                isInteractive={true}
-            />
-        </StyledRnd>
+        <ResponsiveLine
+            {...rest}
+            axisBottom={showXAxis ? rest.axisBottom : undefined}
+            axisLeft={showYAxis ? rest.axisLeft : undefined}
+            data={data.filter((datum) => lines.includes(datum.id))}
+            isInteractive={true}
+        />
     );
 }
 // data={data}

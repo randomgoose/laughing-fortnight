@@ -1,22 +1,23 @@
 import {atom, PrimitiveAtom, SetStateAction} from 'jotai';
 import {BarState} from './barAtomFamily';
+import {LineState} from './lineAtomFamily';
 
-export type ChartAtom = PrimitiveAtom<BarState>;
+export type ChartAtom = PrimitiveAtom<BarState | LineState>;
 
-const internalChartsAtom = atom<ChartAtom[]>([]);
+const internalChartAtomsAtom = atom<ChartAtom[]>([]);
 
-const historyAtom = atom<BarState[][]>([]);
+const historyAtom = atom<(BarState | LineState)[][]>([]);
 
 export const saveHisotryAtom = atom(null, (get, set, _update) => {
-    const charts = get(internalChartsAtom).map((chartAtom) => get(chartAtom));
+    const charts = get(internalChartAtomsAtom).map((chartAtom) => get(chartAtom));
     set(historyAtom, (prev) => [charts, ...prev]);
 });
 
-export const chartsAtom = atom(
-    (get) => get(internalChartsAtom),
+export const chartAtomsAtom = atom(
+    (get) => get(internalChartAtomsAtom),
     (_get, set, update: SetStateAction<ChartAtom[]>) => {
         set(saveHisotryAtom, null);
-        set(internalChartsAtom, update);
+        set(internalChartAtomsAtom, update);
     }
 );
 
@@ -27,11 +28,16 @@ export const undoAtom = atom(
     },
     (get, set, _update) => {
         const history = get(historyAtom);
+
         if (history.length > 0) {
             const [charts, ...rest] = history;
-            set(internalChartsAtom, (prev) =>
-                charts.map((chart, index) => (get(prev[index]) === chart ? prev[index] : atom(chart)))
-            );
+
+            set(internalChartAtomsAtom, (prev) => {
+                return charts.map((chart, index) => {
+                    return prev.length > 0 && get(prev[index]) === chart ? prev[index] : atom(chart);
+                });
+            });
+
             set(historyAtom, rest);
         }
     }

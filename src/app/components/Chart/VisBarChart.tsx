@@ -1,8 +1,6 @@
 import {BarDatum, ResponsiveBar} from '@nivo/bar';
 import * as React from 'react';
-import StyledRnd from '../StyledComponents/StyledRnd';
 import _ from 'lodash';
-import {Param} from '../../atoms/appAtom';
 import {BarState} from '../../atoms/barAtomFamily';
 import {useDisclosure} from '@chakra-ui/hooks';
 import {Portal} from '@chakra-ui/portal';
@@ -11,19 +9,14 @@ import {ComputedDatum} from '@nivo/bar';
 import {Heading} from '@chakra-ui/layout';
 import {useBar} from '../../hooks/useBar';
 import {InputNumber} from 'antd';
+import {PrimitiveAtom, useAtom} from 'jotai';
 
-const VisBarChart = ({id, initialState}: Param & {initialState?: BarState}) => {
-    const {bar, setBar, setData} = useBar(id);
+const VisBarChart = ({initialState, atom}: {initialState?: BarState; atom: PrimitiveAtom<BarState>}) => {
+    const [bar] = useAtom(atom);
+    const {setBar, setData} = useBar(bar.key);
     const [position, setPosition] = React.useState({x: 0, y: 0});
     const [activeDatum, setActiveDatum] = React.useState<ComputedDatum<BarDatum> | null>(null);
     const {isOpen, onOpen, onClose} = useDisclosure();
-
-    function onDragStop(_e, d) {
-        setBar((bar) => {
-            bar.x = d.x;
-            bar.y = d.y;
-        });
-    }
 
     React.useEffect(() => {
         if (initialState)
@@ -32,31 +25,13 @@ const VisBarChart = ({id, initialState}: Param & {initialState?: BarState}) => {
             });
     }, []);
 
-    function onResize(_e, _direction, ref, _delta, position) {
-        setBar((bar) => {
-            bar.width = parseFloat(ref.style.width);
-            bar.height = parseFloat(ref.style.height);
-            bar.x = position.x;
-            bar.y = position.y;
-        });
-    }
-
     return (
-        <StyledRnd
-            chartId={id}
-            width={bar.width}
-            height={bar.height}
-            x={bar.x}
-            y={bar.y}
-            onDragStop={onDragStop}
-            onResize={onResize}
-        >
+        <>
             <ResponsiveBar
                 {...bar}
                 axisBottom={bar.showXAxis ? bar.axisBottom : null}
                 axisLeft={bar.showYAxis ? bar.axisLeft : null}
                 onClick={(datum, event) => {
-                    console.log(datum);
                     setPosition({x: event.clientX, y: event.clientY});
                     setActiveDatum(datum);
                     onOpen();
@@ -84,7 +59,7 @@ const VisBarChart = ({id, initialState}: Param & {initialState?: BarState}) => {
                     />
                 )}
             </Portal>
-        </StyledRnd>
+        </>
     );
 };
 

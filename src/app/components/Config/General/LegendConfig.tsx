@@ -34,22 +34,22 @@ export default ({id}: Param) => {
 
     const addLegend = React.useCallback(() => {
         switch (activeChart?.type) {
-            case 'line':
+            case 'LINE':
                 setLine((draftState) => {
                     draftState.legends?.push(baseLegend[0]);
                 });
                 break;
-            case 'bar':
+            case 'BAR':
                 setBar((draftState) => {
                     draftState.legends?.push({...baseLegend[0], dataFrom: 'keys'});
                 });
                 break;
-            case 'pie':
+            case 'PIE':
                 setPie((draftState) => {
                     draftState.legends?.push(baseLegend[0]);
                 });
                 break;
-            case 'scatter':
+            case 'SCATTER':
                 setScatter((draftState) => {
                     draftState.legends?.push(baseLegend[0]);
                 });
@@ -58,13 +58,13 @@ export default ({id}: Param) => {
 
     const getLegends = React.useCallback(() => {
         switch (activeChart?.type) {
-            case 'line':
+            case 'LINE':
                 return line.legends;
-            case 'bar':
+            case 'BAR':
                 return bar.legends;
-            case 'pie':
+            case 'PIE':
                 return pie.legends ? pie.legends : [];
-            case 'scatter':
+            case 'SCATTER':
                 return scatter.legends;
         }
     }, [line.legends, bar.legends, activeChart?.type, pie.legends, scatter.legends]);
@@ -72,21 +72,21 @@ export default ({id}: Param) => {
     const deleteLegendByIndex = React.useCallback(
         (index: number) => {
             switch (activeChart?.type) {
-                case 'line':
+                case 'LINE':
                     setLine((draftState) => {
                         draftState.legends = draftState.legends?.filter((_legene, i) => i !== index);
                     });
                     break;
-                case 'bar':
+                case 'BAR':
                     setBar((draftState) => {
                         draftState.legends = draftState.legends?.filter((_legene, i) => i !== index);
                     });
                     break;
-                case 'pie':
+                case 'PIE':
                     setPie((draftState) => {
                         draftState.legends = draftState.legends?.filter((_legene, i) => i !== index);
                     });
-                case 'scatter':
+                case 'SCATTER':
                     setScatter((draftState) => {
                         draftState.legends = draftState.legends?.filter((_legene, i) => i !== index);
                     });
@@ -124,19 +124,19 @@ export default ({id}: Param) => {
                             <Form
                                 onValuesChange={(changedValues) => {
                                     switch (activeChart?.type) {
-                                        case 'line':
+                                        case 'LINE':
                                             setLine((draftState) => {
                                                 Object.assign(draftState.legends?.[index], changedValues);
                                             });
                                             break;
-                                        case 'bar':
+                                        case 'BAR':
                                             setBar((draftState) => {
                                                 Object.assign(draftState.legends?.[index], {
                                                     ...changedValues,
                                                     dataFrom: 'keys',
                                                 });
                                             });
-                                        case 'pie':
+                                        case 'PIE':
                                             setPie((pie) => {
                                                 const legend = {...pie.legends?.[index]};
                                                 const newLegend = Object.assign(legend, changedValues);
@@ -151,7 +151,7 @@ export default ({id}: Param) => {
                                                 };
                                             });
                                             break;
-                                        case 'scatter':
+                                        case 'SCATTER':
                                             setScatter((draftState) => {
                                                 Object.assign(draftState.legends?.[index], changedValues);
                                             });

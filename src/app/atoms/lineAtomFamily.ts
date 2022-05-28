@@ -7,6 +7,8 @@ import {LineSvgProps} from '@nivo/line';
 import {Param} from './appAtom';
 
 export interface LineState extends LineSvgProps {
+    type: 'LINE';
+    key: string;
     width: number;
     height: number;
     x: number;
@@ -26,6 +28,8 @@ export interface LineState extends LineSvgProps {
 }
 
 export const initialLineState: LineState = {
+    type: 'LINE',
+    key: '',
     x: 400,
     y: 100,
     scale: 1,
@@ -83,8 +87,8 @@ export const initialLineState: LineState = {
 export const lineAtomFamily = atomFamily(
     (param: Param) =>
         atom({
-            key: param.id,
             ...initialLineState,
+            key: param.id,
         }),
     (a: Param, b: Param) => a.id === b.id
 );

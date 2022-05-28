@@ -3,7 +3,9 @@ import {Box, Input, useToast} from '@chakra-ui/react';
 import {useRef} from 'react';
 
 interface Props {
-    value: number | string;
+    value?: number | string;
+    onChange?: (e: HTMLInputElement) => void;
+    defaultValue?: number | string;
     onFinishEditing?: (value: string) => boolean | void;
     validate?: (value: string) => boolean;
     message?: string;
@@ -63,7 +65,7 @@ export default function EditableDiv({value, onFinishEditing, validate, message}:
     }
 
     return (
-        <Box ref={ref} p={2} borderWidth={editing ? 1 : 0} borderStyle={'solid'} borderColor={'blue.500'}>
+        <Box ref={ref} p={2} borderWidth={1} borderStyle={'solid'} borderColor={editing ? 'blue.500' : 'white'}>
             <Input
                 ref={inputRef}
                 variant={'unstyled'}

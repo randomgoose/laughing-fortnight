@@ -3,9 +3,10 @@ import {Rnd} from 'react-rnd';
 import {Handle} from './StyledComponents';
 import classNames from 'classnames';
 import {useClickAway} from 'ahooks';
-import {useAtom} from 'jotai';
+import {atom, useAtom} from 'jotai';
 import {appAtom} from '../../atoms/appAtom';
 import DimensionIndicator from '../DimensionIndicator';
+import {selectChartAtom, selectedChartAtom} from '../../atoms/selection';
 
 interface Props {
     chartId: string;
@@ -15,14 +16,25 @@ interface Props {
     x: number;
     y: number;
     onResize: (e, direction, ref, delta, position) => void;
+    onResizeStop?: (e, direction, ref, delta, position) => void;
     onDragStop: (e, d) => void;
     onMouseDown?: () => void;
     className?: string;
     onClickAway?: () => void;
     tools?: React.ReactNode;
+    atom?: any;
 }
 
 const handles = ['top', 'topLeft', 'topRight', 'left', 'right', 'bottomLeft', 'bottom', 'bottomRight'];
+
+const activeKeyAtom = atom((get) => {
+    const atom = get(selectedChartAtom);
+    if (atom) {
+        return get(atom).key;
+    } else {
+        return null;
+    }
+});
 
 export default function StyledRnd({
     children,
@@ -33,13 +45,18 @@ export default function StyledRnd({
     onMouseDown,
     onResize,
     onDragStop,
+    onResizeStop,
     className,
     onClickAway,
     chartId,
     tools,
+    atom,
 }: Props) {
     const ref = React.useRef<HTMLDivElement>(null);
-    const [{activeKey, scale}, setApp] = useAtom(appAtom);
+    const [{scale}] = useAtom(appAtom);
+    const [, select] = useAtom(selectChartAtom);
+    const [] = useAtom(selectedChartAtom);
+    const [activeKey] = useAtom(activeKeyAtom);
 
     useClickAway(() => {
         // if (showHandles) setApp(app => ({ ...app, activeKey: '' }))
@@ -53,7 +70,7 @@ export default function StyledRnd({
                 <Handle
                     className={`Handle__${handle} bg-blue-600`}
                     pos={handle}
-                    showHandles={activeKey === chartId}
+                    showHandles={activeKey && chartId === activeKey}
                     scale={scale}
                 />
             );
@@ -66,10 +83,10 @@ export default function StyledRnd({
             <Rnd
                 scale={scale}
                 className={classNames(className, 'chart-box relative')}
-                style={{background: chartId === activeKey ? 'rgba(123, 97, 255, .05)' : ''}}
+                style={{background: activeKey && chartId === activeKey ? 'rgba(123, 97, 255, .05)' : ''}}
                 onMouseDown={() => {
                     onMouseDown && onMouseDown();
-                    setApp((app) => ({...app, activeKey: chartId}));
+                    atom && select(atom);
                 }}
                 resizeHandleComponent={createHandle(handles)}
                 size={{
@@ -82,9 +99,10 @@ export default function StyledRnd({
                 }}
                 onResize={onResize}
                 onDragStop={onDragStop}
+                onResizeStop={onResizeStop}
             >
                 {children}
-                {chartId === activeKey ? <DimensionIndicator width={width} height={height} /> : null}
+                {activeKey && chartId === activeKey ? <DimensionIndicator width={width} height={height} /> : null}
                 {tools && tools}
             </Rnd>
         </div>

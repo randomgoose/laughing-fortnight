@@ -2,10 +2,12 @@ import {BarSvgProps, BarDatum, ComputedBarDatum} from '@nivo/bar';
 import {baseLegend} from '../data/baseLegend';
 import {data} from '../data/baseBarData';
 import {atomFamily} from 'jotai/utils';
-import {atom} from 'jotai';
+import {atom, PrimitiveAtom} from 'jotai';
 import _ from 'lodash';
 
 export interface BarState extends BarSvgProps<BarDatum> {
+    readonly type: 'BAR';
+    key: string;
     data: BarDatum[];
     showXAxis: boolean;
     showYAxis: boolean;
@@ -30,6 +32,8 @@ type Param = {id: string};
 
 export const initialBarState: BarState = {
     // Base
+    type: 'BAR',
+    key: '',
     height: 300,
     width: 400,
     data: data,
@@ -92,7 +96,7 @@ export const initialBarState: BarState = {
     colorSchemeId: 'nivo',
 };
 
-export const barAtomFamily = atomFamily(
-    (param: Param) => atom({key: param.id, ...initialBarState}),
+export const barAtomFamily = atomFamily<Param, PrimitiveAtom<BarState>>(
+    (param: Param) => atom({...initialBarState, key: param.id}),
     (a: Param, b: Param) => a.id === b.id
 );

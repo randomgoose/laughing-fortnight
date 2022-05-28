@@ -1,9 +1,11 @@
-import {atom} from 'jotai';
+import {atom, PrimitiveAtom} from 'jotai';
 import {IColorScheme} from '../../types';
-import {barAtomFamily} from './barAtomFamily';
-import {chartsAtom} from './history';
+import {barAtomFamily, BarState} from './barAtomFamily';
+import {ChartAtom, chartAtomsAtom, saveHisotryAtom} from './history';
+import {lineAtomFamily, LineState} from './lineAtomFamily';
+import {selectChartAtom} from './selection';
 
-export type ChartType = 'line' | 'pie' | 'bar' | 'scatter' | 'radar' | 'calendar';
+export type ChartType = 'LINE' | 'PIE' | 'BAR' | 'SCATTER' | 'RADAR' | 'CALENDAR';
 export type WindowSize = 'sm' | 'md' | 'lg';
 export type Param = {id: string};
 
@@ -45,9 +47,25 @@ export const appAtom = atom<AppState>({
 
 export const numberOfChartsAtom = atom((get) => get(appAtom).charts.length);
 
-export const addChartAtom = atom(null, (_get, set, update: string) => {
-    const chartAtom = barAtomFamily({id: update});
-    set(chartsAtom, (prev) => [...prev, chartAtom]);
+export const chartAtomCreator = (type: ChartType, id: string) => {
+    switch (type) {
+        case 'BAR':
+            return barAtomFamily({id});
+        case 'LINE':
+            return lineAtomFamily({id});
+        default:
+            return lineAtomFamily({id});
+    }
+};
+
+export const addChartAtom = atom(null, (_get, set, update: {type: ChartType; id: string}) => {
+    const {type, id} = update;
+
+    const chartAtom = chartAtomCreator(type, id);
+    set(saveHisotryAtom, null);
+    // TODO: FIX TYPE ISSUE
+    set(chartAtomsAtom, (prev) => [...prev, chartAtom as PrimitiveAtom<BarState | LineState>]);
+    set(selectChartAtom, chartAtom as ChartAtom);
 });
 
 export const insertChartAtom = atom(null, (_get, set, update: Chart) => {
