@@ -1,13 +1,19 @@
 import {IColorScheme} from '../../types';
 
-export async function getAllColorSchemes(): Promise<IColorScheme[]> {
-    const colorSchemes: IColorScheme[] = await figma.clientStorage.getAsync('cm-color-schemes');
+// export async function getAllColorSchemes(): Promise<IColorScheme[]> {
+//     const colorSchemes: IColorScheme[] = await figma.clientStorage.getAsync('cm-color-schemes');
 
-    if (colorSchemes && colorSchemes.length > 0) {
-        return colorSchemes;
-    } else {
-        return [];
-    }
+//     if (colorSchemes && colorSchemes.length > 0) {
+//         return colorSchemes;
+//     } else {
+//         return [];
+//     }
+// }
+
+export async function getAllColorSchemes(): Promise<IColorScheme[]> {
+    const keys = (await figma.clientStorage.keysAsync()).filter((key) => key.startsWith('cm-color-scheme/'));
+    const schemes = await Promise.all(keys.map(async (key) => await figma.clientStorage.getAsync(key)));
+    return schemes;
 }
 
 export async function saveColorSchemes(schemes: IColorScheme[]) {

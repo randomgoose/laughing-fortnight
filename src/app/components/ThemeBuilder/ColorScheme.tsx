@@ -1,8 +1,7 @@
 import * as React from 'react';
 import {IconButton} from '@chakra-ui/button';
 import {FiEdit} from 'react-icons/fi';
-import Icon from '@chakra-ui/icon';
-import {Box} from '@chakra-ui/react';
+import {Box, Icon} from '@chakra-ui/react';
 import {IColorScheme} from '../../../types';
 
 export default function ColorScheme({

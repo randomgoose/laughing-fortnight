@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Rnd} from 'react-rnd';
 import {Handle} from './StyledComponents';
 import classNames from 'classnames';
-import {useClickAway} from 'ahooks';
+import {useClickAway} from 'react-use';
 import {atom, useAtom} from 'jotai';
 import {appAtom} from '../../atoms/appAtom';
 import DimensionIndicator from '../DimensionIndicator';
@@ -58,10 +58,10 @@ export default function StyledRnd({
     const [] = useAtom(selectedChartAtom);
     const [activeKey] = useAtom(activeKeyAtom);
 
-    useClickAway(() => {
+    useClickAway(ref, () => {
         // if (showHandles) setApp(app => ({ ...app, activeKey: '' }))
         onClickAway && onClickAway();
-    }, ref);
+    });
 
     function createHandle(handles: string[]) {
         const handleComponents = {};

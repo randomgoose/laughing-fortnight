@@ -10,7 +10,7 @@ import ScatterConfig from './components/Config/ScatterConfig/Config';
 import {Button, ConfigProvider} from 'antd';
 import 'tailwindcss/tailwind.css';
 import {appAtom, ChartType} from './atoms/appAtom';
-import {useAtom} from 'jotai';
+import {atom, useAtom} from 'jotai';
 import {Empty} from 'antd';
 import {useTranslation} from 'react-i18next';
 import Gallery from './components/Gallery';
@@ -21,12 +21,14 @@ import {undoAtom} from './atoms/history';
 import {Tab, TabList, TabPanel, TabPanels, Tabs, useToast} from '@chakra-ui/react';
 import {selectedAtomKeyAtom} from './atoms/selection';
 import ThemePanel from './components/ThemeBuilder/ThemePanel';
+import {colorSchemeAtoms, colorSchemeFamily} from './atoms/colors';
 
 function App() {
     const [{hideInterface, charts, selectionId}, setApp] = useAtom(appAtom);
     const {t} = useTranslation();
     const [, undo] = useAtom(undoAtom);
     const [key] = useAtom(selectedAtomKeyAtom);
+    const [, setSchemeAtoms] = useAtom(colorSchemeAtoms);
 
     const toast = useToast();
 
@@ -50,6 +52,7 @@ function App() {
                 .replace(')', '')
                 .split(',')
                 .map((i) => parseFloat(i));
+
             return {
                 svg: `<svg xmlns="http://www.w3.org/2000/svg">${box.querySelector('svg')?.innerHTML}</svg>`.replace(
                     /transparent/g,
@@ -112,20 +115,26 @@ function App() {
             try {
                 const {type, data} = await e.data.pluginMessage;
                 switch (type) {
-                    case 'get-chart-data':
-                        // dispatch(loadState(JSON.parse(data)));
-                        break;
                     case 'set-selection':
                         setApp((app) => ({...app, selectionId: data}));
                         break;
                     case GET_ALL_COLOR_SCHEMES:
                         if (data) {
+                            setSchemeAtoms((prev) => [
+                                ...prev,
+                                ...data.map((datum) => {
+                                    const {id, ...rest} = datum;
+                                    return colorSchemeFamily({id: datum.id, initial: rest});
+                                }),
+                            ]);
                             setApp((state) => ({...state, colorSchemes: data}));
                         }
                         break;
                     default:
                 }
-            } catch (err) {}
+            } catch (err) {
+                console.log(err);
+            }
         };
     }, []);
 
@@ -152,7 +161,11 @@ function App() {
                             </TabList>
                             <TabPanels>
                                 <TabPanel p={0}>
-                                    {key ? renderConfig(activeChart.type) : <Empty description={t('Select a chart')} />}
+                                    {key && activeChart ? (
+                                        renderConfig(activeChart.type)
+                                    ) : (
+                                        <Empty description={t('Select a chart')} />
+                                    )}
                                 </TabPanel>
                                 <TabPanel p={0}>
                                     <ThemePanel />

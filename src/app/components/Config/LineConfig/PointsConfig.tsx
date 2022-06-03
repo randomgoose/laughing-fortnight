@@ -1,6 +1,6 @@
-import {useClickAway} from 'ahooks';
-import {Button, Form, Radio, Slider, Space, Switch, Typography} from 'antd';
 import * as React from 'react';
+import {useClickAway} from 'react-use';
+import {Button, Form, Radio, Slider, Space, Switch, Typography} from 'antd';
 import {SketchPicker} from 'react-color';
 import {useTranslation} from 'react-i18next';
 import {FcOrgUnit} from 'react-icons/fc';
@@ -19,9 +19,9 @@ export default function PointsConfig({id}: Param) {
 
     const {t} = useTranslation();
 
-    useClickAway(() => {
+    useClickAway(ref, () => {
         setShowColorPicker(false);
-    }, ref);
+    });
 
     return (
         <>

@@ -1,6 +1,6 @@
+import * as React from 'react';
 import {Tabs} from 'antd';
 import {useAtom} from 'jotai';
-import React from 'react';
 import {FcCalendar, FcSettings} from 'react-icons/fc';
 import {appAtom} from '../../../atoms/appAtom';
 import {StyledTabPane} from '../../StyledComponents/StyledComponents';

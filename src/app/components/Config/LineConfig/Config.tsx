@@ -1,3 +1,4 @@
+//@ts-nocheck
 import * as React from 'react';
 import {Tabs} from 'antd';
 import GridConfig from './GridConfig';
@@ -36,7 +37,6 @@ export default function LineConfig() {
                 <StyledTabPane key={'points'} tab={<FcOrgUnit />}>
                     <PointsConfig id={activeKey} />
                 </StyledTabPane>
-                <StyledTabPane key={'code'} tab={<FcViewDetails />}></StyledTabPane>
             </Tabs>
         </>
     );

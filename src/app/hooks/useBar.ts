@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import cryptoRandomString from 'crypto-random-string';
 import {colorSchemes, ColorSchemeId} from '@nivo/colors';
 import {useApp} from './useApp';
-import useDeepCompareEffect from 'use-deep-compare-effect';
+// import useDeepCompareEffect from 'use-deep-compare-effect';
 import {saveHisotryAtom} from '../atoms/history';
 
 export function useBar(id: string) {
@@ -13,20 +13,20 @@ export function useBar(id: string) {
     const {app} = useApp();
     const [, save] = useAtom(saveHisotryAtom);
 
-    useDeepCompareEffect(() => {
-        if (bar.colorSchemeId in colorSchemes) {
-            setBar((state) => {
-                state.colors = {scheme: bar.colorSchemeId as ColorSchemeId};
-            });
-        } else {
-            setBar((state) => {
-                const colorScheme = app.colorSchemes.find((item) => item.id === bar.colorSchemeId);
-                if (colorScheme) {
-                    state.colors = colorScheme.colors;
-                }
-            });
-        }
-    }, [bar.colorSchemeId, app.colorSchemes]);
+    // useDeepCompareEffect(() => {
+    //     if (bar.colorSchemeId in colorSchemes) {
+    //         setBar((state) => {
+    //             state.colors = {scheme: bar.colorSchemeId as ColorSchemeId};
+    //         });
+    //     } else {
+    //         setBar((state) => {
+    //             const colorScheme = app.colorSchemes.find((item) => item.id === bar.colorSchemeId);
+    //             if (colorScheme) {
+    //                 state.colors = colorScheme.colors;
+    //             }
+    //         });
+    //     }
+    // }, [bar.colorSchemeId, app.colorSchemes]);
 
     function setData(index: number, key: string, value: number) {
         setBar((draftState) => {

@@ -1,4 +1,4 @@
-import {useClickAway} from 'ahooks';
+import {useClickAway} from 'react-use';
 import {Button} from 'antd';
 import * as React from 'react';
 import {ColorResult, RGBColor, SketchPicker} from 'react-color';
@@ -13,7 +13,7 @@ export default function ColorPicker({color, onChange}: ColorPickerProps) {
 
     const ref = React.useRef(null);
 
-    useClickAway(() => setVisible(false), ref);
+    useClickAway(ref, () => setVisible(false));
 
     return (
         <div className={'ColorPicker__wrapper z-50'} ref={ref} style={{position: 'relative', width: 'fit-content'}}>

@@ -1,10 +1,51 @@
 import {atom, PrimitiveAtom} from 'jotai';
-import {SAVE_COLOR_SCHEMES} from '../../plugin/message-types';
+import {atomFamily} from 'jotai/utils';
+import {SAVE_COLOR_SCHEME} from '../../plugin/message-types';
 import {IColorScheme} from '../../types';
+import {colorSchemes} from '@nivo/colors';
 
 export type ColorSchemeAtom = PrimitiveAtom<IColorScheme>;
 
 export const colorSchemeAtoms = atom<ColorSchemeAtom[]>([]);
+
+export type ColorSchemeParam = {
+    id: string;
+    initial?: Omit<IColorScheme, 'id'>;
+};
+
+export const colorSchemeFamily = atomFamily<ColorSchemeParam, ColorSchemeAtom | PrimitiveAtom<{scheme: string}>>(
+    (param: ColorSchemeParam) => {
+        if (param.id in colorSchemes) {
+            return atom({scheme: param.id});
+        } else {
+            return atom(
+                param.initial
+                    ? {...param.initial, id: param.id}
+                    : {
+                          colors: [
+                              '#0000b3',
+                              '#0010d9',
+                              '#0020ff',
+                              '#0040ff',
+                              '#0060ff',
+                              '#0080ff',
+                              '#009fff',
+                              '#00bfff',
+                              '#00ffff',
+                          ],
+                          name: 'New Scheme',
+                          id: param.id,
+                      }
+            );
+        }
+    },
+    (a: ColorSchemeParam, b: ColorSchemeParam) => a.id === b.id
+);
+
+export const getColorSchemesAtom = atom((get) => {
+    const atoms = get(colorSchemeAtoms);
+    return atoms.map((atom) => get(atom));
+});
 
 export const addColorSchemeAtom = atom(null, (_get, set, update: PrimitiveAtom<IColorScheme>) => {
     set(colorSchemeAtoms, (prev) => [...prev, update]);
@@ -18,7 +59,7 @@ export const saveColorScheme = (scheme: IColorScheme) => {
     return window.parent.postMessage(
         {
             pluginMessage: {
-                type: SAVE_COLOR_SCHEMES,
+                type: SAVE_COLOR_SCHEME,
                 data: {scheme},
             },
         },

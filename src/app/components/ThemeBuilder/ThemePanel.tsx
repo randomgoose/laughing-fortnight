@@ -12,20 +12,26 @@ import {
     PopoverBody,
     PopoverContent,
     PopoverTrigger,
+    Select,
+    Editable,
+    EditablePreview,
+    EditableInput,
 } from '@chakra-ui/react';
-import {atom, useAtom} from 'jotai';
+import {useAtom} from 'jotai';
 import {
     addColorSchemeAtom,
     ColorSchemeAtom,
     colorSchemeAtoms,
+    colorSchemeFamily,
     deleteColorSchemeAtom,
     saveColorScheme,
 } from '../../atoms/colors';
-import {FiChevronLeft, FiEdit, FiMinus, FiMoreHorizontal, FiPlus, FiTrash} from 'react-icons/fi';
+import {FiChevronLeft, FiEdit, FiMenu, FiMinus, FiMoreHorizontal, FiPlus, FiTrash, FiDroplet} from 'react-icons/fi';
 import {Empty} from 'antd';
 import cryptoRandomString from 'crypto-random-string';
 import EditableDiv from '../CustomInput/EditableDiv';
-import {HexColorPicker} from 'react-colorful';
+import {HexColorInput, HexColorPicker} from 'react-colorful';
+import {Reorder, useDragControls} from 'framer-motion';
 
 export default function ThemePanel() {
     const [atoms] = useAtom(colorSchemeAtoms);
@@ -33,12 +39,9 @@ export default function ThemePanel() {
     const [activeAtom, setActiveAtom] = React.useState<ColorSchemeAtom | null>(null);
 
     const selectAtom = (atom: ColorSchemeAtom) => setActiveAtom(atom);
+
     const addAtom = () => {
-        const schemeAtom = atom({
-            id: cryptoRandomString({length: 12}),
-            name: 'new scheme',
-            colors: ['#000'],
-        });
+        const schemeAtom = colorSchemeFamily({id: cryptoRandomString({length: 12})}) as ColorSchemeAtom;
         add(schemeAtom);
     };
 
@@ -88,7 +91,7 @@ function ColorSchemeEntry({
     onSelect: (atom: ColorSchemeAtom) => void;
     onEdit: (atom: ColorSchemeAtom) => void;
 }) {
-    const [scheme] = useAtom(atom);
+    const [scheme, setScheme] = useAtom(atom);
     const [, del] = useAtom(deleteColorSchemeAtom);
 
     const onEditHandler = () => {
@@ -140,14 +143,21 @@ function ColorSchemeEntry({
             borderRadius={4}
             cursor={'pointer'}
             onClick={onSelectHandler}
-            _notLast={{mb: 1}}
-            justify={'space-between'}
+            _notLast={{mb: 0.5}}
             onDoubleClick={onEditHandler}
             _hover={{
                 background: 'gray.100',
             }}
         >
-            {scheme.name}
+            <FiDroplet style={{marginRight: 4}} />
+            <Editable
+                w={'full'}
+                defaultValue={scheme.name}
+                onSubmit={(nextValue) => setScheme((prev) => ({...prev, name: nextValue}))}
+            >
+                <EditablePreview />
+                <EditableInput rounded={'sm'} />
+            </Editable>
             {menu}
         </Flex>
     );
@@ -168,6 +178,10 @@ function ColorSchemeEditor({atom, onClose}: {atom: ColorSchemeAtom; onClose: (at
         });
     };
 
+    const deleteColor = (index) => {
+        setScheme((scheme) => ({...scheme, colors: scheme.colors.filter((_color, i) => i !== index)}));
+    };
+
     React.useEffect(() => {
         saveColorScheme({
             id: scheme.id,
@@ -176,36 +190,81 @@ function ColorSchemeEditor({atom, onClose}: {atom: ColorSchemeAtom; onClose: (at
         });
     }, [scheme.colors, scheme.name]);
 
-    const colorList = scheme.colors.map((color, index) => (
-        <Flex key={index} align={'center'}>
-            <Popover trigger={'click'}>
-                <PopoverTrigger>
-                    <Box
-                        flexShrink={0}
-                        mr={0.5}
-                        bg={color}
-                        w={5}
-                        h={5}
-                        borderWidth={1}
-                        borderStyle={'solid'}
-                        borderColor={'gray.100'}
-                        borderRadius={4}
-                    />
-                </PopoverTrigger>
-                <PopoverContent w={'fit-content'}>
-                    <PopoverBody w={'fit-content'}>
-                        <HexColorPicker
-                            onChange={(newColor) => {
-                                setColor(index, newColor);
-                            }}
-                        />
-                    </PopoverBody>
-                </PopoverContent>
-            </Popover>
-            <EditableDiv value={color} />
-            <IconButton aria-label="delete" icon={<FiMinus />} ml={2} variant={'ghost'} size={'xs'} />
-        </Flex>
-    ));
+    const colorEntries = scheme.colors.map((color, index) => ({color, index}));
+
+    const colorList = (
+        <Reorder.Group
+            axis="y"
+            values={colorEntries}
+            onReorder={(newOrder) => {
+                console.log(newOrder);
+                setScheme((prev) => ({...prev, colors: newOrder.map((entry) => entry.color)}));
+            }}
+        >
+            {colorEntries.map((entry, index) => (
+                <ColorEntry
+                    entry={entry}
+                    key={index}
+                    onChange={(newColor) => {
+                        setColor(index, newColor);
+                    }}
+                    onDelete={() => deleteColor(index)}
+                />
+                // <Reorder.Item key={index} value={color}>
+                //     <Flex align={'center'}>
+                //         <Popover trigger={'click'}>
+                //             <PopoverTrigger>
+                //                 <Box
+                //                     flexShrink={0}
+                //                     mr={0.5}
+                //                     bg={color}
+                //                     w={5}
+                //                     h={5}
+                //                     borderWidth={1}
+                //                     borderStyle={'solid'}
+                //                     borderColor={'gray.100'}
+                //                     borderRadius={4}
+                //                 />
+                //             </PopoverTrigger>
+                //             <PopoverContent w={'fit-content'}>
+                //                 <PopoverBody w={'fit-content'} gridGap={2}>
+                //                     <HexColorPicker
+                //                         color={color}
+                //                         onChange={(newColor) => {
+                //                             setColor(index, newColor);
+                //                         }}
+                //                     />
+                //                     <Flex>
+                //                         <Select
+                //                             size={"xs"}
+                //                             onChange={e => setFormat(e.target.value)}
+                //                             value={format}
+                //                         >
+                //                             <option value={"hex"}>Hex</option>
+                //                             <option value={"rgb"}>RGB</option>
+                //                         </Select>
+
+                //                         <HexColorInput color={color} onChange={(newColor) => {
+                //                             setColor(index, newColor);
+                //                         }} />
+                //                     </Flex>
+                //                 </PopoverBody>
+                //             </PopoverContent>
+                //         </Popover>
+                //         <EditableDiv value={color} />
+                //         <IconButton
+                //             aria-label="delete"
+                //             icon={<FiMinus />}
+                //             ml={2}
+                //             variant={'ghost'}
+                //             size={'xs'}
+                //             onClick={() => deleteColor(index)}
+                //         />
+                //     </Flex>
+                // </Reorder.Item>
+            ))}
+        </Reorder.Group>
+    );
 
     return (
         <Box>
@@ -238,5 +297,80 @@ function ColorSchemeEditor({atom, onClose}: {atom: ColorSchemeAtom; onClose: (at
                 {colorList}
             </Box>
         </Box>
+    );
+}
+
+function ColorEntry({
+    entry,
+    onChange,
+    onDelete,
+}: {
+    entry: {color: string; index: number};
+    onChange: (newColor: string) => void;
+    onDelete: () => void;
+}) {
+    const [format, setFormat] = React.useState('hex');
+    const controls = useDragControls();
+
+    return (
+        <Reorder.Item
+            value={entry}
+            dragListener={false}
+            style={{display: 'flex', alignItems: 'center', position: 'relative'}}
+            dragControls={controls}
+            role={'group'}
+        >
+            <Box opacity={0} _groupHover={{opacity: 1}}>
+                <FiMenu
+                    size={8}
+                    color="gray"
+                    style={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: 0,
+                        transform: 'translate(-120%, -50%)',
+                    }}
+                    onPointerDown={(e) => controls.start(e)}
+                    cursor={'pointer'}
+                />
+            </Box>
+            <Popover trigger={'click'}>
+                <PopoverTrigger>
+                    <Box
+                        flexShrink={0}
+                        mr={0.5}
+                        bg={entry.color}
+                        w={5}
+                        h={5}
+                        borderWidth={1}
+                        borderStyle={'solid'}
+                        borderColor={'gray.100'}
+                        borderRadius={4}
+                    />
+                </PopoverTrigger>
+                <PopoverContent w={'fit-content'}>
+                    <PopoverBody w={'fit-content'} gridGap={2}>
+                        <HexColorPicker color={entry.color} onChange={onChange} />
+                        <Flex>
+                            <Select size={'xs'} onChange={(e) => setFormat(e.target.value)} value={format}>
+                                <option value={'hex'}>Hex</option>
+                                <option value={'rgb'}>RGB</option>
+                            </Select>
+
+                            <HexColorInput color={entry.color} onChange={onChange} />
+                        </Flex>
+                    </PopoverBody>
+                </PopoverContent>
+            </Popover>
+            <EditableDiv value={entry.color} />
+            <IconButton
+                aria-label="delete"
+                icon={<FiMinus />}
+                ml={2}
+                variant={'ghost'}
+                size={'xs'}
+                onClick={onDelete}
+            />
+        </Reorder.Item>
     );
 }

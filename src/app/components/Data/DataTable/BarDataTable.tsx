@@ -1,7 +1,6 @@
 import {PlusOutlined} from '@ant-design/icons';
-import {Box, Flex, useToast} from '@chakra-ui/react';
+import {Box, Flex, useToast, IconButton, Button} from '@chakra-ui/react';
 import {Table} from 'antd';
-import {IconButton, Button} from '@chakra-ui/react';
 import cryptoRandomString from 'crypto-random-string';
 import * as React from 'react';
 import {useTranslation} from 'react-i18next';
@@ -157,7 +156,7 @@ export default function BarDataTable({id, atom}: Param & {atom: PrimitiveAtom<Ba
                             <Button
                                 size={'xs'}
                                 variant={'outlined'}
-                                icon={<PlusOutlined />}
+                                leftIcon={<PlusOutlined />}
                                 onClick={() => {
                                     addKey(cryptoRandomString({length: 4}));
                                 }}

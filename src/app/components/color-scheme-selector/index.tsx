@@ -3,15 +3,14 @@ import {Form, Select, Space} from 'antd';
 import {HighlightOutlined} from '@ant-design/icons';
 import {useTranslation} from 'react-i18next';
 import {colorSchemes} from '@nivo/colors';
-import {useApp} from '../../hooks/useApp';
+import {getColorSchemesAtom} from '../../atoms/colors';
+import {useAtom} from 'jotai';
 
 const colorSchemeList = Object.keys(colorSchemes);
 
 export default function ColorSchemeSelector() {
     const {t} = useTranslation();
-    const {
-        app: {colorSchemes: customSchemes},
-    } = useApp();
+    const [customSchemes] = useAtom(getColorSchemesAtom);
 
     return (
         <Form.Item
@@ -27,7 +26,7 @@ export default function ColorSchemeSelector() {
                 {customSchemes.length > 0 ? (
                     <Select.OptGroup label={'Custom colors'}>
                         {customSchemes.map((scheme) => (
-                            <Select.Option key={scheme.name} value={scheme.id}>
+                            <Select.Option key={scheme.id} value={scheme.id}>
                                 {scheme.name}
                             </Select.Option>
                         ))}

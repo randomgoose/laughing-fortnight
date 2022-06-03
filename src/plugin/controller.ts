@@ -66,10 +66,10 @@ figma.ui.onmessage = async (msg) => {
             break;
         case SELECTION_CHANGE:
             figma.currentPage.selection;
-            const {scheme} = msg.data;
-            await saveColorScheme(scheme);
             break;
         case SAVE_COLOR_SCHEME:
+            const {scheme} = msg.data;
+            await saveColorScheme(scheme);
             break;
         default:
             console.log(msg.type);

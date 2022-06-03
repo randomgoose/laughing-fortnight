@@ -4,7 +4,7 @@ import * as React from 'react';
 import {ArrowLeftOutlined} from '@ant-design/icons';
 import {Space, Button, Form, Input} from 'antd';
 import Label from '../../Typography/Label';
-import {useClickAway} from 'ahooks';
+import {useClickAway} from 'react-use';
 import {SketchPicker} from 'react-color';
 
 export default function () {
@@ -12,9 +12,9 @@ export default function () {
     const ref = React.useRef(null);
     const {activeSerie} = useSelector((state: RootState) => state.line);
 
-    useClickAway(() => {
+    useClickAway(ref, () => {
         setDisplayColorPicker(false);
-    }, ref);
+    });
 
     return (
         <div style={{padding: 12}}>
