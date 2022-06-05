@@ -12,6 +12,8 @@
     "dependencies": {
         "@ant-design/icons": "^4.6.2",
         "@chakra-ui/react": "^1.8.8",
+        "@dnd-kit/core": "^6.0.3",
+        "@dnd-kit/sortable": "^7.0.0",
         "@emotion/react": "^11",
         "@emotion/styled": "^11",
         "@nivo/bar": "^0.73.1",

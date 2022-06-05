@@ -8,11 +8,6 @@ import {
     MenuButton,
     MenuItem,
     MenuList,
-    Popover,
-    PopoverBody,
-    PopoverContent,
-    PopoverTrigger,
-    Select,
     Editable,
     EditablePreview,
     EditableInput,
@@ -26,11 +21,12 @@ import {
     deleteColorSchemeAtom,
     saveColorScheme,
 } from '../../atoms/colors';
-import {FiChevronLeft, FiEdit, FiMinus, FiMoreHorizontal, FiPlus, FiTrash, FiDroplet} from 'react-icons/fi';
+import {FiChevronLeft, FiEdit, FiMoreHorizontal, FiPlus, FiTrash, FiDroplet} from 'react-icons/fi';
 import {Empty} from 'antd';
 import cryptoRandomString from 'crypto-random-string';
-import EditableDiv from '../CustomInput/EditableDiv';
-import {HexColorInput, HexColorPicker} from 'react-colorful';
+import ColorEntry from './ColorEntry';
+import {useImmerAtom} from 'jotai/immer';
+import {Reorder} from 'framer-motion';
 
 export default function ThemePanel() {
     const [atoms] = useAtom(colorSchemeAtoms);
@@ -163,17 +159,12 @@ function ColorSchemeEntry({
 }
 
 function ColorSchemeEditor({atom, onClose}: {atom: ColorSchemeAtom; onClose: (atom) => void}) {
-    const [scheme, setScheme] = useAtom(atom);
+    const [scheme, setScheme] = useImmerAtom(atom);
 
-    const setColor = (index: number, color: string) => {
-        setScheme((prev) => {
-            const {colors} = prev;
-            const newColors = [...colors];
-            newColors.splice(index, 1, color);
-            return {
-                ...prev,
-                colors: newColors,
-            };
+    const setColor = (id: string, newColor: string) => {
+        setScheme((draft) => {
+            const color = draft.colors.find((color) => color.id === id);
+            color && (color.value = newColor);
         });
     };
 
@@ -189,16 +180,34 @@ function ColorSchemeEditor({atom, onClose}: {atom: ColorSchemeAtom; onClose: (at
         });
     }, [scheme.colors, scheme.name]);
 
-    const colorList = scheme.colors.map((color, index) => (
-        <ColorEntry
-            color={color}
-            key={index}
-            onChange={(newColor) => {
-                setColor(index, newColor);
+    const colorList = (
+        <Reorder.Group
+            values={scheme.colors.map((color) => color.id)}
+            onReorder={(newOrder) => {
+                setScheme((draft) => {
+                    draft.colors = newOrder.map((id) => {
+                        const color = scheme.colors.find((color) => color.id === id);
+                        if (color) {
+                            return color;
+                        } else {
+                            return {id, value: '#ffffff'};
+                        }
+                    });
+                });
             }}
-            onDelete={() => deleteColor(index)}
-        />
-    ));
+        >
+            {scheme.colors.map((color, index) => (
+                <ColorEntry
+                    color={color}
+                    key={color.id}
+                    onChange={(newColor) => {
+                        setColor(color.id, newColor);
+                    }}
+                    onDelete={() => deleteColor(index)}
+                />
+            ))}
+        </Reorder.Group>
+    );
 
     return (
         <Box>
@@ -223,7 +232,10 @@ function ColorSchemeEditor({atom, onClose}: {atom: ColorSchemeAtom; onClose: (at
                         size={'xs'}
                         variant={'ghost'}
                         onClick={() => {
-                            setScheme((prev) => ({...prev, colors: [...prev.colors, '#fff']}));
+                            setScheme((prev) => ({
+                                ...prev,
+                                colors: [...prev.colors, {id: cryptoRandomString({length: 12}), value: '#ffffff'}],
+                            }));
                         }}
                         aria-label={'add color scheme'}
                     />
@@ -231,61 +243,5 @@ function ColorSchemeEditor({atom, onClose}: {atom: ColorSchemeAtom; onClose: (at
                 {colorList}
             </Box>
         </Box>
-    );
-}
-
-function ColorEntry({
-    color,
-    onChange,
-    onDelete,
-}: {
-    color: string;
-    onChange: (newColor: string) => void;
-    onDelete: () => void;
-}) {
-    const [format, setFormat] = React.useState('hex');
-
-    return (
-        <Flex align={'center'} position={'relative'} role={'group'}>
-            <Popover trigger={'click'}>
-                <PopoverTrigger>
-                    <Box
-                        flexShrink={0}
-                        mr={0.5}
-                        bg={color}
-                        w={5}
-                        h={5}
-                        borderWidth={1}
-                        borderStyle={'solid'}
-                        borderColor={'gray.100'}
-                        borderRadius={4}
-                    />
-                </PopoverTrigger>
-                <PopoverContent w={'fit-content'}>
-                    <PopoverBody w={'fit-content'} gridGap={2}>
-                        <HexColorPicker color={color} onChange={onChange} />
-                        <Flex>
-                            <Select size={'xs'} onChange={(e) => setFormat(e.target.value)} value={format}>
-                                <option value={'hex'}>Hex</option>
-                                <option value={'rgb'}>RGB</option>
-                            </Select>
-
-                            <HexColorInput color={color} onChange={onChange} />
-                        </Flex>
-                    </PopoverBody>
-                </PopoverContent>
-            </Popover>
-            <EditableDiv value={color} />
-            <Flex>
-                <IconButton
-                    aria-label="delete"
-                    icon={<FiMinus />}
-                    ml={2}
-                    variant={'ghost'}
-                    size={'xs'}
-                    onClick={onDelete}
-                />
-            </Flex>
-        </Flex>
     );
 }

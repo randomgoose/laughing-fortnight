@@ -1,6 +1,7 @@
 import {atom, PrimitiveAtom, SetStateAction} from 'jotai';
 import {BarState} from './barAtomFamily';
 import {LineState} from './lineAtomFamily';
+import {selectChartAtom} from './selection';
 
 export type ChartAtom = PrimitiveAtom<BarState | LineState>;
 
@@ -37,6 +38,8 @@ export const undoAtom = atom(
                     return prev.length > 0 && get(prev[index]) === chart ? prev[index] : atom(chart);
                 });
             });
+
+            set(selectChartAtom, get(internalChartAtomsAtom)[0]);
 
             set(historyAtom, rest);
         }

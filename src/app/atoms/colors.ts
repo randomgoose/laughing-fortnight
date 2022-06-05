@@ -3,6 +3,7 @@ import {atomFamily} from 'jotai/utils';
 import {SAVE_COLOR_SCHEME} from '../../plugin/message-types';
 import {IColorScheme} from '../../types';
 import {colorSchemes} from '@nivo/colors';
+import cryptoRandomString from 'crypto-random-string';
 
 export type ColorSchemeAtom = PrimitiveAtom<IColorScheme>;
 
@@ -32,7 +33,10 @@ export const colorSchemeFamily = atomFamily<ColorSchemeParam, ColorSchemeAtom | 
                               '#009fff',
                               '#00bfff',
                               '#00ffff',
-                          ],
+                          ].map((hex) => ({
+                              id: cryptoRandomString({length: 12}),
+                              value: hex,
+                          })),
                           name: 'New Scheme',
                           id: param.id,
                       }

@@ -11,9 +11,9 @@ import VisBarChart from './VisBarChart';
 import VisLineChart from './VisLineChart';
 
 const updateAtom = atom(null, (get, set, update: SetStateAction<BarState | LineState>) => {
-    const atom = get(selectedAtom);
-    if (atom) {
-        set(atom, update);
+    const selected = get(selectedAtom);
+    if (selected) {
+        set(selected, update);
     }
 });
 
@@ -23,7 +23,7 @@ export default function VisChart({atom}: {atom: ChartAtom}) {
     const [, save] = useAtom(saveHisotryAtom);
 
     useDeepCompareEffect(() => {
-        console.log('canva', chart.data.length);
+        console.log('canva', chart.width);
     }, [chart]);
 
     const renderChart = (type: ChartType, atom) => {
@@ -49,6 +49,7 @@ export default function VisChart({atom}: {atom: ChartAtom}) {
                 set((prev) => ({...prev, x: d.x, y: d.y}));
             }}
             onResize={(_e, _direction, ref, _delta, position) => {
+                console.log(ref.style.width);
                 set((prev) => ({
                     ...prev,
                     width: parseFloat(ref.style.width),

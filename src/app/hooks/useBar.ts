@@ -3,38 +3,21 @@ import {useImmerAtom} from 'jotai/immer';
 import {barAtomFamily, BarState} from '../atoms/barAtomFamily';
 import * as _ from 'lodash';
 import cryptoRandomString from 'crypto-random-string';
-import {colorSchemes, ColorSchemeId} from '@nivo/colors';
-import {useApp} from './useApp';
-// import useDeepCompareEffect from 'use-deep-compare-effect';
 import {saveHisotryAtom} from '../atoms/history';
 
 export function useBar(id: string) {
     const [bar, setBar] = useImmerAtom(barAtomFamily({id}));
-    const {app} = useApp();
     const [, save] = useAtom(saveHisotryAtom);
 
-    // useDeepCompareEffect(() => {
-    //     if (bar.colorSchemeId in colorSchemes) {
-    //         setBar((state) => {
-    //             state.colors = {scheme: bar.colorSchemeId as ColorSchemeId};
-    //         });
-    //     } else {
-    //         setBar((state) => {
-    //             const colorScheme = app.colorSchemes.find((item) => item.id === bar.colorSchemeId);
-    //             if (colorScheme) {
-    //                 state.colors = colorScheme.colors;
-    //             }
-    //         });
-    //     }
-    // }, [bar.colorSchemeId, app.colorSchemes]);
-
     function setData(index: number, key: string, value: number) {
+        save(null);
         setBar((draftState) => {
             draftState.data[index][key] = value;
         });
     }
 
     function setKey(key: string, newKey: string) {
+        save(null);
         setBar((draftState) => {
             draftState.data.map((datum) => {
                 datum[newKey] = datum[key];
@@ -55,6 +38,7 @@ export function useBar(id: string) {
     }
 
     function addKey(key: string) {
+        save(null);
         setBar((draftState) => {
             draftState.data.map((datum) => (datum[key] = (Math.random() * 100).toFixed(0)));
             draftState.keys?.push(key);
@@ -64,23 +48,6 @@ export function useBar(id: string) {
     function setPartialState(state: Partial<BarState>) {
         save(null);
         setBar((draftState) => Object.assign(draftState, state));
-    }
-
-    function setColorScheme({scheme}: {scheme: string | ColorSchemeId}) {
-        console.log(scheme);
-        if (scheme in colorSchemes) {
-            console.log('use nivo colors');
-            setBar((state) => {
-                state.colors = {scheme: scheme as ColorSchemeId};
-            });
-        } else {
-            const localScheme = app.colorSchemes.find((item) => item.id === scheme);
-            if (localScheme) {
-                setBar((state) => {
-                    state.colors = localScheme.colors;
-                });
-            }
-        }
     }
 
     function addRow() {
@@ -99,6 +66,5 @@ export function useBar(id: string) {
         addKey,
         setPartialState,
         addRow,
-        setColorScheme,
     };
 }

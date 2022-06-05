@@ -1,4 +1,3 @@
-//@ts-nocheck
 import {BarDatum, ResponsiveBar} from '@nivo/bar';
 import * as React from 'react';
 import _ from 'lodash';
@@ -11,19 +10,14 @@ import {Heading} from '@chakra-ui/layout';
 import {useBar} from '../../hooks/useBar';
 import {InputNumber} from 'antd';
 import {PrimitiveAtom, useAtom} from 'jotai';
-import {colorSchemeFamily} from '../../atoms/colors';
-import {IColorScheme} from '../../../types';
+import {useColorScheme} from '../../hooks';
 
 const VisBarChart = ({initialState, atom}: {initialState?: BarState; atom: PrimitiveAtom<BarState>}) => {
     const [bar] = useAtom(atom);
-    const [colorScheme] = useAtom<IColorScheme | {scheme: string}>(colorSchemeFamily({id: bar.colorSchemeId}));
     const {setBar, setData} = useBar(bar.key);
     const [position, setPosition] = React.useState({x: 0, y: 0});
     const [activeDatum, setActiveDatum] = React.useState<ComputedDatum<BarDatum> | null>(null);
     const {isOpen, onOpen, onClose} = useDisclosure();
-    const [colors, setColors] = React.useState<{scheme: string} | IColorScheme['colors']>(
-        'scheme' in colorScheme ? colorScheme : colorScheme.colors
-    );
 
     React.useEffect(() => {
         if (initialState)
@@ -32,13 +26,7 @@ const VisBarChart = ({initialState, atom}: {initialState?: BarState; atom: Primi
             });
     }, []);
 
-    React.useEffect(() => {
-        if ('scheme' in colorScheme) {
-            setColors(colorScheme);
-        } else {
-            setColors(colorScheme.colors);
-        }
-    }, [colorScheme, bar.colorSchemeId]);
+    const {colors} = useColorScheme(bar.colorSchemeId);
 
     return (
         <>

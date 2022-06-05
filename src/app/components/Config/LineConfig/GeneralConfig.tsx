@@ -3,7 +3,7 @@ import {Space, Slider, Select, Form, Switch, Typography} from 'antd';
 import MarginInput from '../../CustomInput/MarginInput';
 import {AreaChartOutlined, ColumnWidthOutlined} from '@ant-design/icons';
 import {FcSettings} from 'react-icons/fc';
-import _ from 'lodash';
+import * as _ from 'lodash';
 import {useTranslation} from 'react-i18next';
 import {useLine} from '../../../hooks/useLine';
 import {Param} from '../../../atoms/appAtom';

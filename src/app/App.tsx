@@ -10,7 +10,7 @@ import ScatterConfig from './components/Config/ScatterConfig/Config';
 import {Button, ConfigProvider} from 'antd';
 import 'tailwindcss/tailwind.css';
 import {appAtom, ChartType} from './atoms/appAtom';
-import {atom, useAtom} from 'jotai';
+import {useAtom} from 'jotai';
 import {Empty} from 'antd';
 import {useTranslation} from 'react-i18next';
 import Gallery from './components/Gallery';
@@ -20,7 +20,7 @@ import {GET_ALL_COLOR_SCHEMES} from '../plugin/message-types';
 import {undoAtom} from './atoms/history';
 import {Tab, TabList, TabPanel, TabPanels, Tabs, useToast} from '@chakra-ui/react';
 import {selectedAtomKeyAtom} from './atoms/selection';
-import ThemePanel from './components/ThemeBuilder/ThemePanel';
+import ThemePanel from './components/ThemePanel';
 import {colorSchemeAtoms, colorSchemeFamily} from './atoms/colors';
 
 function App() {

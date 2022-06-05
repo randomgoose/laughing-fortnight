@@ -1,5 +1,4 @@
 import {atom, PrimitiveAtom} from 'jotai';
-import {IColorScheme} from '../../types';
 import {barAtomFamily, BarState} from './barAtomFamily';
 import {ChartAtom, chartAtomsAtom, saveHisotryAtom} from './history';
 import {lineAtomFamily, LineState} from './lineAtomFamily';
@@ -26,8 +25,6 @@ export interface AppState {
     scale: number;
     decimalDigit: number;
     windowSize: WindowSize;
-    colorSchemes: IColorScheme[];
-    activeColorSchemeId: IColorScheme['id'];
 }
 
 export const appAtom = atom<AppState>({
@@ -41,8 +38,6 @@ export const appAtom = atom<AppState>({
     scale: 1,
     decimalDigit: 2,
     windowSize: 'sm',
-    colorSchemes: [],
-    activeColorSchemeId: '',
 });
 
 export const numberOfChartsAtom = atom((get) => get(appAtom).charts.length);

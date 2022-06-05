@@ -1,11 +1,9 @@
-//@ts-nocheck
 import * as React from 'react';
 import i18n from '../../i18n/i18n';
 import {Radio, Space} from 'antd';
 import {useTranslation} from 'react-i18next';
 import {Button} from '@chakra-ui/button';
 import {useDisclosure} from '@chakra-ui/hooks';
-import ColorSchemeBuilder from './ThemeBuilder/ColorSchemeBuilder';
 import {useAtom} from 'jotai';
 import {appAtom} from '../atoms/appAtom';
 import {sendMessage} from '../utils/send-message';
@@ -28,7 +26,6 @@ const languages: {name: string; key: string}[] = [
 
 export default function Settings() {
     const {t} = useTranslation();
-    const {isOpen, onClose, onOpen} = useDisclosure();
     const {isOpen: isVersionsOpen, onClose: onVersionsClose, onOpen: onVersionsOpen} = useDisclosure();
     const [{windowSize}] = useAtom(appAtom);
 
@@ -52,9 +49,6 @@ export default function Settings() {
             </Flex>
             <Space direction={'vertical'} className={'mb-2'}>
                 <Heading as={'h6'}>{t('Theme')}</Heading>
-                <Button size={'xs'} onClick={onOpen}>
-                    {t('Theme maker')}
-                </Button>
             </Space>
             <Space direction={'vertical'} className={'mb-2'}>
                 <Heading as={'h6'}>{t('Window size')}</Heading>
@@ -78,7 +72,6 @@ export default function Settings() {
                     optionType={'button'}
                 />
             </Space>
-            <ColorSchemeBuilder isOpen={isOpen} onClose={onClose} isCentered size={'3xl'} />
             <Flex direction={'column'} gridGap={2}>
                 <Heading as={'h6'}>{t('Version 7')}</Heading>
                 <Button size={'xs'} onClick={onVersionsOpen}>
