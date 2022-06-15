@@ -7,19 +7,21 @@ import {PrimitiveAtom} from 'jotai';
 import {useImmerAtom} from 'jotai/immer';
 import * as React from 'react';
 import {useTranslation} from 'react-i18next';
-import {Param} from '../../atoms/appAtom';
-import {scatterAtomFamily, ScatterState} from '../../atoms/scatterAtomFamily';
+import {ScatterState} from '../../atoms/scatterAtomFamily';
 import {useScatter} from '../../hooks/useScatter';
 import Widget from '../../widgets/Widget';
-import StyledRnd from '../StyledComponents/StyledRnd';
 
-export default function VisScatterPlot({id, initialState}: Param & {initialState?: ScatterState}) {
-    const [{width, height, x, y, enableXAxis, enableYAxis, ...rest}, setScatter] = useImmerAtom(
-        scatterAtomFamily({id}) as PrimitiveAtom<ScatterState>
-    );
+export default function VisScatterPlot({
+    initialState,
+    atom,
+}: {
+    initialState?: ScatterState;
+    atom: PrimitiveAtom<ScatterState>;
+}) {
+    const [{width, height, x, y, enableXAxis, enableYAxis, key, ...rest}, setScatter] = useImmerAtom(atom);
 
     const {isOpen, onClose, onOpen} = useDisclosure();
-    const {changeNodeDataX, changeNodeDataY} = useScatter(id);
+    const {changeNodeDataX, changeNodeDataY} = useScatter(key);
 
     const {t} = useTranslation();
 
@@ -33,24 +35,8 @@ export default function VisScatterPlot({id, initialState}: Param & {initialState
             });
     }, []);
 
-    function onDragStop(_e, d) {
-        setScatter((scatter) => {
-            scatter.x = d.x;
-            scatter.y = d.y;
-        });
-    }
-
-    function onResize(_e, _direction, ref, _delta, position) {
-        setScatter((scatter) => {
-            scatter.width = parseFloat(ref.style.width);
-            scatter.height = parseFloat(ref.style.height);
-            scatter.x = position.x;
-            scatter.y = position.y;
-        });
-    }
-
     return (
-        <StyledRnd chartId={id} width={width} height={height} x={x} y={y} onDragStop={onDragStop} onResize={onResize}>
+        <>
             <ResponsiveScatterPlot
                 {...rest}
                 isInteractive
@@ -89,6 +75,6 @@ export default function VisScatterPlot({id, initialState}: Param & {initialState
                     }
                 />
             </Portal>
-        </StyledRnd>
+        </>
     );
 }

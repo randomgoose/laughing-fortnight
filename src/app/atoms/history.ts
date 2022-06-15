@@ -1,13 +1,13 @@
 import {atom, PrimitiveAtom, SetStateAction} from 'jotai';
-import {BarState} from './barAtomFamily';
-import {LineState} from './lineAtomFamily';
+import {ChartState} from '../../types';
 import {selectChartAtom} from './selection';
 
-export type ChartAtom = PrimitiveAtom<BarState | LineState>;
+export type ChartAtom = PrimitiveAtom<ChartState>;
 
 const internalChartAtomsAtom = atom<ChartAtom[]>([]);
 
-const historyAtom = atom<(BarState | LineState)[][]>([]);
+const historyAtom = atom<ChartState[][]>([]);
+// const futureAtom = atom<(BarState | LineState)[][]>([]);
 
 export const saveHisotryAtom = atom(null, (get, set, _update) => {
     const charts = get(internalChartAtomsAtom).map((chartAtom) => get(chartAtom));

@@ -1,10 +1,14 @@
 import {atom, PrimitiveAtom} from 'jotai';
-import {barAtomFamily, BarState} from './barAtomFamily';
+import {ChartState, ChartType} from '../../types';
+import {barAtomFamily} from './barAtomFamily';
+import {calendaraAtomFamily} from './calendarAtomFamily';
 import {ChartAtom, chartAtomsAtom, saveHisotryAtom} from './history';
-import {lineAtomFamily, LineState} from './lineAtomFamily';
+import {lineAtomFamily} from './lineAtomFamily';
+import {pieAtomFamily} from './pieAtomFamily';
+import {radarAtomFamily} from './radarAtomFamily';
+import {scatterAtomFamily} from './scatterAtomFamily';
 import {selectChartAtom} from './selection';
 
-export type ChartType = 'LINE' | 'PIE' | 'BAR' | 'SCATTER' | 'RADAR' | 'CALENDAR';
 export type WindowSize = 'sm' | 'md' | 'lg';
 export type Param = {id: string};
 
@@ -48,6 +52,14 @@ export const chartAtomCreator = (type: ChartType, id: string) => {
             return barAtomFamily({id});
         case 'LINE':
             return lineAtomFamily({id});
+        case 'PIE':
+            return pieAtomFamily({id});
+        case 'RADAR':
+            return radarAtomFamily({id});
+        case 'SCATTER':
+            return scatterAtomFamily({id});
+        case 'CALENDAR':
+            return calendaraAtomFamily({id});
         default:
             return lineAtomFamily({id});
     }
@@ -59,10 +71,10 @@ export const addChartAtom = atom(null, (_get, set, update: {type: ChartType; id:
     const chartAtom = chartAtomCreator(type, id);
     set(saveHisotryAtom, null);
     // TODO: FIX TYPE ISSUE
-    set(chartAtomsAtom, (prev) => [...prev, chartAtom as PrimitiveAtom<BarState | LineState>]);
+    set(chartAtomsAtom, (prev) => [...prev, chartAtom as PrimitiveAtom<ChartState>]);
     set(selectChartAtom, chartAtom as ChartAtom);
 });
 
-export const insertChartAtom = atom(null, (_get, set, update: Chart) => {
-    set(appAtom, (prev) => ({...prev, charts: [...prev.charts, update], activeKey: update.id}));
-});
+// export const insertChartAtom = atom(null, (_get, set, update: Chart) => {
+//     set(appAtom, (prev) => ({ ...prev, charts: [...prev.charts, update], activeKey: update.id }));
+// });

@@ -60,6 +60,7 @@ export function usePie(id: string) {
 
     return {
         pie,
+        setPie,
         addArc,
         removeArcById,
         changeArcValueById,

@@ -5,27 +5,27 @@ import {atom} from 'jotai';
 import _ from 'lodash';
 import {LineSvgProps} from '@nivo/line';
 import {Param} from './appAtom';
+import {AxisProps} from '../../types';
 
-export interface LineState extends LineSvgProps {
-    type: 'LINE';
-    key: string;
-    width: number;
-    height: number;
-    x: number;
-    y: number;
-    showXAxis: boolean;
-    xAxisLabel: string;
-    yAxisLabel: string;
-    showYAxis: boolean;
-    showLegend: boolean;
-    lines: Array<string | number>;
-    activeSerie: string | number;
-    scale: number;
-    render: 'svg' | 'canvas';
-    showGridX: boolean;
-    showGridY: boolean;
-    colorSchemeId: 'nivo';
-}
+export type LineState = LineSvgProps &
+    AxisProps & {
+        type: 'LINE';
+        key: string;
+        width: number;
+        height: number;
+        x: number;
+        y: number;
+        xAxisLabel: string;
+        yAxisLabel: string;
+        showLegend: boolean;
+        lines: Array<string | number>;
+        activeSerie: string | number;
+        scale: number;
+        render: 'svg' | 'canvas';
+        showGridX: boolean;
+        showGridY: boolean;
+        colorSchemeId: 'nivo';
+    };
 
 export const initialLineState: LineState = {
     type: 'LINE',

@@ -143,23 +143,6 @@ export default function Canvas() {
                 {charts.map((atom) => (
                     <VisChart atom={atom} key={`${atom}`} />
                 ))}
-                {/* {app.charts.length > 0 ? (
-                    app.charts.map((chart) => renderChart(chart))
-                ) : (
-                    <div
-                        className={
-                            'absolute left-1/2 top-1/3 transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-2 items-center'
-                        }
-                    >
-                        <ChartTypeList
-                            tooltipPlacement={'top'}
-                            className={
-                                'border border-dashed border-purple-600 p-6 rounded-lg flex flex-row justify-center'
-                            }
-                        />
-                        <span className={'text-gray-700'}>{t('Click an icon to insert a chart')}</span>
-                    </div>
-                )} */}
             </animated.div>
             <Space className={'absolute top-4 right-4'}>
                 <Button disabled={!hasHistory} onClick={undo}>

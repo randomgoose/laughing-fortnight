@@ -22,8 +22,8 @@ export default function VisLineChart({initialState, atom}: {initialState?: LineS
         <ResponsiveLine
             {...rest}
             colors={colors}
-            axisBottom={showXAxis ? rest.axisBottom : undefined}
-            axisLeft={showYAxis ? rest.axisLeft : undefined}
+            axisBottom={showXAxis ? rest.axisBottom : null}
+            axisLeft={showYAxis ? rest.axisLeft : null}
             data={data.filter((datum) => lines.includes(datum.id))}
             isInteractive={true}
         />

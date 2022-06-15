@@ -1,5 +1,5 @@
 import {LegendProps} from '@nivo/legends';
-export const baseLegend: LegendProps[] = [
+export const baseLegend: (LegendProps & {dataFrom: string})[] = [
     {
         anchor: 'bottom-right',
         direction: 'column',
@@ -23,5 +23,6 @@ export const baseLegend: LegendProps[] = [
                 },
             },
         ],
+        dataFrom: 'keys',
     },
 ];

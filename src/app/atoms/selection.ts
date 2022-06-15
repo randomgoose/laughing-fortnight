@@ -3,16 +3,17 @@ import {ChartAtom, chartAtomsAtom, saveHisotryAtom} from './history';
 
 export const selectedChartAtom = atom<ChartAtom | null>(null);
 
-export const selectChartAtom = atom(null, (_get, set, update: ChartAtom) => {
-    set(selectedChartAtom, update);
-});
-
 export const selectedAtomCreator = (chartAtom: ChartAtom) => {
     return atom((get) => chartAtom === get(selectedChartAtom));
 };
 
 export const unselectChartAtom = atom(null, (_get, set, _update) => {
     set(selectedChartAtom, null);
+});
+
+export const selectChartAtom = atom(null, (get, set, update: ChartAtom) => {
+    console.log(`Select ${get(update).key}`);
+    set(selectedChartAtom, update);
 });
 
 export const selectedAtom = atom((get) => get(selectedChartAtom));

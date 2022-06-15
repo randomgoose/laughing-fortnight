@@ -4,7 +4,7 @@ import {useAtom} from 'jotai';
 import * as React from 'react';
 import {useTranslation} from 'react-i18next';
 import {FcBarChart, FcCalendar, FcLineChart, FcPieChart, FcRadarPlot, FcScatterPlot} from 'react-icons/fc';
-import {addChartAtom, ChartType as IChartType, ChartType as Type, insertChartAtom} from '../atoms/appAtom';
+import {addChartAtom} from '../atoms/appAtom';
 import classnames from 'classnames';
 import {Pie} from '@nivo/pie';
 import {initialPieState} from '../atoms/pieAtomFamily';
@@ -14,8 +14,9 @@ import {initialLineState} from '../atoms/lineAtomFamily';
 import {Bar} from '@nivo/bar';
 import {initialBarState} from '../atoms/barAtomFamily';
 import {Radar} from '@nivo/radar';
+import {ChartType} from '../../types';
 
-function getChart(type: IChartType, state: any) {
+function getChart(type: ChartType, state: any) {
     switch (type) {
         case 'PIE':
             return <Pie {...{...initialPieState, ...state}} isInteractive={false} />;
@@ -30,17 +31,16 @@ function getChart(type: IChartType, state: any) {
     }
 }
 
-export function ChartType({
+export function ChartTypeButton({
     type,
     children,
     placement,
 }: {
-    type: Type;
+    type: ChartType;
     children?: React.ReactNode;
     placement?: PopoverProps['placement'];
 }) {
     const {t} = useTranslation();
-    const [, insertChart] = useAtom(insertChartAtom);
     const [, addChart] = useAtom(addChartAtom);
 
     return (
@@ -68,16 +68,11 @@ export function ChartType({
                                 <div
                                     className={'transform scale-50'}
                                     key={index}
-                                    onClick={() => {
-                                        const id = cryptoRandomString({length: 16});
-
-                                        insertChart({type, id, initialState: example.state});
-                                        // setApp((app) => ({
-                                        //     ...app,
-                                        //     activeKey: id,
-                                        //     charts: [...app.charts,],
-                                        // }));
-                                    }}
+                                    // setApp((app) => ({
+                                    //     ...app,
+                                    //     activeKey: id,
+                                    //     charts: [...app.charts,],
+                                    // }));
                                 >
                                     {getChart(type, example.state)}
                                 </div>
@@ -93,13 +88,6 @@ export function ChartType({
                 onClick={() => {
                     const id = cryptoRandomString({length: 16});
                     addChart({type, id});
-                    insertChart({type, id});
-
-                    // setApp((app) => ({
-                    //     ...app,
-                    //     activeKey: id,
-                    //     charts: [...app.charts, { type, id }],
-                    // }));
                 }}
             >
                 {children}
@@ -117,24 +105,24 @@ export function ChartTypeList({
 }) {
     return (
         <div className={classnames('ChartTypeList flex gap-1', className)}>
-            <ChartType type={'BAR'} placement={tooltipPlacement}>
+            <ChartTypeButton type={'BAR'} placement={tooltipPlacement}>
                 <FcBarChart size={16} />
-            </ChartType>
-            <ChartType type={'LINE'} placement={tooltipPlacement}>
+            </ChartTypeButton>
+            <ChartTypeButton type={'LINE'} placement={tooltipPlacement}>
                 <FcLineChart size={16} />
-            </ChartType>
-            <ChartType type={'PIE'} placement={tooltipPlacement}>
+            </ChartTypeButton>
+            <ChartTypeButton type={'PIE'} placement={tooltipPlacement}>
                 <FcPieChart size={16} />
-            </ChartType>
-            <ChartType type={'SCATTER'} placement={tooltipPlacement}>
+            </ChartTypeButton>
+            <ChartTypeButton type={'SCATTER'} placement={tooltipPlacement}>
                 <FcScatterPlot size={16} />
-            </ChartType>
-            <ChartType type={'RADAR'} placement={tooltipPlacement}>
+            </ChartTypeButton>
+            <ChartTypeButton type={'RADAR'} placement={tooltipPlacement}>
                 <FcRadarPlot size={16} />
-            </ChartType>
-            <ChartType type={'CALENDAR'} placement={tooltipPlacement}>
+            </ChartTypeButton>
+            <ChartTypeButton type={'CALENDAR'} placement={tooltipPlacement}>
                 <FcCalendar size={16} />
-            </ChartType>
+            </ChartTypeButton>
         </div>
     );
 }

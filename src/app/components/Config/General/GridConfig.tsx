@@ -1,36 +1,42 @@
 import {MenuOutlined} from '@ant-design/icons';
-import {Form, Space, Switch, Typography, Slider} from 'antd';
+import {Form, Space, Switch, Typography} from 'antd';
 import * as React from 'react';
 import {useTranslation} from 'react-i18next';
-import {FcNumericalSorting12} from 'react-icons/fc';
+import {FcGrid} from 'react-icons/fc';
 
-export default function LabelConfig() {
+export default function GridConfig() {
     const {t} = useTranslation();
     return (
         <>
             <Typography.Title level={5}>
                 <Space size={4}>
-                    <FcNumericalSorting12 />
-                    {t('Label')}
+                    <FcGrid />
+                    {t('Grid')}
                 </Space>
             </Typography.Title>
             <Form.Item
                 valuePropName={'checked'}
-                name={'enableLabel'}
+                name={'enableGridX'}
                 label={
                     <Space align={'center'}>
                         <MenuOutlined rotate={90} />
-                        {t('Enable Label')}
+                        {t('Grid X')}
                     </Space>
                 }
             >
                 <Switch size={'small'}></Switch>
             </Form.Item>
-            <Form.Item name={'labelSkipHeight'} label={t('Label skip Height')}>
-                <Slider />
-            </Form.Item>
-            <Form.Item name={'labelSkipWidth'} label={t('Label skip Width')}>
-                <Slider />
+            <Form.Item
+                valuePropName={'checked'}
+                name={'enableGridY'}
+                label={
+                    <Space align={'center'}>
+                        <MenuOutlined />
+                        {t('Grid Y')}
+                    </Space>
+                }
+            >
+                <Switch size={'small'}></Switch>
             </Form.Item>
         </>
     );

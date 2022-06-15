@@ -5,6 +5,8 @@ import {Param} from './appAtom';
 import {baseCalendarData} from '../data/baseCalendarData';
 
 export interface CalendarState extends CalendarSvgProps {
+    readonly type: 'CALENDAR';
+    key: string;
     width: number;
     height: number;
     x: number;
@@ -15,6 +17,8 @@ const initialState: CalendarState = {
     /**
      * Base
      */
+    type: 'CALENDAR',
+    key: '',
     data: baseCalendarData,
     x: 400,
     y: 100,
@@ -57,8 +61,8 @@ const initialState: CalendarState = {
 export const calendaraAtomFamily = atomFamily(
     (param: Param) =>
         atom({
-            key: param.id,
             ...initialState,
+            key: param.id,
         }),
     (a: Param, b: Param) => a.id === b.id
 );

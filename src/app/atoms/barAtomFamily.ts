@@ -4,29 +4,29 @@ import {data} from '../data/baseBarData';
 import {atomFamily} from 'jotai/utils';
 import {atom, PrimitiveAtom} from 'jotai';
 import _ from 'lodash';
+import {AxisProps} from '../../types';
 
-export interface BarState extends BarSvgProps<BarDatum> {
-    readonly type: 'BAR';
-    key: string;
-    data: BarDatum[];
-    showXAxis: boolean;
-    showYAxis: boolean;
-    enableGridX: boolean;
-    enableGridY: boolean;
-    width: number;
-    height: number;
-    x: number;
-    y: number;
-    render: 'svg' | 'canvas';
-    activeBar: string;
-    activeIndex: number;
-    activeDatum:
-        | (ComputedBarDatum<BarDatum> & {
-              color: string;
-          })
-        | null;
-    colorSchemeId: string;
-}
+export type BarState = BarSvgProps<BarDatum> &
+    AxisProps & {
+        readonly type: 'BAR';
+        key: string;
+        data: BarDatum[];
+        enableGridX: boolean;
+        enableGridY: boolean;
+        width: number;
+        height: number;
+        x: number;
+        y: number;
+        render: 'svg' | 'canvas';
+        activeBar: string;
+        activeIndex: number;
+        activeDatum:
+            | (ComputedBarDatum<BarDatum> & {
+                  color: string;
+              })
+            | null;
+        colorSchemeId: string;
+    };
 
 type Param = {id: string};
 

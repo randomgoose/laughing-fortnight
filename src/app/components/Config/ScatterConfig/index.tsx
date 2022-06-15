@@ -9,7 +9,7 @@ import GeneralConfig from './GeneralConfig';
 import AxisConfig from './AxisConfig';
 import GridConfig from './GridConfig';
 
-export default function LineConfig() {
+export default function ScatterConfig() {
     const [{activeKey}] = useAtom(appAtom);
 
     const config = (
@@ -25,7 +25,7 @@ export default function LineConfig() {
                     <GridConfig id={activeKey} />
                 </StyledTabPane>
                 <StyledTabPane key={'legend'} tab={<FcAbout />}>
-                    <LegendConfig id={activeKey} />
+                    <LegendConfig />
                 </StyledTabPane>
             </Tabs>
         </>

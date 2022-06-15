@@ -3,17 +3,22 @@ import {Heading} from '@chakra-ui/layout';
 import {NumberInput, NumberInputField} from '@chakra-ui/number-input';
 import {Portal} from '@chakra-ui/portal';
 import {Datum, ResponsiveCalendar} from '@nivo/calendar';
+import {PrimitiveAtom, useAtom} from 'jotai';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {Param} from '../../atoms/appAtom';
 import {CalendarState} from '../../atoms/calendarAtomFamily';
 import {useCalendar} from '../../hooks/useCalendar';
-import {onDragStop, onResize} from '../../utils/rnd-util';
 import Widget from '../../widgets/Widget';
-import StyledRnd from '../StyledComponents/StyledRnd';
 
-export default function VisCalendar({id, initialState}: Param & {initialState?: CalendarState}) {
-    const {calendar, setCalendar, getValueByDate, changeValueByDate} = useCalendar(id);
+export default function VisCalendar({
+    initialState,
+    atom,
+}: {
+    initialState?: CalendarState;
+    atom: PrimitiveAtom<CalendarState>;
+}) {
+    const [calendar] = useAtom(atom);
+    const {setCalendar, getValueByDate, changeValueByDate} = useCalendar(calendar.key);
     const [position, setPosition] = React.useState({x: 0, y: 0});
     const [activeDate, setActiveDate] = React.useState<Datum | Omit<Datum, 'data' | 'value'> | null>(null);
     const {isOpen, onOpen, onClose} = useDisclosure();
@@ -31,18 +36,7 @@ export default function VisCalendar({id, initialState}: Param & {initialState?: 
     }, []);
 
     return (
-        <StyledRnd
-            chartId={id}
-            width={calendar.width}
-            height={calendar.height}
-            x={calendar.x}
-            y={calendar.y}
-            onResize={(e, direction, ref, delta, position) => onResize(e, direction, ref, delta, position, setCalendar)}
-            onDragStop={(e, d) => onDragStop(e, d, setCalendar)}
-            // onMouseDown={() => {
-            //     onClose()
-            // }}
-        >
+        <>
             <ResponsiveCalendar
                 {...calendar}
                 onClick={(datum, event) => {
@@ -80,6 +74,6 @@ export default function VisCalendar({id, initialState}: Param & {initialState?: 
                     />
                 </Portal>
             ) : null}
-        </StyledRnd>
+        </>
     );
 }

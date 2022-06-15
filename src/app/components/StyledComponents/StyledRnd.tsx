@@ -6,7 +6,7 @@ import {useClickAway} from 'react-use';
 import {atom, useAtom} from 'jotai';
 import {appAtom} from '../../atoms/appAtom';
 import DimensionIndicator from '../DimensionIndicator';
-import {selectChartAtom, selectedChartAtom} from '../../atoms/selection';
+import {selectedChartAtom} from '../../atoms/selection';
 
 interface Props {
     chartId: string;
@@ -50,11 +50,9 @@ export default function StyledRnd({
     onClickAway,
     chartId,
     tools,
-    atom,
 }: Props) {
     const ref = React.useRef<HTMLDivElement>(null);
     const [{scale}] = useAtom(appAtom);
-    const [, select] = useAtom(selectChartAtom);
     const [] = useAtom(selectedChartAtom);
     const [activeKey] = useAtom(activeKeyAtom);
 
@@ -86,16 +84,15 @@ export default function StyledRnd({
                 style={{background: activeKey && chartId === activeKey ? 'rgba(123, 97, 255, .05)' : ''}}
                 onMouseDown={() => {
                     onMouseDown && onMouseDown();
-                    atom && select(atom);
                 }}
                 resizeHandleComponent={createHandle(handles)}
                 size={{
-                    width: width,
-                    height: height,
+                    width,
+                    height,
                 }}
                 position={{
-                    x: x,
-                    y: y,
+                    x,
+                    y,
                 }}
                 onResize={onResize}
                 onDragStop={onDragStop}

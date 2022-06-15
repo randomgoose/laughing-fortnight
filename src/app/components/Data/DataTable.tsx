@@ -22,23 +22,25 @@ const activeKeyAtom = atom((get) => {
     }
 });
 
-const fancyAtom = atom((get) => get(chartAtomsAtom).find((chart) => get(chart).key.toString() === get(activeKeyAtom)));
+const selectedAtomAtom = atom((get) =>
+    get(chartAtomsAtom).find((chart) => get(chart).key.toString() === get(activeKeyAtom))
+);
 
 export default function DataTable() {
     const [app] = useAtom(appAtom);
     const {t} = useTranslation();
     const [activeKey] = useAtom(activeKeyAtom);
-    const [at] = useAtom(fancyAtom);
+    const [selectedAtom] = useAtom(selectedAtomAtom);
 
     const createTable = () => {
         const activeChart = app.charts.find((chart) => chart.id === app.activeKey);
 
-        if (activeChart && activeKey && at) {
+        if (activeChart && activeKey && selectedAtom) {
             switch (activeChart.type) {
                 case 'LINE':
                     return <LineDataTable id={activeChart.id} />;
                 case 'BAR':
-                    return <BarDataTable id={activeKey} atom={at as PrimitiveAtom<BarState>} />;
+                    return <BarDataTable id={activeKey} atom={selectedAtom as PrimitiveAtom<BarState>} />;
                 case 'PIE':
                     return <PieDataTable id={activeChart.id} />;
                 case 'SCATTER':

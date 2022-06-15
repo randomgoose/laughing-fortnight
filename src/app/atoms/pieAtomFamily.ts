@@ -5,15 +5,19 @@ import {atomFamily} from 'jotai/utils';
 import {atom} from 'jotai';
 
 export interface PieState extends PieSvgProps<DefaultRawDatum & {label: string}> {
+    readonly type: 'PIE';
     data: (DefaultRawDatum & {label: string})[];
     x: number;
     y: number;
     colorSchemeId: string;
+    key: string;
 }
 
 type Param = {id: string};
 
 export const initialPieState: PieState = {
+    type: 'PIE',
+    key: '',
     data: data,
     innerRadius: 0,
     startAngle: 360,
@@ -59,8 +63,8 @@ export const initialPieState: PieState = {
 export const pieAtomFamily = atomFamily(
     (param: Param) =>
         atom({
-            key: param.id,
             ...initialPieState,
+            key: param.id,
         }),
     (a: Param, b: Param) => a.id === b.id
 );

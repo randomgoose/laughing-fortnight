@@ -1,21 +1,22 @@
 import * as React from 'react';
 import {DefaultRawDatum, ResponsivePie} from '@nivo/pie';
-import StyledRnd from '../StyledComponents/StyledRnd';
-import {pieAtomFamily, PieState} from '../../atoms/pieAtomFamily';
+import {PieState} from '../../atoms/pieAtomFamily';
 import {ComputedDatum} from '@nivo/pie';
 import {useImmerAtom} from 'jotai/immer';
-import {appAtom, Param} from '../../atoms/appAtom';
+import {appAtom} from '../../atoms/appAtom';
 import DimensionIndicator from '../DimensionIndicator';
 import {useTranslation} from 'react-i18next';
 import {usePie} from '../../hooks/usePie';
 import {Input, Heading, Button, Portal, useDisclosure} from '@chakra-ui/react';
 import _ from 'lodash';
 import Widget from '../../widgets/Widget';
+import {PrimitiveAtom, useAtom} from 'jotai';
 
-export default function VisPieChart({id, initialState}: Param & {initialState?: PieState}) {
+export default function VisPieChart({atom, initialState}: {initialState?: PieState; atom: PrimitiveAtom<PieState>}) {
     const {isOpen, onOpen, onClose} = useDisclosure();
     const [position, setPosition] = React.useState({x: 0, y: 0});
-    const [pie, setPie] = useImmerAtom(pieAtomFamily({id}));
+    const [pie] = useAtom(atom);
+    const {setPie} = usePie(pie.key);
     const [app] = useImmerAtom(appAtom);
     const [activeArc, setActiveArc] = React.useState<ComputedDatum<
         DefaultRawDatum & {
@@ -23,7 +24,7 @@ export default function VisPieChart({id, initialState}: Param & {initialState?: 
         }
     > | null>(null);
     const {t} = useTranslation();
-    const {removeArcById, addArc, changeArcValueById, getValueById, changeId, getDatumById} = usePie(id);
+    const {removeArcById, addArc, changeArcValueById, getValueById, changeId, getDatumById} = usePie(pie.key);
 
     React.useEffect(() => {
         if (initialState)
@@ -32,49 +33,19 @@ export default function VisPieChart({id, initialState}: Param & {initialState?: 
             });
     }, []);
 
-    function onDragStop(_e, d) {
-        setPie((pie) => {
-            pie.x = d.x;
-            pie.y = d.y;
-        });
-    }
-
-    function onResize(_e, _direction, ref, _delta, position) {
-        setPie((pie) => {
-            pie.width = parseFloat(ref.style.width);
-            pie.height = parseFloat(ref.style.height);
-            pie.x = position.x;
-            pie.y = position.y;
-        });
-    }
-
     return (
-        <StyledRnd
-            chartId={id}
-            onMouseDown={() => {
-                close();
-            }}
-            width={pie.width}
-            height={pie.height}
-            x={pie.x}
-            y={pie.y}
-            onDragStop={onDragStop}
-            onResize={onResize}
-            onClickAway={() => {
-                close();
-            }}
-        >
+        <>
             <ResponsivePie
                 {...pie}
                 onClick={(node, event) => {
                     setPosition({x: event.clientX, y: event.clientY});
                     onOpen();
-                    id === app.activeKey && setActiveArc(node);
+                    pie.key === app.activeKey && setActiveArc(node);
                 }}
-                isInteractive={id === app.activeKey}
+                isInteractive={pie.key === app.activeKey}
             />
 
-            {id === app.activeKey ? <DimensionIndicator width={pie.width} height={pie.height} /> : null}
+            {pie.key === app.activeKey ? <DimensionIndicator width={pie.width} height={pie.height} /> : null}
             {activeArc && (
                 <Portal>
                     <Widget
@@ -144,6 +115,6 @@ export default function VisPieChart({id, initialState}: Param & {initialState?: 
                     />
                 </Portal>
             )}
-        </StyledRnd>
+        </>
     );
 }
